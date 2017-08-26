@@ -1,0 +1,224 @@
+
+options {
+  JAVA_UNICODE_ESCAPE = true;
+  IGNORE_CASE=true ;
+
+}
+
+PARSER_BEGIN(XmlParser)
+package Analizador_xml;
+import java.io.FileNotFoundException;
+public class XmlParser {
+public static void main (String args []) throws FileNotFoundException{
+XmlParser parser;
+    System.out.println("Reading from standard input. . .");
+    parser = new XmlParser(new java.io.FileInputStream("sample1.dat"));
+    try {
+      INode root = parser.Inicio();
+      System.out.println("Parsed successfully.");
+      //root.accept(new FreeVarFinder());
+    }
+    catch (ParseException e) {
+      System.out.println(e.getMessage());
+      System.out.println("Encountered errors during parse.");
+    }
+
+}
+}
+PARSER_END(XmlParser)
+
+/* ESPACIO EN BLACO */
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+
+}
+
+/* COMENTARIOS*/
+
+SPECIAL_TOKEN:
+{
+   <LINE_COMMENT: "#"(~["\r","\n"])*>
+|  <MULTI_LINE_COMMENT: "#*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "#">
+}
+
+
+/* PALABRAS RESERVADAS Y REPRESENTACIONES LITERALES */
+
+
+
+
+TOKEN : 
+{
+<#VERDADERO: "1">
+|<#FALSO: "0">
+}
+
+
+TOKEN : /* COSNTANTES NUMERICAS */
+{
+	< #S_NUMBERO: <FLOAT>
+	    | <FLOAT> ( ["e","E"] ([ "-","+"])? <FLOAT> )?
+    	>
+  | 	< FLOAT: <INTEGER> "." <INTEGER> > 	        	
+  | 	< INTEGER: ( <DIGITO> )+ >
+  |     <DATE :  <DIGITO><DIGITO> ["-"] <DIGITO><DIGITO> ["-"] <DIGITO><DIGITO> <DIGITO><DIGITO>>
+  |     <HORA :  <DIGITO><DIGITO> [":"] <DIGITO><DIGITO> [":"] <DIGITO><DIGITO> > 
+  | 	< #DIGITO: ["0" - "9"] >
+}
+
+TOKEN :
+{
+<K_prueba: "prueba">
+|<K_db: "<db>">
+|<K_dbf: "</db>">
+|<K_nombre: "<nombre>">
+|<K_nombref: "</nombre>">
+|<K_path: "<path>">
+|<K_pathf: "</path>">
+|<K_seek: "<seek>">
+|<K_seekf: "</seek>">
+|<K_tabla: "<tabla>">
+|<K_tablaf: "</tabla>">
+|<K_permiso: "<permiso>">
+|<K_permisof: "</permiso>">
+|<K_rows: "<rows>">
+|<K_rowsf: "</rows>">
+|<#K_int: "<int>">
+|<#K_intf: "</int>">
+|<#K_doble: "<doble>">
+|<#K_doblef: "</doble>">
+|<#K_texto: "<texto>">
+|<#K_textof: "</texto>">
+|<#K_bool: "<bool>">
+|<#K_boolf: "</bool>">
+|<#K_date: "<date>">
+|<#K_datef: "</date>">
+|<#K_datehora: "<datehora>">
+|<#K_datehoraf: "</datehora>">
+|<K_nulo: "<nulo>">
+|<K_nulof: "</nulo>">
+|<K_auto: "<auto>">
+|<K_autof: "</auto>">
+|<K_prim: "<prim>">
+|<K_primf: "</prim>">
+|<K_for: "<for>">
+|<K_forf: "</for>">
+|<K_unico: "<unico>">
+|<K_unicof: "</unico>">
+|<K_procedure: "<procedure>">
+|<K_proceduref: "</procedure>">
+|<K_object: "<object>">
+|<K_objectf: "</object>">
+|<K_obj: "<obj>">
+|<K_objf: "</obj>">
+|<K_atr: "<atr>">
+|<K_atrf: "</atr>">
+|<K_proc: "<proc>">
+|<K_procf: "</proc>">
+|<K_src: "<src>">
+|<K_srcf: "</src>">
+|<K_clave: "<clave>">
+|<K_clavef: "</clave>">
+|<K_usuario: "<usuario>">
+|<K_usuariof: "</usuario>">
+|<K_iden: "<" <S_IDENTIFICADOR> ">">
+|<K_idenf: "</"<S_IDENTIFICADOR> ">">
+
+}
+TOKEN:
+{
+    < S_IDENTIFICADOR:  (["@"])? (<LETRA>)+ (<DIGITO> | <LETRA> |<ESPECIAL>)* >
+  | < #LETRA: ["a"-"z", "A"-"Z"] >
+  | < #ESPECIAL: "$" | "_" | "#">
+  /*| < S_BIND: ":" ( <S_NUMBERO> | <S_IDENTIFICADOR> ("." <S_IDENTIFICADOR>)?) >*/
+  | < CADENA_LITERAL: "\"" (~["\n","\r","\""])* "\"" >
+}
+void Inicio():
+{}
+{
+ (lista_xml())* <EOF>
+}
+
+void lista_xml():
+{}
+{
+Db()
+|Tablaxml()
+|proc()
+|obj()
+|objeto()
+|procedimiento()
+|usuarioxml()
+}
+
+
+void usuarioxml():
+{}
+{
+"<usuario>" "<nombre>" <S_IDENTIFICADOR> "</nombre>" "<seek>" <INTEGER> "</seek>" "<clave>" <CADENA_LITERAL> "</clave>" "</usuario>"
+}
+void procedimiento():
+{}
+{
+"<proc>"  "<seek>" <INTEGER>"</seek>" "<nombre>"<S_IDENTIFICADOR> "</nombre>" "<permiso>" <CADENA_LITERAL>"</permiso>" "<atr>"  (lista_row())+ "</atr>" "<src>"<CADENA_LITERAL> "</src>" "</proc>"
+}
+void proc():
+{}
+{
+"<procedure>" "<path>" <CADENA_LITERAL> "</path>" "</procedure>"
+}
+
+
+void objeto():
+{}
+{
+"<obj>" "<seek>" <INTEGER> "</seek>" "<nombre>"<S_IDENTIFICADOR>"</nombre>" "<permiso>"<CADENA_LITERAL>"</permiso>" "<atr>" (lista_row())+"</atr>""</obj>"
+}
+
+
+void obj():
+{}
+{
+"<object>" "<path>" <CADENA_LITERAL> "</path>" "</object>"
+}
+
+void Db():
+{}
+{
+"<db>" ["<seek>" <INTEGER> "</seek>"] lista_db() "</db>"
+}
+
+void lista_db():
+{}
+{
+"<nombre>" <S_IDENTIFICADOR> "</nombre>" "<path>" <CADENA_LITERAL> "</path>"
+}
+
+void Tablaxml():
+
+{}
+{
+"<tabla>" "<nombre>" <S_IDENTIFICADOR> "</nombre>" "<permiso>" <CADENA_LITERAL> "</permiso>" "<path>" <CADENA_LITERAL> "</path>" "<rows>" (lista_row())+ "</rows>" "<seek>"<INTEGER>"</seek>" "</tabla>"
+}
+
+void lista_row():
+{}
+{
+<K_iden> <S_IDENTIFICADOR> (atributo())* <K_idenf> 
+}
+
+void atributo():
+{}
+{
+"<nulo>" <INTEGER> "</nulo>"    
+|"<prim>" <INTEGER> "</prim>"
+|"<for>" <S_IDENTIFICADOR> "</for>"
+|"<auto>" <INTEGER> "</auto>"
+|"<unico>" <INTEGER> "</unico>"
+}

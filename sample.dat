@@ -1,0 +1,68 @@
+CREAr BASE_DATOs @MIKE;
+CREAr BASE_DATOs @MIKE1;
+CREAr BASE_DATOs @MIKE13;
+CREAr BASE_DATOs @MIKE14;
+crear usuario user21 colocar password = "hola mundo";
+crear usuario user213 colocar password = "hola mundo";
+crear usuario user212 colocar password = "hola mundo";
+crear usuario user214 colocar password = "hola mundo";
+crear usuario user215 colocar password = "hola mundo";
+usar @MIKE13;
+crear tabla uno4(integer dos no nulo, integer tres nulo, integer dos);
+crear tabla uno44(integer dos no nulo, integer tres nulo, miko uno);
+crear tabla uno45(integer dos no nulo, integer tres nulo, miko uno);
+
+
+crear objeto dos(integer uno, integer tres);
+crear objeto dos4(integer uno, integer tres);
+crear objeto dos41(integer uno, integer tres);
+
+crear funcion set_salario (double a, integer b , carro ac) double {
+seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
+otorgar permisos usuario1, p.mike;
+otorgar permisos usuario1, p.*;
+denegar permisos usuario1, p.mike;
+denegar permisos usuario1, p.*;
+}
+
+
+crear funcion set_salario1 (double a, integer b , carro ac) double {
+seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
+otorgar permisos usuario1, p.mike;
+otorgar permisos usuario1, p.*;
+denegar permisos usuario1, p.mike;
+denegar permisos usuario1, p.*;
+}
+
+crear procedimiento set_salario122 (double a, integer b){
+seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
+otorgar permisos usuario1, p.mike;
+otorgar permisos usuario1, p.*;
+denegar permisos usuario1, p.mike;
+denegar permisos usuario1, p.*;
+}
+
+
+alterar tabla uno4 agregar (integer b llave_foranea uno4);
+##alterar tabla uno4 agregar (integer c llave_foranea uno4, date d, date f);
+alterar tabla uno4 quitar c,d;
+alterar tabla uno4 quitar b;
+alterar tabla uno4 quitar f,tres;
+alterar objeto dos agregar (integer cuatro, integer cinco);
+alterar objeto dos quitar cuatro, tres;
+
+alterar usuario user21 cambiar password = "13223";
+eliminar tabla uno44;
+eliminar base_datos @MIKE14;
+alterar objeto dos quitar cuatro, tres;
+eliminar usuario user212;
+alterar usuario user215 cambiar password = "HOLA MUNDO COMO ESTAS";
+eliminar objeto dos4;
+otorgar permisos user21, @MIKE13.*;
+denegar permisos user21, @MIKE13.*;
+

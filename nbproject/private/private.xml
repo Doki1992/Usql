@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/home/mike/NetBeansProjects/Proyecto/src/Ejecucion_usql/Instruccion_crear.java</file>
+            <file>file:/home/mike/NetBeansProjects/Proyecto/src/Analizador_xml/gramatica_xml.jjt</file>
+            <file>file:/home/mike/NetBeansProjects/Proyecto/src/Ejecucion_usql/Instruccion_usar.java</file>
+            <file>file:/home/mike/NetBeansProjects/Proyecto/src/Analizador_usql/gramtica_usql.jjt</file>
+            <file>file:/home/mike/NetBeansProjects/Proyecto/src/Ejecucion_usql/Instruccion_eliminar.java</file>
+            <file>file:/home/mike/NetBeansProjects/Proyecto/src/Entorno/Usuario_ent.java</file>
+            <file>file:/home/mike/NetBeansProjects/Proyecto/src/visitor/DepthFirstRetVisitor_usql.java</file>
+            <file>file:/home/mike/NetBeansProjects/Proyecto/src/visitorxml/DepthFirstRetVisitor.java</file>
+            <file>file:/home/mike/NetBeansProjects/Proyecto/src/Ejecucion_usql/Instruccion_alterar.java</file>
+        </group>
+    </open-files>
+</project-private>

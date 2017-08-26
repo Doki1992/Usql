@@ -1,0 +1,110 @@
+CREAr BASE_DATOs @MIKE;
+@f = 11-02-2017;
+declarar uno, dos, tres, cuatro date = 11-20-2017 12:30:12;
+hola(d,d,"mike",123456,3);
+crear tabla dato(bool es);
+
+crear objeto b(bool mike, integer b);
+
+crear procedimiento set_salario122 (double a, integer b){
+seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
+otorgar permisos usuario1, p.mike;
+otorgar permisos usuario1, p.*;
+denegar permisos usuario1, p.mike;
+denegar permisos usuario1, p.*;
+}
+
+crear funcion set_salario (double a, integer b) double {
+seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
+otorgar permisos usuario1, p.mike;
+otorgar permisos usuario1, p.*;
+denegar permisos usuario1, p.mike;
+denegar permisos usuario1, p.*;
+}
+
+
+
+
+crear usuario user1 colocar password = "hola mundo";
+
+alterar tabla b agregar (bool h nulo , bool h nulo);
+alterar tabla b agregar (bool h);
+
+alterar objeto c  agregar (bool h, bool c);
+alterar objeto c  agregar (bool h);
+
+alterar tabla b quitar h,d,c;
+alterar objeto b quitar h; 
+ALTERAR usuario este cambiar password =  "123";
+
+eliminar usuario b;
+eliminar objeto b;
+eliminar base_datos b;
+eliminar tabla b;
+
+insertar en tabla m (1+1,1-1);
+insertar en tabla m (uno, dos) valores (1+1<23 && !!-23 || 56,1-1);
+actualizar tabla m (a,b) valores (1,2,c) donde 2<3;
+actualizar tabla m (a,b) valores (1,2,c) ;
+borrar en tabla m donde a == 1;
+borrar en tabla m;
+
+seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
+otorgar permisos usuario1, p.mike;
+otorgar permisos usuario1, p.*;
+denegar permisos usuario1, p.mike;
+denegar permisos usuario1, p.*;
+
+declarar uno, dos, tres, cuatro date = 3;
+declarar uno, dos, tres, cuatro date;
+declarar uno date;
+declarar uno dos;
+uno.dos  = 21;
+uno.dos  = "1235";
+uno.dos  = 2.25;
+uno  = fecha();
+uno  = "1235";
+uno=2.25;
+si(a==b){}
+sino{}
+selecciona("dfdf"){
+caso "d" :seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
+otorgar permisos usuario1, p.mike;
+otorgar permisos usuario1, p.*;
+denegar permisos usuario1, p.mike;
+denegar permisos usuario1, p.*;
+caso "d" : si(a==b){seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
+otorgar permisos usuario1, p.mike;
+otorgar permisos usuario1, p.*;
+denegar permisos usuario1, p.mike;
+denegar permisos usuario1, p.*;}
+sino{seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
+otorgar permisos usuario1, p.mike;
+otorgar permisos usuario1, p.*;
+denegar permisos usuario1, p.mike;
+denegar permisos usuario1, p.*;}
+caso "d" : 
+defecto : 
+}
+
+para(declarar b integer= 12; b<12; ++){}
+
+mientras(v==d){para(declarar b integer= 12; b<12; ++){} detener;}
+
+imprimir("ddd");
+@f  =  fecha_hora();
+@f  =  fecha();
+
+contar (seleccionar *  de mike donde a == 0); 
+BACKUP USQLDUMP Proyecto1 Proyecto1_backup;
+BACKUP COMPLETO Proyecto1 Proyecto1_backup2;
+RESTAURAR USQLDUMP "/home/usuario/backups/backup_prueba.udmp" ;
+RESTAURAR completo "/home/usuario/backups/backup_prueba.udmp" ;
+
+#hola mundo

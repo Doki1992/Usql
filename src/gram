@@ -1,0 +1,555 @@
+
+options {
+  JAVA_UNICODE_ESCAPE = true;
+  IGNORE_CASE=true ;
+
+}
+
+PARSER_BEGIN(UsqlParser)
+package proyecto;
+import java.io.FileNotFoundException;
+public class UsqlParser {
+public static void main (String args []) throws FileNotFoundException{
+UsqlParser parser;
+    System.out.println("Reading from standard input. . .");
+    parser = new UsqlParser(new java.io.FileInputStream("sample.dat"));
+    try {
+      INode root = parser.Inicio();
+      System.out.println("Parsed successfully.");
+      //root.accept(new FreeVarFinder());
+    }
+    catch (ParseException e) {
+      System.out.println(e.getMessage());
+      System.out.println("Encountered errors during parse.");
+    }
+
+}
+}
+PARSER_END(UsqlParser)
+
+/* ESPACIO EN BLACO */
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+}
+
+/* COMENTARIOS*/
+
+SPECIAL_TOKEN:
+{
+   <LINE_COMMENT: "#"(~["\r","\n"])*>
+|  <MULTI_LINE_COMMENT: "#*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "#">
+}
+
+
+/* PALABRAS RESERVADAS Y REPRESENTACIONES LITERALES */
+
+
+
+
+TOKEN : 
+{
+<VERDADERO: "1">
+|<FALSO: "0">
+}
+
+
+TOKEN : /* COSNTANTES NUMERICAS */
+{
+	< #S_NUMBERO: <FLOAT>
+	    | <FLOAT> ( ["e","E"] ([ "-","+"])? <FLOAT> )?
+    	>
+  | 	< FLOAT: <INTEGER> "." <INTEGER> > 	        	
+  | 	< INTEGER: ( <DIGITO> )+ >
+  |     <DATE :  <DIGITO><DIGITO> ["-"] <DIGITO><DIGITO> ["-"] <DIGITO><DIGITO> <DIGITO><DIGITO>>
+  |     <HORA :  <DIGITO><DIGITO> [":"] <DIGITO><DIGITO> [":"] <DIGITO><DIGITO> > 
+  | 	< #DIGITO: ["0" - "9"] >
+}
+
+TOKEN :
+{
+<K_text: "text">
+|<K_integer: "integer">
+|<K_double: "double">
+|<K_bool: "bool">
+|<K_date: "date">
+|<K_datetime: "datetime">
+|<K_suma: "+">
+|<K_resta: "-">
+|<K_multiplicacion: "*">
+|<K_division: "/">
+|<K_potencia: "^">
+|<K_igualda: "==">
+|<K_asig: "=">
+|<K_diferente: "!=">
+|<K_menor: "<">
+|<K_mayor: ">">
+|<K_menor_igual: "<=">
+|<K_mayor_igual: ">=">
+|<K_or: "||">
+|<K_and: "&&">
+|<K_not: "!">
+|<K_pariz: "(">
+|<K_parder: ")">
+|<K_crear: "crear">
+|<K_base: "base_datos">
+|<K_pcoma: ";">
+|<K_tabla: "tabla">
+|<K_coma: ",">
+|<K_nulo: "nulo">
+|<K_no_nulo: "no nulo">
+|<K_autoincrementable: "autoincrementable">
+|<K_llave_primaria: "llave_primaria">
+|<K_llave_foranea: "llave_foranea">
+|<K_unico: "unico">
+|<K_objeto: "objeto">
+|<K_procedimiento: "procedimiento">
+|<K_llaveiz: "{">
+|<K_llaveder: "}">
+|<K_funcion: "funcion">
+|<K_retorno: "retorno">
+|<K_usuario: "usuario">
+|<K_colocar: "colocar">
+|<K_pw: "password">
+|<K_usar: "usar">
+|<K_alterar: "alterar">
+|<K_agregar: "agregar">
+|<K_quitar: "quitar">
+|<K_cambiar: "cambiar">
+|<K_eliminar: "eliminar">
+|<K_insertar: "insertar">
+|<K_en: "en">
+|<K_actualizar: "actualizar">
+|<K_borrar: "borrar">
+|<K_seleccionar: "seleccionar">
+|<K_ordenar: "ordenar">
+|<K_asc: "asc">
+|<K_desc: "desc">
+|<K_por: "por">
+|<K_donde: "donde">
+|<K_otorgar: "otorgar">
+|<K_permisos: "permisos">
+|<K_denegar: "denegar">
+|<K_declarar: "declarar">
+|<K_si: "si">
+|<K_sino: "sino">
+|<K_selecciona: "selecciona">
+|<K_dos_puntos: ":">
+|<K_caso: "caso">
+|<K_defecto: "defecto">
+|<K_detener: "detener">
+|<K_para: "para">
+|<K_mientras:"mientras">
+|<K_imprimir: "imprimir">
+|<K_fecha: "fecha">
+|<K_fecha_hora: "fecha_hora">
+|<K_contar: "contar">
+|<K_backup: "backup">
+|<K_usqldump: "usqldump">
+|<K_completo: "completo">
+|<K_restaurar: "restaurar">
+|<K_valores: "valores">
+|<K_de: "de">
+|<K_verdadero: <VERDADERO> >
+|<K_falso: <FALSO> >
+}
+TOKEN:
+{
+    < S_IDENTIFICADOR:  (["@"])? (<LETRA>)+ (<DIGITO> | <LETRA> |<ESPECIAL>)* >
+  | < #LETRA: ["a"-"z", "A"-"Z"] >
+  | < #ESPECIAL: "$" | "_" | "#">
+  /*| < S_BIND: ":" ( <S_NUMBERO> | <S_IDENTIFICADOR> ("." <S_IDENTIFICADOR>)?) >*/
+  | < CADENA_LITERAL: "\"" (~["\n","\r","\""])* "\"" >
+}
+void Inicio():
+{}
+{
+ (listasentencias())+
+}
+
+void listasentencias() : 
+{}
+{
+  "crear" (crear_base() | crear_tabla() | crear_objeto() |crear_procedimiento() | crear_funcion()| crear_usuario() ) 
+| "usar" <S_IDENTIFICADOR> ";"
+| "alterar" (alterar_tabla() | alterar_objeto() | alterar_usuario()) ";"  
+| "eliminar"  (eliminar_usuario() | eliminar_tabla() | eliminar_base() | eliminar_objeto()) ";"
+| insertar()
+| actualizar()
+| borrar()
+| seleccionar()
+| otorgar()
+| denegar()
+| Declarar()
+| LOOKAHEAD(6) asignacion()
+| Si()
+| Selecciona()
+| Para()
+| Mientras()
+| Imprimir()
+| Contar()
+| Backup_dump ()
+| Restaurar () 
+| LOOKAHEAD(6) exp_logica() ";"
+
+}
+
+
+void eliminar_usuario():
+{}
+{
+"usuario" <S_IDENTIFICADOR> 
+}
+
+void eliminar_tabla():
+{}
+{
+"tabla" <S_IDENTIFICADOR> 
+}
+
+void eliminar_base():
+{}
+{
+"base_datos" <S_IDENTIFICADOR> 
+}
+
+void eliminar_objeto():
+{}
+{
+"objeto" <S_IDENTIFICADOR> 
+}
+
+void alterar_usuario():
+{}
+{
+"usuario" <S_IDENTIFICADOR> "cambiar" "password" "=" <CADENA_LITERAL>
+}
+
+void alterar_tabla ():
+{}
+{
+"tabla" <S_IDENTIFICADOR> (agregar_tabla() | quitar () )
+}
+
+void alterar_objeto():
+{}
+
+{
+"objeto" <S_IDENTIFICADOR> (agregar_objeto() | quitar () )
+}
+
+void agregar_tabla():
+{}
+{
+"agregar" "(" (lista_atributos()) ("," lista_atributos())* ")"
+}
+
+void quitar ():
+{}
+{
+"quitar" <S_IDENTIFICADOR> ("," <S_IDENTIFICADOR>)*
+}
+
+void agregar_objeto():
+{}
+{
+"agregar" "(" (lista_componentes()) ("," lista_componentes())* ")"
+}
+
+void crear_base() : 
+{}
+{
+"base_datos" <S_IDENTIFICADOR> ";"
+}
+
+
+void crear_tabla() : 
+{}
+{
+"tabla" <S_IDENTIFICADOR> "(" (lista_atributos()) ("," lista_atributos())* ")" ";"
+}
+
+void lista_atributos() : 
+{}
+{
+  tipo() <S_IDENTIFICADOR> [(complemento_campo())+] 
+}
+
+void tipo() : 
+{}
+{
+"text"
+|"integer"
+|"double"
+|"bool"
+|"date"
+|"datetime"
+}
+
+void complemento_campo(): 
+{}
+{
+"nulo"
+|"no nulo"
+|"llave_primaria"
+|"llave_foranea"
+|"autoincrementable"
+|"unico"
+}
+
+
+void crear_objeto():
+{}
+{
+ "objeto" <S_IDENTIFICADOR> "(" lista_componentes() ("," lista_componentes() )* ")" ";"
+}
+
+void lista_componentes() : 
+{}
+{
+tipo() <S_IDENTIFICADOR> 
+}
+
+void crear_procedimiento():
+
+{}
+
+{
+
+"procedimiento" <S_IDENTIFICADOR> "(" (lista_parametros() ("," lista_parametros())*)? ")" "{" (lista_sentencias_p())* "}"
+}
+
+void lista_parametros():
+{}
+{
+tipo() <S_IDENTIFICADOR> 
+}
+
+
+void crear_funcion() : 
+{}
+{
+"funcion" <S_IDENTIFICADOR> "(" (lista_parametros() ("," lista_parametros())*)? ")" tipo() "{" (lista_sentencias_p() (lista_sentencias_p()))* "}"
+}
+void lista_sentencias_p() : 
+{}
+{
+LOOKAHEAD(10)
+listasentencias()
+| Retorno()
+| Detener()
+|LOOKAHEAD(10) asignacion()
+}
+
+void Retorno():
+{}
+{
+"retorno" exp_logica() ";"
+}
+void crear_usuario():
+
+{}
+{
+"usuario" <S_IDENTIFICADOR> "colocar" "password" "=" <CADENA_LITERAL> ";"
+}
+
+void insertar():
+{}
+{
+"insertar" "en" "tabla" <S_IDENTIFICADOR> "(" (LOOKAHEAD(3) <S_IDENTIFICADOR> ("," <S_IDENTIFICADOR>)*")" "valores" "(" lista_expresion() ("," lista_expresion())* ")" |  lista_expresion() ("," lista_expresion())* ")" ) ";"
+}
+
+
+void lista_expresion():
+{}
+{
+  exp_logica()
+}
+
+void expresion():
+{}
+{
+t() (LOOKAHEAD(10) ("+" t() | "-" t()))*
+}
+
+void g() : 
+{}
+{
+f() ("^" f())*
+}
+
+void t() :
+{}
+{
+g() ("*" g() | "/" g())*
+}
+
+void f():
+{}
+{
+h()
+|"-" h()
+}
+
+void h():
+{}
+{
+<FLOAT>
+|<INTEGER>
+| "(" exp_logica() ")"
+| <S_IDENTIFICADOR> [LOOKAHEAD(10) ("." <S_IDENTIFICADOR> | "("exp_logica() ("," exp_logica())* ")")]
+| <CADENA_LITERAL>
+| Fecha()
+| Fecha_hora()
+| "1"
+| "0"
+| <DATE> [<HORA>]
+
+}
+
+void exp_relacional():
+{}
+{
+expresion() ("<" expresion()| ">" expresion()|"<=" expresion()|">=" expresion()|"==" expresion()|"!=" expresion())? 
+|"!" exp_relacional()
+}
+
+void exp_logica():
+{}
+{
+exp_or() ("||" exp_or())*
+}
+
+void exp_or():
+{}
+{
+exp_and () ("&&" exp_and() )*
+}
+
+void exp_and():
+{}
+{
+exp_relacional()
+}
+
+void actualizar():
+{}
+{
+"actualizar" "tabla" <S_IDENTIFICADOR> "(" <S_IDENTIFICADOR> ("," <S_IDENTIFICADOR> )* ")" "valores" "(" lista_expresion() ("," lista_expresion()) *  ")" ["donde" exp_logica()] ";" 
+}
+
+void borrar() : 
+{}
+{
+"borrar" "en" "tabla" <S_IDENTIFICADOR> ["donde" exp_logica() ] ";"
+}
+
+void seleccionar():
+{}
+{
+"seleccionar"  (<S_IDENTIFICADOR> | "*") ("," <S_IDENTIFICADOR>)* "de" <S_IDENTIFICADOR> ("," <S_IDENTIFICADOR>)* ["donde" exp_logica() ["ordenar" "por" <S_IDENTIFICADOR> [("asc" | "desc")]] ] [";"]
+}
+
+void otorgar():
+{}
+{
+"otorgar" "permisos" <S_IDENTIFICADOR> "," <S_IDENTIFICADOR> "." (<S_IDENTIFICADOR>|"*") ";"
+}
+
+void denegar():
+{}
+{
+"denegar" "permisos" <S_IDENTIFICADOR> "," <S_IDENTIFICADOR> "." (<S_IDENTIFICADOR>|"*") ";"
+}
+
+void Declarar():
+{}
+{
+"declarar" <S_IDENTIFICADOR> ("," <S_IDENTIFICADOR>)* (tipo() ["=" exp_logica()] | <S_IDENTIFICADOR>) ";"
+}
+
+void asignacion():
+{}
+
+{
+<S_IDENTIFICADOR> ["." <S_IDENTIFICADOR>] "=" exp_logica() ";"
+}
+
+void Si():
+{}
+{
+"si" "(" exp_logica() ")" "{" (lista_sentencias_p())* "}" ["sino" "{" (lista_sentencias_p())* "}"]
+}
+
+void Selecciona():
+{}
+{
+"selecciona" "(" exp_logica() ")" "{" (caso()) (caso())* ["defecto" ":" (lista_sentencias_p())*] "}"
+}
+
+void caso():
+{}
+{
+"caso" exp_logica() ":" (lista_sentencias_p())* 
+}
+
+void Para():
+{}
+
+{
+"para" "(" Declarar ()  exp_logica() ";" ("++"|"--") ")" "{" (lista_sentencias_p())* "}"
+}
+
+void Mientras ():
+{}
+{
+"mientras" "(" exp_logica() ")" "{" (lista_sentencias_p())*"}"
+}
+
+void Detener():
+{}
+{
+"detener" ";"
+}
+
+void Imprimir():
+{}
+{
+"imprimir" "(" exp_logica() ")" ";"
+}
+
+void Fecha() : 
+{}
+{
+"fecha" "("")"
+}
+
+void Fecha_hora():
+{}
+{
+"fecha_hora" "(" ")"
+}
+
+void Contar():
+{}
+{
+"contar" "(" seleccionar () ")" ";"
+}
+
+void Backup_dump () :
+{}
+{
+"backup" ("usqldump"| "completo") <S_IDENTIFICADOR> <S_IDENTIFICADOR> ";"
+}
+
+void Restaurar () :
+{}
+{
+"restaurar"  ("usqldump"| "completo") <CADENA_LITERAL> ";"
+}
+
