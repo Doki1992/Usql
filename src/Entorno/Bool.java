@@ -20,7 +20,10 @@ public class Bool extends Valor{
     
     @Override
     public String ACadena() {
-        return valor;
+        if(valor.equals("1") || valor.equals("1.0")){
+            return "true";
+        }
+        return "false";
     }
 
     @Override
@@ -35,7 +38,7 @@ public class Bool extends Valor{
 
     @Override
     public boolean ABool() {
-        if(valor.equals("1")){
+        if(valor.equals("1") || valor.equals("true")){
             return true;
         }
         return false;

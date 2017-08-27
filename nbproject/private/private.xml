@@ -8,9 +8,10 @@
             <file>file:/home/mike/NetBeansProjects/Proyecto/src/Ejecucion_usql/Instruccion_usar.java</file>
             <file>file:/home/mike/NetBeansProjects/Proyecto/src/Analizador_usql/gramtica_usql.jjt</file>
             <file>file:/home/mike/NetBeansProjects/Proyecto/src/Ejecucion_usql/Instruccion_eliminar.java</file>
-            <file>file:/home/mike/NetBeansProjects/Proyecto/src/Entorno/Usuario_ent.java</file>
+            <file>file:/home/mike/NetBeansProjects/Proyecto/src/Ejecucion_usql/Operaciones_aritmeticas.java</file>
             <file>file:/home/mike/NetBeansProjects/Proyecto/src/visitor/DepthFirstRetVisitor_usql.java</file>
             <file>file:/home/mike/NetBeansProjects/Proyecto/src/visitorxml/DepthFirstRetVisitor.java</file>
+            <file>file:/home/mike/NetBeansProjects/Proyecto/src/Entorno/Doble.java</file>
             <file>file:/home/mike/NetBeansProjects/Proyecto/src/Ejecucion_usql/Instruccion_alterar.java</file>
         </group>
     </open-files>

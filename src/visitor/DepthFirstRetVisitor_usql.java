@@ -568,11 +568,17 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
         return nRes;
     }
 
-    public R visit(final exp_logica n) {
-        R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        return nRes;
+    public R visit(final exp_logica n) {        
+        Simbolo izquierdo = (Simbolo)n.f0.accept(this);
+        NodeListOptional op =  n.f1;
+        if(op.present()){
+            for(INode_usql node :  op.nodes){
+                NodeSequence ns =  (NodeSequence) node;
+                Simbolo derecho =  (Simbolo)ns.nodes.get(1).accept(this);
+                //izquierdo.v = Operaciones_aritmeticas.OperacionOr(izquierdo, derecho);
+            }
+        }        
+        return (R)izquierdo;
     }
 
     public R visit(final exp_or n) {
