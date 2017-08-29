@@ -164,7 +164,8 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 Instruccion_denegar.DenegarPermisos((Simbolo) dd_denegar.accept(this));
                 break;
             case 10:
-                break;
+                INode_usql dd_declarar = (INode_usql) n.f0.choice;
+                return (R) dd_declarar.accept(this);                   
             case 11:
                 break;
             case 12:
@@ -636,14 +637,14 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                         case 0:
                             NodeSequence ns1  =(NodeSequence) choice.choice;
                             NodeToken to = (NodeToken) ns1.nodes.get(1);
-                            iz.v = new AccesoObjTab(token1.tokenImage + "." + to.tokenImage, true);
+                            //iz;
                             return (R)iz;
                         case 1:
                             //hacer la llamada del metodo
                             break;
                     }
                 }
-                iz.v = new AccesoObjTab(token1.tokenImage,false);
+                iz =  global.Buscar(token1.tokenImage);
                 break;
             case 4:
                 NodeToken tok_cadena = (NodeToken) nc.choice;
@@ -835,9 +836,9 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
         Simbolo exp_l = null;
         Simbolo tipo = null;
         Simbolo tipo_objeto = null;
-        NodeListOptional lista_ide = n.f2; //lista  id
-        lista_ide.nodes.add(0, n.f1); //
-        n.f3.accept(this); //opcion primitivo o no         
+        Simbolo primerid =  new Simbolo(n.f1.tokenImage, "", null);
+        Instruccion_declarar dec =  new Instruccion_declarar(this.global);
+        NodeListOptional lista_ide = n.f2; //lista  id                      
         switch(n.f3.which){
             case 0:
                 NodeSequence ns =  (NodeSequence) n.f3.choice;
@@ -853,7 +854,14 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 NodeToken tok =  (NodeToken) n.f3.choice;
                 tipo_objeto = new Simbolo ("temp", tok.tokenImage, null);
                 break;
+        }  
+        if(tipo !=  null){
+            Instruccion_declarar Dec =  new Instruccion_declarar(this.global);
+            Dec.declararVar(tipo, exp_l, primerid, lista_ide);
+        }else{
+            
         }
+        
         return (R)retorno;
     }
 

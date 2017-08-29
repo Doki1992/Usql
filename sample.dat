@@ -83,5 +83,6 @@ imprimir("estoy en el caso " + 3);
 defecto: "estoy en defecto";
 }
 
-declarar a,b date = b;
+declarar a date = 20-02-2015;
+a;
 
