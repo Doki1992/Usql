@@ -6,6 +6,7 @@
 package Entorno;
 
 import proyecto.Contexto;
+import proyecto.Debuger;
 
 /**
  *
@@ -20,10 +21,9 @@ public class Bool extends Valor{
     
     @Override
     public String ACadena() {
-        if(valor.equals("1") || valor.equals("1.0")){
-            return "true";
-        }
-        return "false";
+        Debuger.Debug("ESTE ES EL VALOR DE VAL EN BOOL " + valor + ".....");
+        return valor;
+    
     }
 
     @Override

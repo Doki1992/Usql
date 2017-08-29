@@ -5,6 +5,9 @@
  */
 package proyecto;
 
+import Entorno.Simbolo;
+import java.util.LinkedList;
+
 /**
  *
  * @author mike
@@ -12,5 +15,16 @@ package proyecto;
 public class Debuger {
     public static void Debug(Object x){
         System.out.println(x);
+    }
+    
+    public static LinkedList<Object> Impresiones =  new LinkedList<>();
+    
+    public static void Debug(Object x, boolean debug, Simbolo s){
+        if(debug){
+            Debug(x);
+        }else{
+            Debug((x==null?s.v.ACadena():x));
+            Impresiones.add((x==null?s.v.ACadena():x));
+        }
     }
 }

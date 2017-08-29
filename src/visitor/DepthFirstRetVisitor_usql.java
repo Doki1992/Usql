@@ -116,7 +116,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                         choice_alterar.choice.accept(this);
                         break;
                     case 2:
-                        Instruccion_alterar.AlterarUsuario((Simbolo)choice_alterar.choice.accept(this));
+                        Instruccion_alterar.AlterarUsuario((Simbolo) choice_alterar.choice.accept(this));
                         break;
                     case 3:
                         break;
@@ -125,18 +125,18 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
             case 3:
                 NodeSequence ddd_alterar = (NodeSequence) n.f0.choice;
                 NodeChoice choice_eliminar = (NodeChoice) ddd_alterar.nodes.get(1);
-                Simbolo choiceSimbolo = (Simbolo)choice_eliminar.choice.accept(this);
-                switch(choice_eliminar.which){
+                Simbolo choiceSimbolo = (Simbolo) choice_eliminar.choice.accept(this);
+                switch (choice_eliminar.which) {
                     case 0:
                         Instruccion_eliminar.EliminarUsuario(choiceSimbolo);
-                        break;                        
+                        break;
                     case 1:
                         Instruccion_eliminar.EliminarTabla(choiceSimbolo);
                         break;
                     case 2:
                         Instruccion_eliminar.EliminarBd(choiceSimbolo);
                         break;
-                    case 3: 
+                    case 3:
                         Instruccion_eliminar.EliminarObjeto(choiceSimbolo);
                         break;
                 }
@@ -151,12 +151,12 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 break;
             case 8:
                 //otorgar 
-                INode_usql dd_otorgar = (INode_usql) n.f0.choice;                
-                Instruccion_otorgar.OtorgarPermisos((Simbolo)dd_otorgar.accept(this));
+                INode_usql dd_otorgar = (INode_usql) n.f0.choice;
+                Instruccion_otorgar.OtorgarPermisos((Simbolo) dd_otorgar.accept(this));
                 break;
             case 9:
-                INode_usql dd_denegar = (INode_usql) n.f0.choice;                
-                Instruccion_denegar.DenegarPermisos((Simbolo)dd_denegar.accept(this));
+                INode_usql dd_denegar = (INode_usql) n.f0.choice;
+                Instruccion_denegar.DenegarPermisos((Simbolo) dd_denegar.accept(this));
                 break;
             case 10:
                 break;
@@ -165,12 +165,15 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
             case 12:
                 break;
             case 13:
+                // este es el if
                 break;
             case 14:
                 break;
             case 15:
                 break;
             case 16:
+                INode_usql dd_imprimir = (INode_usql) n.f0.choice;
+                dd_imprimir.accept(this);
                 break;
             case 17:
                 break;
@@ -178,40 +181,44 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 break;
             case 19:
                 break;
+            case 20:
+                NodeSequence dd_expresion = (NodeSequence) n.f0.choice;
+                Debuger.Debug(null, false, (Simbolo) dd_expresion.nodes.get(0).accept(this));
+                break;
         }
         return nRes;
     }
 
-    public R visit(final eliminar_usuario n) {                
+    public R visit(final eliminar_usuario n) {
         String identificadorUsuario = n.f1.tokenImage;
-        Simbolo user  = new Simbolo(identificadorUsuario, identificadorUsuario, null);
-        return (R)user;
+        Simbolo user = new Simbolo(identificadorUsuario, identificadorUsuario, null);
+        return (R) user;
     }
 
-    public R visit(final eliminar_tabla n) {                
+    public R visit(final eliminar_tabla n) {
         String identificadorTabla = n.f1.tokenImage;
-        Simbolo s =  new Simbolo(identificadorTabla, "", null);
-        return (R)s;
+        Simbolo s = new Simbolo(identificadorTabla, "", null);
+        return (R) s;
     }
 
-    public R visit(final eliminar_base n) {               
+    public R visit(final eliminar_base n) {
         String identificador = n.f1.tokenImage;
-        Simbolo s =  new Simbolo(identificador, "", null);
-        return (R)s;
+        Simbolo s = new Simbolo(identificador, "", null);
+        return (R) s;
     }
 
-    public R visit(final eliminar_objeto n) {                
+    public R visit(final eliminar_objeto n) {
         String identificador = n.f1.tokenImage;
-        Simbolo s =  new Simbolo(identificador, identificador, null);
-        return (R)s;
+        Simbolo s = new Simbolo(identificador, identificador, null);
+        return (R) s;
     }
 
-    public R visit(final alterar_usuario n) {                
-        String nombreUsuario =  n.f1.tokenImage;      
+    public R visit(final alterar_usuario n) {
+        String nombreUsuario = n.f1.tokenImage;
         String claveUsuario = n.f5.tokenImage;
-        Usuario_ent user =  new Usuario_ent(nombreUsuario, claveUsuario);
-        Simbolo sreturn =  new Simbolo(nombreUsuario, "", user);
-        return (R)sreturn;
+        Usuario_ent user = new Usuario_ent(nombreUsuario, claveUsuario);
+        Simbolo sreturn = new Simbolo(nombreUsuario, "", user);
+        return (R) sreturn;
     }
 
     public R visit(final alterar_tabla n) {
@@ -238,7 +245,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 Instruccion_alterar.AgregarObjeto((agregar_objeto) no.choice, identificador);
                 break;
             case 1:
-                Instruccion_alterar.QuitarObjeto((quitar)no.choice, identificador);
+                Instruccion_alterar.QuitarObjeto((quitar) no.choice, identificador);
                 break;
         }
         return null;
@@ -278,7 +285,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final agregar_objeto n) {
-        Tabla val =  new Tabla("");        
+        Tabla val = new Tabla("");
         NodeSequence ns = n.f2;
         Simbolo primerComponente = (Simbolo) ns.nodes.get(0).accept(this);
         val.valores.add(primerComponente);
@@ -289,8 +296,8 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 val.valores.add(siguienteComponente);
             }
         }
-        Simbolo temp =  new Simbolo("temporal", "", val);
-        return (R)temp;
+        Simbolo temp = new Simbolo("temporal", "", val);
+        return (R) temp;
     }
 
     public R visit(final crear_base n) {
@@ -529,69 +536,204 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
         return nRes;
     }
 
-    public R visit(final expresion n) {
-        R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        return nRes;
+    public R visit(final expresion n) {                
+        Simbolo izquierdo = (Simbolo) n.f0.accept(this);
+        NodeListOptional op = n.f1;
+        if (op.present()) {
+            for (INode_usql node : op.nodes) {
+                NodeChoice choice =  (NodeChoice) node;
+                NodeSequence ns = (NodeSequence) choice.choice;
+                Simbolo derecho = (Simbolo) ns.nodes.get(1).accept(this);
+                switch(choice.which){
+                    case 0:                       
+                        izquierdo.v = Operaciones_aritmeticas.OperacionSuma(izquierdo, derecho);
+                        break;
+                    case 1:                                                                        
+                        izquierdo.v = Operaciones_aritmeticas.OperacionResta(izquierdo, derecho);
+                        break;
+                }
+            }
+        }
+        return (R) izquierdo;        
     }
 
     public R visit(final g n) {
-        R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        return nRes;
+     Simbolo izquierdo = (Simbolo) n.f0.accept(this);
+        NodeListOptional op = n.f1;
+        if (op.present()) {
+            for (INode_usql node : op.nodes) {
+                NodeSequence ns = (NodeSequence) node;
+                Simbolo derecho = (Simbolo) ns.nodes.get(1).accept(this);
+                izquierdo.v = Operaciones_aritmeticas.OperacionPotencia(izquierdo, derecho);
+            }
+        }
+        return (R) izquierdo; 
     }
 
-    public R visit(final t n) {
-        R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        return nRes;
+    public R visit(final t n) {         
+        Simbolo izquierdo = (Simbolo) n.f0.accept(this);
+        NodeListOptional op = n.f1;
+        if (op.present()) {
+            for (INode_usql node : op.nodes) {
+                NodeChoice choice =  (NodeChoice) node;
+                NodeSequence ns = (NodeSequence) choice.choice;
+                Simbolo derecho = (Simbolo) ns.nodes.get(1).accept(this);
+                switch(choice.which){
+                    case 0:                       
+                        izquierdo.v = Operaciones_aritmeticas.OperacionMultiplicacion(izquierdo, derecho);
+                        break;
+                    case 1:                                                                        
+                        izquierdo.v = Operaciones_aritmeticas.OperacionDivision(izquierdo, derecho);
+                        break;
+                }
+            }
+        }
+        return (R) izquierdo;
     }
 
     public R visit(final f n) {
-        R nRes = null;
-        n.f0.accept(this);
-        return nRes;
+        Simbolo iz = new Simbolo("temp", "", null);
+        NodeChoice nc =  n.f0;
+        switch(nc.which){
+            case 0:
+                iz =  (Simbolo)nc.choice.accept(this);
+                break;
+            case 1:
+                NodeSequence ns =  (NodeSequence) n.f0.choice;
+                iz = (Simbolo) ns.nodes.get(1).accept(this);
+                iz.v = Operaciones_aritmeticas.OperacionMinus(iz);
+                break;
+        }
+        return (R)iz;
     }
 
     public R visit(final h n) {
-        R nRes = null;
-        n.f0.accept(this);
-        return nRes;
+      Simbolo iz = new Simbolo("temp", "", null);
+        NodeChoice nc =  n.f0;
+        switch(nc.which){
+            case 0:
+                NodeToken tok_doble =  (NodeToken) nc.choice;
+                iz.v =  new Doble(tok_doble.tokenImage, "");
+                break;
+            case 1:
+                NodeToken tok_entero =  (NodeToken) nc.choice;
+                iz.v =  new Entero(tok_entero.tokenImage, "");                
+                break;
+            case 2:
+                NodeSequence ns_exp_log =  (NodeSequence) nc.choice;
+                iz =  (Simbolo) ns_exp_log.nodes.get(1).accept(this);
+                break;
+            case 3:
+                //identificadores por el momento me falta...
+                break;
+            case 4:
+                NodeToken tok_cadena =  (NodeToken) nc.choice;
+                iz.v =  new Texto(tok_cadena.tokenImage, "");  
+                break;
+            case 5:
+                //funcion fecha
+                break;
+            case 6:
+                //funcion fechahora
+                break;
+            case 7:
+                iz.v =  new Bool("1", "");
+                break;
+            case 8:
+                iz.v =  new Bool("0", "");
+                break;
+            case 9:
+                NodeSequence ns_date =  (NodeSequence) nc.choice;
+                NodeToken token =  (NodeToken) ns_date.nodes.get(0);
+                NodeOptional op =  (NodeOptional) ns_date.nodes.get(1);
+                iz.v  = new Fecha_tipo(token.tokenImage, "");
+                if(op.present()){
+                    NodeToken tok =  (NodeToken) op.node;
+                    iz.v =  new Fecha_hora_tipo(token.tokenImage + tok.tokenImage, "");
+                }
+                break;
+        }
+        return (R)iz;
     }
 
     public R visit(final exp_relacional n) {
-        R nRes = null;
-        n.f0.accept(this);
-        return nRes;
+        n.f0.accept(this);        
+        Simbolo iz = null;
+        Simbolo der;
+        switch (n.f0.which) {
+            case 0:
+                NodeSequence ns = (NodeSequence) n.f0.choice;
+                iz = (Simbolo) ns.nodes.get(0).accept(this);
+                NodeOptional nc = (NodeOptional) ns.nodes.get(1);
+                if (nc.present()) {
+                    NodeChoice ns1 = (NodeChoice) nc.node;
+                    NodeSequence ns2 =  (NodeSequence)ns1.choice;
+                    switch (ns1.which) {
+                        case 0:
+                            der = (Simbolo) ns2.nodes.get(1).accept(this);
+                            iz.v = Operaciones_aritmeticas.OperacionMenor(iz, der);
+                            break;
+                        case 1:
+                            der = (Simbolo) ns2.nodes.get(1).accept(this);
+                            iz.v = Operaciones_aritmeticas.OperacionMayor(iz, der);
+                            break;
+                        case 2:
+                            der = (Simbolo) ns2.nodes.get(1).accept(this);
+                            iz.v = Operaciones_aritmeticas.OperacionMenorIgual(iz, der);
+                            break;
+                        case 3:
+                            der = (Simbolo) ns2.nodes.get(1).accept(this);
+                            iz.v = Operaciones_aritmeticas.OperacionMayorIgual(iz, der);
+                            break;
+                        case 4:
+                            der = (Simbolo) ns2.nodes.get(1).accept(this);
+                            iz.v = Operaciones_aritmeticas.OperacionIgualdad(iz, der);
+                            break;
+                        case 5:
+                            der = (Simbolo) ns2.nodes.get(1).accept(this);
+                            iz.v = Operaciones_aritmeticas.OperacionDiferente(iz, der);
+                            break;
+                    }
+                }
+
+                break;
+            case 1:
+                NodeSequence ns1 =  (NodeSequence) n.f0.choice;
+                iz =(Simbolo)  ns1.nodes.get(1).accept(this);
+                iz.v =  Operaciones_aritmeticas.OperacionNot(iz);
+                break;
+        }
+        return (R) iz;
     }
 
-    public R visit(final exp_logica n) {        
-        Simbolo izquierdo = (Simbolo)n.f0.accept(this);
-        NodeListOptional op =  n.f1;
-        if(op.present()){
-            for(INode_usql node :  op.nodes){
-                NodeSequence ns =  (NodeSequence) node;
-                Simbolo derecho =  (Simbolo)ns.nodes.get(1).accept(this);
-                //izquierdo.v = Operaciones_aritmeticas.OperacionOr(izquierdo, derecho);
+    public R visit(final exp_logica n) {
+        Simbolo izquierdo = (Simbolo) n.f0.accept(this);
+        NodeListOptional op = n.f1;
+        if (op.present()) {
+            for (INode_usql node : op.nodes) {
+                NodeSequence ns = (NodeSequence) node;
+                Simbolo derecho = (Simbolo) ns.nodes.get(1).accept(this);
+                izquierdo.v = Operaciones_aritmeticas.OperacionOr(izquierdo, derecho);
             }
-        }        
-        return (R)izquierdo;
+        }
+        return (R) izquierdo;
     }
 
     public R visit(final exp_or n) {
-        R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        return nRes;
+        Simbolo izquierdo = (Simbolo) n.f0.accept(this);
+        NodeListOptional op = n.f1;
+        if (op.present()) {
+            for (INode_usql node : op.nodes) {
+                NodeSequence ns = (NodeSequence) node;
+                Simbolo derecho = (Simbolo) ns.nodes.get(1).accept(this);
+                izquierdo.v = Operaciones_aritmeticas.OperacionAnd(izquierdo, derecho);
+            }
+        }
+        return (R) izquierdo;
     }
 
     public R visit(final exp_and n) {
-        R nRes = null;
-        n.f0.accept(this);
-        return nRes;
+        return (R) n.f0.accept(this);
     }
 
     public R visit(final actualizar n) {
@@ -637,36 +779,36 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
         return nRes;
     }
 
-    public R visit(final otorgar n) { 
-        Tabla val =  new Tabla("");
+    public R visit(final otorgar n) {
+        Tabla val = new Tabla("");
         String idUsuario = n.f2.tokenImage;
         String idBd = n.f4.tokenImage;
-        NodeToken tok =  (NodeToken) n.f6.choice;        
-        String queObjeto =  tok.tokenImage;
-        Simbolo bd =  new Simbolo(idBd,"",null);
-        Simbolo usuario =  new Simbolo(idUsuario, idBd, null);
-        Simbolo objeto =  new Simbolo(queObjeto, queObjeto, null);
+        NodeToken tok = (NodeToken) n.f6.choice;
+        String queObjeto = tok.tokenImage;
+        Simbolo bd = new Simbolo(idBd, "", null);
+        Simbolo usuario = new Simbolo(idUsuario, idBd, null);
+        Simbolo objeto = new Simbolo(queObjeto, queObjeto, null);
         val.valores.add(bd);
         val.valores.add(usuario);
         val.valores.add(objeto);
-        Simbolo otorgar =  new Simbolo("otorgar", "", val);
-        return (R)otorgar;
+        Simbolo otorgar = new Simbolo("otorgar", "", val);
+        return (R) otorgar;
     }
 
     public R visit(final denegar n) {
-        Tabla val =  new Tabla("");
+        Tabla val = new Tabla("");
         String idUsuario = n.f2.tokenImage;
         String idBd = n.f4.tokenImage;
-        NodeToken tok =  (NodeToken) n.f6.choice;        
-        String queObjeto =  tok.tokenImage;
-        Simbolo bd =  new Simbolo(idBd,"",null);
-        Simbolo usuario =  new Simbolo(idUsuario, idBd, null);
-        Simbolo objeto =  new Simbolo(queObjeto, queObjeto, null);
+        NodeToken tok = (NodeToken) n.f6.choice;
+        String queObjeto = tok.tokenImage;
+        Simbolo bd = new Simbolo(idBd, "", null);
+        Simbolo usuario = new Simbolo(idUsuario, idBd, null);
+        Simbolo objeto = new Simbolo(queObjeto, queObjeto, null);
         val.valores.add(bd);
         val.valores.add(usuario);
         val.valores.add(objeto);
-        Simbolo otorgar =  new Simbolo("otorgar", "", val);
-        return (R)otorgar;        
+        Simbolo otorgar = new Simbolo("otorgar", "", val);
+        return (R) otorgar;
     }
 
     public R visit(final Declarar n) {
@@ -691,14 +833,16 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
 
     public R visit(final Si n) {
         R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
-        n.f4.accept(this);
-        n.f5.accept(this);
-        n.f6.accept(this);
-        n.f7.accept(this);
+        Simbolo exp_logica =(Simbolo) n.f2.accept(this); // expresion logica
+        if(exp_logica.v.ABool()){
+            for(INode_usql node : n.f5.nodes){
+                node.accept(this);
+            }
+        }
+        
+        n.f5.accept(this); //lista opcional;
+        
+        n.f7.accept(this); //nodo opcional
         return nRes;
     }
 
@@ -760,13 +904,9 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final Imprimir n) {
-        R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
-        n.f4.accept(this);
-        return nRes;
+        Simbolo impresion = (Simbolo) n.f2.accept(this);//expresion logica; 
+        Debuger.Debug(null, false, impresion);
+        return null;
     }
 
     public R visit(final Fecha n) {
