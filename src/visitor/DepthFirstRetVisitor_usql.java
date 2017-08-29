@@ -73,7 +73,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
 
     public R visit(final listasentencias n) {
         R nRes = null;
-        switch (n.f0.which) {
+         switch (n.f0.which) {
             case 0:
                 //crear base de datos
                 NodeSequence dd = (NodeSequence) n.f0.choice;
@@ -163,9 +163,11 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
             case 11:
                 break;
             case 12:
+                INode_usql dd_si = (INode_usql) n.f0.choice;
+                dd_si.accept(this);
                 break;
             case 13:
-                // este es el if
+                                
                 break;
             case 14:
                 break;
@@ -831,19 +833,23 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
         return nRes;
     }
 
-    public R visit(final Si n) {
-        R nRes = null;
+    public R visit(final Si n) {        
         Simbolo exp_logica =(Simbolo) n.f2.accept(this); // expresion logica
         if(exp_logica.v.ABool()){
             for(INode_usql node : n.f5.nodes){
                 node.accept(this);
             }
-        }
-        
-        n.f5.accept(this); //lista opcional;
-        
-        n.f7.accept(this); //nodo opcional
-        return nRes;
+        }else{
+            NodeOptional no =  (NodeOptional) n.f7;
+            NodeSequence ns =  (NodeSequence) no.node;
+            NodeListOptional nlto =  (NodeListOptional) ns.nodes.get(2);
+            if(nlto.present()){
+                for(INode_usql node : nlto.nodes){
+                    node.accept(this);
+                }
+            }
+        }                                
+        return null;
     }
 
     public R visit(final Selecciona n) {
