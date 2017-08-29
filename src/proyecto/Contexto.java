@@ -38,6 +38,9 @@ public class Contexto {
     public static final String OBJ = "OBJ";
     public static final String TB = "TB";
     public static final String USUARIO = "Usuario";
+    public static final String RETORNO = "retorno";    
+    public static final String DETENER = "detener";
+    
     
     private static final File FILE =  new File(".");
     public static  String CanonicalPath;

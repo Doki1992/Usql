@@ -72,8 +72,8 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final listasentencias n) {
-        R nRes = null;
-         switch (n.f0.which) {
+        Simbolo retorno =  new Simbolo("temp", "", new Texto("", ""));
+        switch (n.f0.which) {
             case 0:
                 //crear base de datos
                 NodeSequence dd = (NodeSequence) n.f0.choice;
@@ -164,10 +164,9 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 break;
             case 12:
                 INode_usql dd_si = (INode_usql) n.f0.choice;
-                dd_si.accept(this);
-                break;
+                return (R) dd_si.accept(this);                
             case 13:
-                                
+
                 break;
             case 14:
                 break;
@@ -175,8 +174,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 break;
             case 16:
                 INode_usql dd_imprimir = (INode_usql) n.f0.choice;
-                dd_imprimir.accept(this);
-                break;
+                return dd_imprimir.accept(this);                
             case 17:
                 break;
             case 18:
@@ -188,7 +186,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 Debuger.Debug(null, false, (Simbolo) dd_expresion.nodes.get(0).accept(this));
                 break;
         }
-        return nRes;
+        return (R)retorno;
     }
 
     public R visit(final eliminar_usuario n) {
@@ -500,18 +498,15 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
         return (R) nres;
     }
 
-    public R visit(final lista_sentencias_p n) {
-        R nRes = null;
-        n.f0.accept(this);
-        return nRes;
+    public R visit(final lista_sentencias_p n) {        
+        return (R)n.f0.accept(this);        
     }
 
     public R visit(final Retorno n) {
-        R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        return nRes;
+                
+        Simbolo retorno = (Simbolo)n.f1.accept(this); //retorno de funcion;        
+        Simbolo ret =  new Simbolo("temp", "", new Texto(Contexto.RETORNO, Contexto.TEX));
+        return (R)ret;
     }
 
     public R visit(final crear_usuario n) {
@@ -538,29 +533,29 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
         return nRes;
     }
 
-    public R visit(final expresion n) {                
+    public R visit(final expresion n) {
         Simbolo izquierdo = (Simbolo) n.f0.accept(this);
         NodeListOptional op = n.f1;
         if (op.present()) {
             for (INode_usql node : op.nodes) {
-                NodeChoice choice =  (NodeChoice) node;
+                NodeChoice choice = (NodeChoice) node;
                 NodeSequence ns = (NodeSequence) choice.choice;
                 Simbolo derecho = (Simbolo) ns.nodes.get(1).accept(this);
-                switch(choice.which){
-                    case 0:                       
+                switch (choice.which) {
+                    case 0:
                         izquierdo.v = Operaciones_aritmeticas.OperacionSuma(izquierdo, derecho);
                         break;
-                    case 1:                                                                        
+                    case 1:
                         izquierdo.v = Operaciones_aritmeticas.OperacionResta(izquierdo, derecho);
                         break;
                 }
             }
         }
-        return (R) izquierdo;        
+        return (R) izquierdo;
     }
 
     public R visit(final g n) {
-     Simbolo izquierdo = (Simbolo) n.f0.accept(this);
+        Simbolo izquierdo = (Simbolo) n.f0.accept(this);
         NodeListOptional op = n.f1;
         if (op.present()) {
             for (INode_usql node : op.nodes) {
@@ -569,22 +564,22 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 izquierdo.v = Operaciones_aritmeticas.OperacionPotencia(izquierdo, derecho);
             }
         }
-        return (R) izquierdo; 
+        return (R) izquierdo;
     }
 
-    public R visit(final t n) {         
+    public R visit(final t n) {
         Simbolo izquierdo = (Simbolo) n.f0.accept(this);
         NodeListOptional op = n.f1;
         if (op.present()) {
             for (INode_usql node : op.nodes) {
-                NodeChoice choice =  (NodeChoice) node;
+                NodeChoice choice = (NodeChoice) node;
                 NodeSequence ns = (NodeSequence) choice.choice;
                 Simbolo derecho = (Simbolo) ns.nodes.get(1).accept(this);
-                switch(choice.which){
-                    case 0:                       
+                switch (choice.which) {
+                    case 0:
                         izquierdo.v = Operaciones_aritmeticas.OperacionMultiplicacion(izquierdo, derecho);
                         break;
-                    case 1:                                                                        
+                    case 1:
                         izquierdo.v = Operaciones_aritmeticas.OperacionDivision(izquierdo, derecho);
                         break;
                 }
@@ -595,42 +590,42 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
 
     public R visit(final f n) {
         Simbolo iz = new Simbolo("temp", "", null);
-        NodeChoice nc =  n.f0;
-        switch(nc.which){
+        NodeChoice nc = n.f0;
+        switch (nc.which) {
             case 0:
-                iz =  (Simbolo)nc.choice.accept(this);
+                iz = (Simbolo) nc.choice.accept(this);
                 break;
             case 1:
-                NodeSequence ns =  (NodeSequence) n.f0.choice;
+                NodeSequence ns = (NodeSequence) n.f0.choice;
                 iz = (Simbolo) ns.nodes.get(1).accept(this);
                 iz.v = Operaciones_aritmeticas.OperacionMinus(iz);
                 break;
         }
-        return (R)iz;
+        return (R) iz;
     }
 
     public R visit(final h n) {
-      Simbolo iz = new Simbolo("temp", "", null);
-        NodeChoice nc =  n.f0;
-        switch(nc.which){
+        Simbolo iz = new Simbolo("temp", "", null);
+        NodeChoice nc = n.f0;
+        switch (nc.which) {
             case 0:
-                NodeToken tok_doble =  (NodeToken) nc.choice;
-                iz.v =  new Doble(tok_doble.tokenImage, "");
+                NodeToken tok_doble = (NodeToken) nc.choice;
+                iz.v = new Doble(tok_doble.tokenImage, "");
                 break;
             case 1:
-                NodeToken tok_entero =  (NodeToken) nc.choice;
-                iz.v =  new Entero(tok_entero.tokenImage, "");                
+                NodeToken tok_entero = (NodeToken) nc.choice;
+                iz.v = new Entero(tok_entero.tokenImage, "");
                 break;
             case 2:
-                NodeSequence ns_exp_log =  (NodeSequence) nc.choice;
-                iz =  (Simbolo) ns_exp_log.nodes.get(1).accept(this);
+                NodeSequence ns_exp_log = (NodeSequence) nc.choice;
+                iz = (Simbolo) ns_exp_log.nodes.get(1).accept(this);
                 break;
             case 3:
                 //identificadores por el momento me falta...
                 break;
             case 4:
-                NodeToken tok_cadena =  (NodeToken) nc.choice;
-                iz.v =  new Texto(tok_cadena.tokenImage, "");  
+                NodeToken tok_cadena = (NodeToken) nc.choice;
+                iz.v = new Texto(tok_cadena.tokenImage, "");
                 break;
             case 5:
                 //funcion fecha
@@ -639,27 +634,27 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 //funcion fechahora
                 break;
             case 7:
-                iz.v =  new Bool("1", "");
+                iz.v = new Bool("1", "");
                 break;
             case 8:
-                iz.v =  new Bool("0", "");
+                iz.v = new Bool("0", "");
                 break;
             case 9:
-                NodeSequence ns_date =  (NodeSequence) nc.choice;
-                NodeToken token =  (NodeToken) ns_date.nodes.get(0);
-                NodeOptional op =  (NodeOptional) ns_date.nodes.get(1);
-                iz.v  = new Fecha_tipo(token.tokenImage, "");
-                if(op.present()){
-                    NodeToken tok =  (NodeToken) op.node;
-                    iz.v =  new Fecha_hora_tipo(token.tokenImage + tok.tokenImage, "");
+                NodeSequence ns_date = (NodeSequence) nc.choice;
+                NodeToken token = (NodeToken) ns_date.nodes.get(0);
+                NodeOptional op = (NodeOptional) ns_date.nodes.get(1);
+                iz.v = new Fecha_tipo(token.tokenImage, "");
+                if (op.present()) {
+                    NodeToken tok = (NodeToken) op.node;
+                    iz.v = new Fecha_hora_tipo(token.tokenImage + tok.tokenImage, "");
                 }
                 break;
         }
-        return (R)iz;
+        return (R) iz;
     }
 
     public R visit(final exp_relacional n) {
-        n.f0.accept(this);        
+        n.f0.accept(this);
         Simbolo iz = null;
         Simbolo der;
         switch (n.f0.which) {
@@ -669,7 +664,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 NodeOptional nc = (NodeOptional) ns.nodes.get(1);
                 if (nc.present()) {
                     NodeChoice ns1 = (NodeChoice) nc.node;
-                    NodeSequence ns2 =  (NodeSequence)ns1.choice;
+                    NodeSequence ns2 = (NodeSequence) ns1.choice;
                     switch (ns1.which) {
                         case 0:
                             der = (Simbolo) ns2.nodes.get(1).accept(this);
@@ -700,9 +695,9 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
 
                 break;
             case 1:
-                NodeSequence ns1 =  (NodeSequence) n.f0.choice;
-                iz =(Simbolo)  ns1.nodes.get(1).accept(this);
-                iz.v =  Operaciones_aritmeticas.OperacionNot(iz);
+                NodeSequence ns1 = (NodeSequence) n.f0.choice;
+                iz = (Simbolo) ns1.nodes.get(1).accept(this);
+                iz.v = Operaciones_aritmeticas.OperacionNot(iz);
                 break;
         }
         return (R) iz;
@@ -768,7 +763,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
         return nRes;
     }
 
-    public R visit(final seleccionar n) {
+    public R visit(final seleccionar n) {                
         R nRes = null;
         n.f0.accept(this);
         n.f1.accept(this);
@@ -833,46 +828,96 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
         return nRes;
     }
 
-    public R visit(final Si n) {        
-        Simbolo exp_logica =(Simbolo) n.f2.accept(this); // expresion logica
-        if(exp_logica.v.ABool()){
-            for(INode_usql node : n.f5.nodes){
-                node.accept(this);
-            }
-        }else{
-            NodeOptional no =  (NodeOptional) n.f7;
-            NodeSequence ns =  (NodeSequence) no.node;
-            NodeListOptional nlto =  (NodeListOptional) ns.nodes.get(2);
-            if(nlto.present()){
-                for(INode_usql node : nlto.nodes){
-                    node.accept(this);
+    public R visit(final Si n) {
+        Simbolo exp_logica = (Simbolo) n.f2.accept(this); // expresion logica    
+        Simbolo ret = new Simbolo("temporal", "", new Texto("vacio", Contexto.TEX));
+        if (exp_logica.v.ABool()) {
+            for (INode_usql node : n.f5.nodes) {
+                ret = (Simbolo) node.accept(this);
+                if (ret.v.ACadena().equals(Contexto.RETORNO)) {
+                    return (R) ret;
+                } else if (ret.v.ACadena().equals(Contexto.DETENER)) {
+                    return (R) ret;
                 }
             }
-        }                                
-        return null;
+        } else {
+            NodeOptional no = (NodeOptional) n.f7;
+            NodeSequence ns = (NodeSequence) no.node;
+            NodeListOptional nlto = (NodeListOptional) ns.nodes.get(2);
+            if (nlto.present()) {
+                for (INode_usql node : nlto.nodes) {
+                    ret = (Simbolo) node.accept(this);
+                    if (ret.v.ACadena().equals(Contexto.RETORNO)) {
+                        return (R) ret;
+                    } else if (ret.v.ACadena().equals(Contexto.DETENER)) {
+                        return (R) ret;
+                    }
+                }
+            }
+        }
+        return (R)ret;
     }
 
     public R visit(final Selecciona n) {
-        R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
-        n.f4.accept(this);
-        n.f5.accept(this);
-        n.f6.accept(this);
-        n.f7.accept(this);
-        n.f8.accept(this);
-        return nRes;
+        
+        Simbolo exp_selec = (Simbolo)n.f2.accept(this); //expresion logica        
+        NodeSequence ns =  n.f5; //nodeopcional}
+        caso caso1 =  (caso) ns.nodes.get(0);
+        NodeListOptional nop =  n.f6;
+        boolean ejecuta_defecto =  true;
+        boolean ejecuta_hasta =  false;
+        Simbolo retorno =  new Simbolo("temp", "", new Texto("vacio", ""));
+        nop.nodes.add(caso1);
+        
+        for(INode_usql node :  nop.nodes){
+            caso c =  (caso) node;
+            Simbolo exp_caso =  (Simbolo) c.f1.accept(this);
+            exp_selec.v = Operaciones_aritmeticas.OperacionIgualdad(exp_caso, exp_selec);
+            if(exp_selec.v.ABool()){
+                retorno = (Simbolo) c.accept(this);
+                ejecuta_defecto =  false;
+                ejecuta_hasta =  true;
+            }else if(ejecuta_hasta){
+                retorno = (Simbolo)c.accept(this);
+            }
+            if(retorno.v.ACadena().equals(Contexto.RETORNO)){
+                return (R)retorno;
+            }
+            if(retorno.v.ACadena().equals(Contexto.DETENER)){
+                retorno.v  = new Texto("vacio", "");
+                break;
+            }
+        }
+        if(n.f7.present() && ejecuta_defecto){
+            NodeSequence ns_defecto =  (NodeSequence) n.f7.node;
+            NodeListOptional nlo =  (NodeListOptional) ns_defecto.nodes.get(2);
+            for(INode_usql node :  nlo.nodes){
+                retorno  = (Simbolo)node.accept(this);
+                if(retorno.v.ACadena().equals(Contexto.RETORNO)){
+                    return (R)retorno;
+                }
+                if(retorno.v.ACadena().equals(Contexto.DETENER)){
+                    retorno.v  = new Texto("vacio", "");
+                    break;
+                }
+            }
+        }                        
+        return (R)retorno;
     }
 
     public R visit(final caso n) {
-        R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
-        return nRes;
+        Simbolo retorno  =  new Simbolo("temp", "", null);
+        for(INode_usql node : n.f3.nodes){
+            retorno = (Simbolo) node.accept(this);
+            if(retorno.v.ACadena().equals(Contexto.RETORNO)){
+                return (R)retorno;
+            }
+            if(retorno.v.ACadena().equals(Contexto.DETENER)){
+                retorno.v =  new Texto("vacio", "");
+                break;
+            }
+        }
+        return (R)retorno;
     }
 
     public R visit(final Para n) {
@@ -903,16 +948,14 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final Detener n) {
-        R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        return nRes;
+        Simbolo detener =  new Simbolo("temp","", new Texto(Contexto.DETENER, Contexto.TEX));
+        return (R)detener;
     }
 
     public R visit(final Imprimir n) {
         Simbolo impresion = (Simbolo) n.f2.accept(this);//expresion logica; 
-        Debuger.Debug(null, false, impresion);
-        return null;
+        Debuger.Debug(null, false, impresion);        
+        return (R)impresion;
     }
 
     public R visit(final Fecha n) {

@@ -273,6 +273,9 @@ public class Operaciones_aritmeticas {
             } else {
                 iz.v = new Bool("0", "");
             }
+        } else {
+            Debuger.Debug("Error los operandos deben de ser del mismo tipo para == ...");
+            iz.v = null;
         }
         return iz.v;
     }
@@ -307,16 +310,31 @@ public class Operaciones_aritmeticas {
                 }
             }
         } else if ((iz.v.Tipo.equals(Contexto.ENT) && der.v.Tipo.equals(Contexto.DOB)) || (iz.v.Tipo.equals(Contexto.DOB) && der.v.Tipo.equals(Contexto.ENT))) {
-            if (!(iz.v.AEntero() == der.v.AEntero())) {
+            if (iz.v.ADoble() ==  der.v.ADoble()) {
                 iz.v = new Bool("1", "");
             } else {
                 iz.v = new Bool("0", "");
             }
+        }else if ((iz.v.Tipo.equals(Contexto.ENT) && der.v.Tipo.equals(Contexto.BOl)) || (iz.v.Tipo.equals(Contexto.BOl) && der.v.Tipo.equals(Contexto.ENT))) {
+            if (iz.v.AEntero() == der.v.AEntero()) {
+                iz.v = new Bool("1", "");
+            } else {
+                iz.v = new Bool("0", "");
+            }
+        }else if ((iz.v.Tipo.equals(Contexto.DOB) && der.v.Tipo.equals(Contexto.BOl)) || (iz.v.Tipo.equals(Contexto.BOl) && der.v.Tipo.equals(Contexto.DOB))) {
+            if (iz.v.ADoble()== der.v.ADoble()) {
+                iz.v = new Bool("1", "");
+            } else {
+                iz.v = new Bool("0", "");
+            }
+        } else {
+            Debuger.Debug("Error los operandos deben de ser del mismo tipo para != ...");
+            iz.v = null;
         }
         return iz.v;
     }
 
-    public static Valor OperacionMenor(Simbolo iz, Simbolo der) {
+    public static Valor OperacionMenor(Simbolo iz, Simbolo der){
         if (iz.v.Tipo.equals(der.v.Tipo)) {
             if (iz.v.Tipo.equals(Contexto.TEX)) {
                 if (iz.v.ACadena().compareTo(der.v.ACadena())<0) {
@@ -346,11 +364,26 @@ public class Operaciones_aritmeticas {
                 }
             }
         } else if ((iz.v.Tipo.equals(Contexto.ENT) && der.v.Tipo.equals(Contexto.DOB)) || (iz.v.Tipo.equals(Contexto.DOB) && der.v.Tipo.equals(Contexto.ENT))) {
+            if (iz.v.ADoble()< der.v.ADoble()) {
+                iz.v = new Bool("1", "");
+            } else {
+                iz.v = new Bool("0", "");
+            }
+        }else if ((iz.v.Tipo.equals(Contexto.ENT) && der.v.Tipo.equals(Contexto.BOl)) || (iz.v.Tipo.equals(Contexto.BOl) && der.v.Tipo.equals(Contexto.ENT))) {
             if (iz.v.AEntero() < der.v.AEntero()) {
                 iz.v = new Bool("1", "");
             } else {
                 iz.v = new Bool("0", "");
             }
+        }else if ((iz.v.Tipo.equals(Contexto.DOB) && der.v.Tipo.equals(Contexto.BOl)) || (iz.v.Tipo.equals(Contexto.BOl) && der.v.Tipo.equals(Contexto.DOB))) {
+            if (iz.v.ADoble() < der.v.ADoble()) {
+                iz.v = new Bool("1", "");
+            } else {
+                iz.v = new Bool("0", "");
+            }
+        } else {
+            Debuger.Debug("Error los operandos deben de ser del mismo tipo para < ...");
+            iz.v = null;
         }
         return iz.v;
     }
@@ -385,11 +418,26 @@ public class Operaciones_aritmeticas {
                 }
             }
         } else if ((iz.v.Tipo.equals(Contexto.ENT) && der.v.Tipo.equals(Contexto.DOB)) || (iz.v.Tipo.equals(Contexto.DOB) && der.v.Tipo.equals(Contexto.ENT))) {
+            if (iz.v.ADoble() > der.v.ADoble()) {
+                iz.v = new Bool("1", "");
+            } else {
+                iz.v = new Bool("0", "");
+            }
+        }else if ((iz.v.Tipo.equals(Contexto.ENT) && der.v.Tipo.equals(Contexto.BOl)) || (iz.v.Tipo.equals(Contexto.BOl) && der.v.Tipo.equals(Contexto.ENT))) {
             if (iz.v.AEntero() > der.v.AEntero()) {
                 iz.v = new Bool("1", "");
             } else {
                 iz.v = new Bool("0", "");
             }
+        }else if ((iz.v.Tipo.equals(Contexto.DOB) && der.v.Tipo.equals(Contexto.BOl)) || (iz.v.Tipo.equals(Contexto.BOl) && der.v.Tipo.equals(Contexto.DOB))) {
+            if (iz.v.ADoble()> der.v.ADoble()) {
+                iz.v = new Bool("1", "");
+            } else {
+                iz.v = new Bool("0", "");
+            }
+        }else {
+            Debuger.Debug("Error los operandos deben de ser del mismo tipo para > ...");
+            iz.v = null;
         }
         return iz.v;
     }
@@ -424,11 +472,26 @@ public class Operaciones_aritmeticas {
                 }
             }
         } else if ((iz.v.Tipo.equals(Contexto.ENT) && der.v.Tipo.equals(Contexto.DOB)) || (iz.v.Tipo.equals(Contexto.DOB) && der.v.Tipo.equals(Contexto.ENT))) {
+            if (iz.v.ADoble() <= der.v.ADoble()) {
+                iz.v = new Bool("1", "");
+            } else {
+                iz.v = new Bool("0", "");
+            }
+        }else if ((iz.v.Tipo.equals(Contexto.ENT) && der.v.Tipo.equals(Contexto.BOl)) || (iz.v.Tipo.equals(Contexto.BOl) && der.v.Tipo.equals(Contexto.ENT))) {
             if (iz.v.AEntero() <= der.v.AEntero()) {
                 iz.v = new Bool("1", "");
             } else {
                 iz.v = new Bool("0", "");
             }
+        }else if ((iz.v.Tipo.equals(Contexto.DOB) && der.v.Tipo.equals(Contexto.BOl)) || (iz.v.Tipo.equals(Contexto.BOl) && der.v.Tipo.equals(Contexto.DOB))) {
+            if (iz.v.ADoble() <= der.v.ADoble()) {
+                iz.v = new Bool("1", "");
+            } else {
+                iz.v = new Bool("0", "");
+            }
+        }else {
+            Debuger.Debug("Error los operandos deben de ser del mismo tipo para <= ...");
+            iz.v = null;
         }
         return iz.v;
     }
@@ -463,11 +526,26 @@ public class Operaciones_aritmeticas {
                 }
             }
         } else if ((iz.v.Tipo.equals(Contexto.ENT) && der.v.Tipo.equals(Contexto.DOB)) || (iz.v.Tipo.equals(Contexto.DOB) && der.v.Tipo.equals(Contexto.ENT))) {
+            if (iz.v.ADoble() >= der.v.ADoble()) {
+                iz.v = new Bool("1", "");
+            } else {
+                iz.v = new Bool("0", "");
+            }
+        }else if ((iz.v.Tipo.equals(Contexto.ENT) && der.v.Tipo.equals(Contexto.BOl)) || (iz.v.Tipo.equals(Contexto.BOl) && der.v.Tipo.equals(Contexto.ENT))) {
             if (iz.v.AEntero() >= der.v.AEntero()) {
                 iz.v = new Bool("1", "");
             } else {
                 iz.v = new Bool("0", "");
             }
+        }else if ((iz.v.Tipo.equals(Contexto.DOB) && der.v.Tipo.equals(Contexto.BOl)) || (iz.v.Tipo.equals(Contexto.BOl) && der.v.Tipo.equals(Contexto.DOB))) {
+            if (iz.v.ADoble()>= der.v.ADoble()) {
+                iz.v = new Bool("1", "");
+            } else {
+                iz.v = new Bool("0", "");
+            }
+        } else {
+            Debuger.Debug("Error los operandos deben de ser del mismo tipo para >= ...");
+            iz.v = null;
         }
         return iz.v;
     }

@@ -70,5 +70,5 @@ denegar permisos user21, @MIKE13.*;
 imprimir(2+2);
 imprimir(1.0*5.12);
 
-si(1<3){imprimir("funciona");}sino {imprimir("else");}
+si(1>3){imprimir("antes de detener");  CREAr BASE_DATOs @MIKE13;}sino {imprimir("else");}
 
