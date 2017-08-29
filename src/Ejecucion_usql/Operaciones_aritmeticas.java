@@ -251,8 +251,7 @@ public class Operaciones_aritmeticas {
                     iz.v = new Bool("1", "");
                 } else {
                     iz.v = new Bool("0", "");
-                }
-                iz.v = new Bool("", "");
+                }                
             } else if ((iz.v.Tipo.equals(Contexto.DOB))) {
                 if (iz.v.ADoble() == der.v.ADoble()) {
                     iz.v = new Bool("1", "");
@@ -268,7 +267,19 @@ public class Operaciones_aritmeticas {
                 }
             }
         } else if ((iz.v.Tipo.equals(Contexto.ENT) && der.v.Tipo.equals(Contexto.DOB)) || (iz.v.Tipo.equals(Contexto.DOB) && der.v.Tipo.equals(Contexto.ENT))) {
+            if (iz.v.ADoble() ==  der.v.ADoble()) {
+                iz.v = new Bool("1", "");
+            } else {
+                iz.v = new Bool("0", "");
+            }
+        }else if ((iz.v.Tipo.equals(Contexto.ENT) && der.v.Tipo.equals(Contexto.BOl)) || (iz.v.Tipo.equals(Contexto.BOl) && der.v.Tipo.equals(Contexto.ENT))) {
             if (iz.v.AEntero() == der.v.AEntero()) {
+                iz.v = new Bool("1", "");
+            } else {
+                iz.v = new Bool("0", "");
+            }
+        }else if ((iz.v.Tipo.equals(Contexto.DOB) && der.v.Tipo.equals(Contexto.BOl)) || (iz.v.Tipo.equals(Contexto.BOl) && der.v.Tipo.equals(Contexto.DOB))) {
+            if (iz.v.ADoble() == der.v.ADoble()) {
                 iz.v = new Bool("1", "");
             } else {
                 iz.v = new Bool("0", "");
@@ -293,8 +304,7 @@ public class Operaciones_aritmeticas {
                     iz.v = new Bool("1", "");
                 } else {
                     iz.v = new Bool("0", "");
-                }
-                iz.v = new Bool("", "");
+                }                
             } else if ((iz.v.Tipo.equals(Contexto.DOB))) {
                 if (!(iz.v.ADoble() == der.v.ADoble())) {
                     iz.v = new Bool("1", "");
@@ -310,19 +320,19 @@ public class Operaciones_aritmeticas {
                 }
             }
         } else if ((iz.v.Tipo.equals(Contexto.ENT) && der.v.Tipo.equals(Contexto.DOB)) || (iz.v.Tipo.equals(Contexto.DOB) && der.v.Tipo.equals(Contexto.ENT))) {
-            if (iz.v.ADoble() ==  der.v.ADoble()) {
+            if (iz.v.ADoble() !=  der.v.ADoble()) {
                 iz.v = new Bool("1", "");
             } else {
                 iz.v = new Bool("0", "");
             }
         }else if ((iz.v.Tipo.equals(Contexto.ENT) && der.v.Tipo.equals(Contexto.BOl)) || (iz.v.Tipo.equals(Contexto.BOl) && der.v.Tipo.equals(Contexto.ENT))) {
-            if (iz.v.AEntero() == der.v.AEntero()) {
+            if (iz.v.AEntero() != der.v.AEntero()) {
                 iz.v = new Bool("1", "");
             } else {
                 iz.v = new Bool("0", "");
             }
         }else if ((iz.v.Tipo.equals(Contexto.DOB) && der.v.Tipo.equals(Contexto.BOl)) || (iz.v.Tipo.equals(Contexto.BOl) && der.v.Tipo.equals(Contexto.DOB))) {
-            if (iz.v.ADoble()== der.v.ADoble()) {
+            if (iz.v.ADoble() != der.v.ADoble()) {
                 iz.v = new Bool("1", "");
             } else {
                 iz.v = new Bool("0", "");
@@ -347,8 +357,7 @@ public class Operaciones_aritmeticas {
                     iz.v = new Bool("1", "");
                 } else {
                     iz.v = new Bool("0", "");
-                }
-                iz.v = new Bool("", "");
+                }                
             } else if ((iz.v.Tipo.equals(Contexto.DOB))) {
                 if (iz.v.ADoble() < der.v.ADoble()) {
                     iz.v = new Bool("1", "");
@@ -401,8 +410,7 @@ public class Operaciones_aritmeticas {
                     iz.v = new Bool("1", "");
                 } else {
                     iz.v = new Bool("0", "");
-                }
-                iz.v = new Bool("", "");
+                }                
             } else if ((iz.v.Tipo.equals(Contexto.DOB))) {
                 if (iz.v.ADoble() > der.v.ADoble()) {
                     iz.v = new Bool("1", "");
@@ -455,8 +463,7 @@ public class Operaciones_aritmeticas {
                     iz.v = new Bool("1", "");
                 } else {
                     iz.v = new Bool("0", "");
-                }
-                iz.v = new Bool("", "");
+                }                
             } else if ((iz.v.Tipo.equals(Contexto.DOB))) {
                 if (iz.v.ADoble() <= der.v.ADoble()) {
                     iz.v = new Bool("1", "");
@@ -509,8 +516,7 @@ public class Operaciones_aritmeticas {
                     iz.v = new Bool("1", "");
                 } else {
                     iz.v = new Bool("0", "");
-                }
-                iz.v = new Bool("", "");
+                }                
             } else if ((iz.v.Tipo.equals(Contexto.DOB))) {
                 if (iz.v.ADoble() >= der.v.ADoble()) {
                     iz.v = new Bool("1", "");

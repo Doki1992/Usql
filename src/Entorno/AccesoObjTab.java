@@ -5,19 +5,20 @@
  */
 package Entorno;
 
-import proyecto.Contexto;
-import proyecto.Debuger;
-
 /**
  *
  * @author mike
  */
-public class Bool extends Valor{
-    public String valor;
-    public Bool(String valor, String tipo){
-        this.valor =  valor;
-        this.Tipo =  Contexto.BOl;
+public class AccesoObjTab extends Valor{
+    public String valor ;
+    public boolean esta = false;
+    public AccesoObjTab(String valor, boolean esta) {
+        this.valor = valor;
+        this.Tipo =  "Acceso";
+        this.esta =  esta;
     }
+    
+    
     
     @Override
     public String ACadena() {        
@@ -41,5 +42,4 @@ public class Bool extends Valor{
         }
         return false;
     }
-    
 }

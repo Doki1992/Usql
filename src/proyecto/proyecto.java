@@ -13,6 +13,7 @@ import arbolxml.*;
 import visitor.*;
 import visitorxml.*;
 import Entorno.*;
+import java.util.HashMap;
 /**
  *
  * @author mike
@@ -23,7 +24,7 @@ public class proyecto {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws FileNotFoundException, IOException, ParseException_usql {
-        // TODO code application logic here
+        // TODO code application logic here              
         Contexto.ObtenerPathCononico();
         UsqlParser a = new UsqlParser(new java.io.FileInputStream("sample.dat"));
         INode_usql init  = a.Inicio();

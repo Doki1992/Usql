@@ -12,7 +12,9 @@ import Ejecucion_usql.*;
 public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
 
     public Ent levantado = new Ent(null);
-
+    private boolean flujo =  false;
+    private Ent global =  new Ent(null);
+    
     public R visit(final NodeChoice n) {
         final R nRes = n.choice.accept(this);
         return nRes;
@@ -67,7 +69,10 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
 
     public R visit(final Inicio n) {
         R nRes = null;
-        n.f0.accept(this);
+        try {
+            n.f0.accept(this);            
+        } catch (NullPointerException ex) {            
+        }                
         return nRes;
     }
 
@@ -166,8 +171,8 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 INode_usql dd_si = (INode_usql) n.f0.choice;
                 return (R) dd_si.accept(this);                
             case 13:
-
-                break;
+                INode_usql dd_selecciona = (INode_usql) n.f0.choice;
+                return (R) dd_selecciona.accept(this);                 
             case 14:
                 break;
             case 15:
@@ -622,6 +627,23 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 break;
             case 3:
                 //identificadores por el momento me falta...
+                NodeSequence ns = (NodeSequence)nc.choice;
+                NodeToken token1 =  (NodeToken) ns.nodes.get(0); //el primer token 
+                NodeOptional op1 =  (NodeOptional) ns.nodes.get(1);
+                if(op1.present()){
+                    NodeChoice choice =  (NodeChoice) op1.node;
+                    switch(choice.which){
+                        case 0:
+                            NodeSequence ns1  =(NodeSequence) choice.choice;
+                            NodeToken to = (NodeToken) ns1.nodes.get(1);
+                            iz.v = new AccesoObjTab(token1.tokenImage + "." + to.tokenImage, true);
+                            return (R)iz;
+                        case 1:
+                            //hacer la llamada del metodo
+                            break;
+                    }
+                }
+                iz.v = new AccesoObjTab(token1.tokenImage,false);
                 break;
             case 4:
                 NodeToken tok_cadena = (NodeToken) nc.choice;
@@ -809,13 +831,30 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final Declarar n) {
-        R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
-        n.f4.accept(this);
-        return nRes;
+        Simbolo retorno =  new Simbolo("temp", "vacio", null);
+        Simbolo exp_l = null;
+        Simbolo tipo = null;
+        Simbolo tipo_objeto = null;
+        NodeListOptional lista_ide = n.f2; //lista  id
+        lista_ide.nodes.add(0, n.f1); //
+        n.f3.accept(this); //opcion primitivo o no         
+        switch(n.f3.which){
+            case 0:
+                NodeSequence ns =  (NodeSequence) n.f3.choice;
+                tipo =  (Simbolo) ns.nodes.get(0).accept(this);                
+                NodeOptional op =  (NodeOptional)ns.nodes.get(1);
+                NodeSequence ns1;
+                if(op.present()){
+                    ns1 = (NodeSequence) op.node;
+                    exp_l =(Simbolo) ns1.nodes.get(1).accept(this);                    
+                }
+                break;
+            case 1:
+                NodeToken tok =  (NodeToken) n.f3.choice;
+                tipo_objeto = new Simbolo ("temp", tok.tokenImage, null);
+                break;
+        }
+        return (R)retorno;
     }
 
     public R visit(final asignacion n) {
@@ -836,7 +875,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 ret = (Simbolo) node.accept(this);
                 if (ret.v.ACadena().equals(Contexto.RETORNO)) {
                     return (R) ret;
-                } else if (ret.v.ACadena().equals(Contexto.DETENER)) {
+                } else if (ret.v.ACadena().equals(Contexto.DETENER) && flujo) {
                     return (R) ret;
                 }
             }
@@ -849,7 +888,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                     ret = (Simbolo) node.accept(this);
                     if (ret.v.ACadena().equals(Contexto.RETORNO)) {
                         return (R) ret;
-                    } else if (ret.v.ACadena().equals(Contexto.DETENER)) {
+                    } else if (ret.v.ACadena().equals(Contexto.DETENER) && flujo) {
                         return (R) ret;
                     }
                 }
@@ -862,18 +901,19 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
         
         Simbolo exp_selec = (Simbolo)n.f2.accept(this); //expresion logica        
         NodeSequence ns =  n.f5; //nodeopcional}
+        Bool b ;
         caso caso1 =  (caso) ns.nodes.get(0);
         NodeListOptional nop =  n.f6;
         boolean ejecuta_defecto =  true;
         boolean ejecuta_hasta =  false;
         Simbolo retorno =  new Simbolo("temp", "", new Texto("vacio", ""));
-        nop.nodes.add(caso1);
+        nop.nodes.add(0,caso1);
         
         for(INode_usql node :  nop.nodes){
             caso c =  (caso) node;
             Simbolo exp_caso =  (Simbolo) c.f1.accept(this);
-            exp_selec.v = Operaciones_aritmeticas.OperacionIgualdad(exp_caso, exp_selec);
-            if(exp_selec.v.ABool()){
+            b = (Bool)Operaciones_aritmeticas.OperacionIgualdad(exp_caso, exp_selec);
+            if(b.ABool()){
                 retorno = (Simbolo) c.accept(this);
                 ejecuta_defecto =  false;
                 ejecuta_hasta =  true;
@@ -912,9 +952,8 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
             if(retorno.v.ACadena().equals(Contexto.RETORNO)){
                 return (R)retorno;
             }
-            if(retorno.v.ACadena().equals(Contexto.DETENER)){
-                retorno.v =  new Texto("vacio", "");
-                break;
+            if(retorno.v.ACadena().equals(Contexto.DETENER)){                
+                return (R)retorno;
             }
         }
         return (R)retorno;

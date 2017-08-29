@@ -7,6 +7,8 @@ package Entorno;
 
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map.Entry;
+import proyecto.Debuger;
 
 /**
  *
@@ -31,10 +33,25 @@ public class Ent {
     }
     
     public void insertar(String id, Simbolo s){
-        this.tabla.put(id, s);
+        if(this.tabla.containsKey(id)){
+            Debuger.Debug("Se ha detectado un estado de ambiguedad entre un objeto usql y el nombre de una variable...", false, null);
+            Debuger.Debug("Esposible que exista un objeto usql con el mismo nombre que la variable " + id + "...",false, null);
+            Debuger.Debug("Por favor verifique el nombre de las variables declaradas y asegurese de que no tengan el nombre de ningun objero usql...",false,null);
+            ListarObjetosUsql();
+            
+        }else{
+            this.tabla.put(id, s);
+        }               
     }
     
     public boolean existe(String id){
         return (this.tabla.get(id)!=null);
+    }
+    
+    private void ListarObjetosUsql(){
+        Debuger.Debug("Listado de objetos usql...");
+        for(Entry<String, Simbolo> s: this.tabla.entrySet() ){            
+            Debuger.Debug(s.getKey() + "...");
+        }
     }
 }

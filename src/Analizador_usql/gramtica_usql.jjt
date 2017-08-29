@@ -188,7 +188,7 @@ void listasentencias() :
 | Declarar() //si
 | LOOKAHEAD(6) asignacion()
 | Si()  //si
-| Selecciona()
+| Selecciona() //si
 | Para()
 | Mientras()
 | Imprimir() //si

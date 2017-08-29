@@ -37,6 +37,7 @@ public class Contexto {
     public static final String FP = "FP";
     public static final String OBJ = "OBJ";
     public static final String TB = "TB";
+    public static final String ACCESO = "Acceso";
     public static final String USUARIO = "Usuario";
     public static final String RETORNO = "retorno";    
     public static final String DETENER = "detener";
