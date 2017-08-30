@@ -193,7 +193,7 @@ void listasentencias() :
 | Mientras() //si
 | Imprimir() //si
 | Contar()  
-| Backup_dump ()
+| Backup_dump () 
 | Restaurar () 
 | LOOKAHEAD(6) exp_logica() ";" // si
 

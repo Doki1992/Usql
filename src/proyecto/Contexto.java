@@ -41,10 +41,26 @@ public class Contexto {
     public static final String USUARIO = "Usuario";
     public static final String RETORNO = "retorno";    
     public static final String DETENER = "detener";
-    
-    
+    private static final String BD_BACKUP = "" + "/Bases/backup/";
+    public static boolean Backup = false;
+    public static String contenidoBitacora = "";     
     private static final File FILE =  new File(".");
     public static  String CanonicalPath;
+    
+    public static void LimpiarBackUp(String path, int size, Admon_archivo ar) throws IOException{
+        for(int i  = 0; i< size; i++){
+            ar.EscribirRegistroBd(size, " ",path);
+        }
+    }
+    public static void EscribirBdDump(String nuevo) throws IOException{
+        String path_bd_back =  FILE.getCanonicalPath()+BD_BACKUP+EnUso.nombre+".dump";
+        Admon_archivo ar =  new Admon_archivo();
+        String viejo = ar.LeerRegistroBd(0, path_bd_back, ar.Tamano(path_bd_back));
+        LimpiarBackUp(path_bd_back, ar.Tamano(path_bd_back), ar);
+        viejo += nuevo;        
+        ar.EscribirRegistroBd(0, viejo, path_bd_back);        
+    }
+    
     public static void ObtenerPathCononico() throws IOException{
          CanonicalPath = FILE.getCanonicalPath();
     }

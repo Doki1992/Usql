@@ -8,13 +8,18 @@ import Analizador_usql.*;
 import proyecto.*;
 import Entorno.*;
 import Ejecucion_usql.*;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
 
 public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
 
+    public INode_usql BackUpDump;
     public Ent levantado = new Ent(null);
     private boolean flujo =  false;
     private Ent global =  new Ent(null);
+    
     
     public R visit(final NodeChoice n) {
         final R nRes = n.choice.accept(this);
@@ -25,11 +30,18 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
         R nRes = null;
         for (final Iterator<INode_usql> e = n.elements(); e.hasNext();) {                        
             try{
-                final R sRes = e.next().accept(this);
+                INode_usql no =  (INode_usql)e.next();
+                final R sRes = no.accept(this);
+                if(Contexto.Backup){
+                    DepthFirstVoidVisitor vi =  new DepthFirstVoidVisitor();
+                    no.accept(vi);
+                    Contexto.contenidoBitacora = vi.instrucciones.toString() + "\n";
+                    //Contexto.EscribirBdDump(Contexto.contenidoBitacora);
+                }
             }catch(NullPointerException ex){
-                
+                Debuger.Debug(ex);
             }
-        }
+        }        
         return nRes;
     }
 
@@ -110,6 +122,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 NodeToken Tusar = (NodeToken) Usar.nodes.get(1);
                 String NombreBase = Tusar.tokenImage;
                 Instruccion_usar.UsarBase(NombreBase);
+                Contexto.Backup =  true;
                 break;
             case 2:
                 NodeSequence dd_alterar = (NodeSequence) n.f0.choice;
@@ -1084,13 +1097,13 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final Backup_dump n) {
-        R nRes = null;
-        n.f0.accept(this);
+        Simbolo retorno =  new Simbolo ("", "",new Texto("vacio", ""));
+        
         n.f1.accept(this);
         n.f2.accept(this);
         n.f3.accept(this);
-        n.f4.accept(this);
-        return nRes;
+        
+        return (R)retorno;
     }
 
     public R visit(final Restaurar n) {

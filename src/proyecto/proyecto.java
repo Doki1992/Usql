@@ -29,6 +29,7 @@ public class proyecto {
         UsqlParser a = new UsqlParser(new java.io.FileInputStream("sample.dat"));
         INode_usql init  = a.Inicio();
         DepthFirstRetVisitor_usql <Simbolo> v = new DepthFirstRetVisitor_usql<>();
+        v.BackUpDump = init;
         init.accept(v);
                          
     }
