@@ -189,7 +189,7 @@ void listasentencias() :
 | LOOKAHEAD(6) asignacion()
 | Si()  //si
 | Selecciona() //si
-| Para()
+| Para() //si
 | Mientras()
 | Imprimir() //si
 | Contar()

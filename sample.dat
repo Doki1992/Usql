@@ -70,7 +70,7 @@ denegar permisos user21, @MIKE13.*;
 imprimir(2+2);
 imprimir(1.0*5.12);
 
-si(1>3){imprimir("antes de detener");  CREAr BASE_DATOs @MIKE13;}sino {imprimir("else");}
+si(1>"3"){imprimir("antes de detener");  CREAr BASE_DATOs @MIKE13;}sino {imprimir("else");}
 
 selecciona(1){
 caso 1:
@@ -83,6 +83,21 @@ imprimir("estoy en el caso " + 3);
 defecto: "estoy en defecto";
 }
 
-declarar a date = 20-02-2015;
+declarar a,b date = 20-02-2015;
+declarar @jota date = 20-02-1995;
+@jota;  
 a;
+declarar @jota1 date = @jota;
+c;
+declarar p double = 23;
+declarar p double = 23;
+p;
+!(p<10 || 0);
+Para(declarar uno integer = 0; uno <= 10; ++){
+
+si(uno == 10){
+imprimir(10 + "si");
+}
+
+}
 

@@ -8,6 +8,7 @@ import Analizador_usql.*;
 import proyecto.*;
 import Entorno.*;
 import Ejecucion_usql.*;
+import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
 
 public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
 
@@ -22,9 +23,12 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
 
     public R visit(final NodeList n) {
         R nRes = null;
-        for (final Iterator<INode_usql> e = n.elements(); e.hasNext();) {
-            @SuppressWarnings("unused")
-            final R sRes = e.next().accept(this);
+        for (final Iterator<INode_usql> e = n.elements(); e.hasNext();) {                        
+            try{
+                final R sRes = e.next().accept(this);
+            }catch(NullPointerException ex){
+                
+            }
         }
         return nRes;
     }
@@ -69,10 +73,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
 
     public R visit(final Inicio n) {
         R nRes = null;
-        try {
-            n.f0.accept(this);            
-        } catch (NullPointerException ex) {            
-        }                
+        n.f0.accept(this);
         return nRes;
     }
 
@@ -175,7 +176,8 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 INode_usql dd_selecciona = (INode_usql) n.f0.choice;
                 return (R) dd_selecciona.accept(this);                 
             case 14:
-                break;
+                INode_usql dd_para = (INode_usql) n.f0.choice;
+                return (R) dd_para.accept(this);                                 
             case 15:
                 break;
             case 16:
@@ -644,7 +646,8 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                             break;
                     }
                 }
-                iz =  global.Buscar(token1.tokenImage);
+                Simbolo aux = global.Buscar(token1.tokenImage);
+                iz.v = aux.v;
                 break;
             case 4:
                 NodeToken tok_cadena = (NodeToken) nc.choice;
@@ -676,8 +679,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
         return (R) iz;
     }
 
-    public R visit(final exp_relacional n) {
-        n.f0.accept(this);
+    public R visit(final exp_relacional n) {        
         Simbolo iz = null;
         Simbolo der;
         switch (n.f0.which) {
@@ -968,18 +970,47 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final Para n) {
-        R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
+        Simbolo retorno = new Simbolo("temp", "", null);
         n.f2.accept(this);
-        n.f3.accept(this);
-        n.f4.accept(this);
-        n.f5.accept(this);
-        n.f6.accept(this);
-        n.f7.accept(this);
-        n.f8.accept(this);
-        n.f9.accept(this);
-        return nRes;
+        Ent d  = this.global;
+        Simbolo exp_l = (Simbolo) n.f3.accept(this);
+        String varContro = n.f2.f1.tokenImage;
+        Simbolo varControl = this.global.Buscar(varContro);
+        if (varControl.v.Tipo.equals(Contexto.ENT)) {
+            while (exp_l.v.ABool()) {
+                for (INode_usql node : n.f8.nodes) {
+                    retorno = (Simbolo) node.accept(this);
+                    if (retorno.v.ACadena().equals(Contexto.RETORNO)) {
+                        return (R) retorno;
+                    }
+                    if (retorno.v.ACadena().equals(Contexto.DETENER)) {                        
+                        break;
+                    }
+                }
+                if(retorno.v.ACadena().equals(Contexto.DETENER)){
+                    retorno.v = new Texto("vacio", "");
+                    break;
+                }                                    
+                int valor;
+                Entero val;
+                switch (n.f5.which) {
+                    case 0:
+                        valor =  varControl.v.AEntero() + 1;
+                        val =  new Entero(Integer.toString(valor), varContro);
+                        varControl.v = val;
+                        break;
+                    case 1:
+                        valor =  varControl.v.AEntero() - 1;                        
+                        val =  new Entero(Integer.toString(valor), varContro);
+                        varControl.v = val;
+                        break;
+                }
+                exp_l = (Simbolo) n.f3.accept(this);
+            }
+        }else{
+            Debuger.Debug("Error la variable de contron del cilco para debe de ser de tipo entero...",false,null);
+        }
+        return (R) retorno;
     }
 
     public R visit(final Mientras n) {
