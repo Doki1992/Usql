@@ -168,7 +168,8 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 INode_usql dd_declarar = (INode_usql) n.f0.choice;
                 return (R) dd_declarar.accept(this);                   
             case 11:
-                break;
+                INode_usql dd_asignacion = (INode_usql) n.f0.choice;
+                return (R) dd_asignacion.accept(this);  
             case 12:
                 INode_usql dd_si = (INode_usql) n.f0.choice;
                 return (R) dd_si.accept(this);                
@@ -179,15 +180,18 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 INode_usql dd_para = (INode_usql) n.f0.choice;
                 return (R) dd_para.accept(this);                                 
             case 15:
-                break;
+                INode_usql dd_mientras = (INode_usql) n.f0.choice;
+                return (R) dd_mientras.accept(this);
             case 16:
                 INode_usql dd_imprimir = (INode_usql) n.f0.choice;
-                return dd_imprimir.accept(this);                
+                return dd_imprimir.accept(this);
             case 17:
                 break;
             case 18:
+                // back up
                 break;
             case 19:
+                //restarura up
                 break;
             case 20:
                 NodeSequence dd_expresion = (NodeSequence) n.f0.choice;
@@ -834,7 +838,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final Declarar n) {
-        Simbolo retorno =  new Simbolo("temp", "vacio", null);
+        Simbolo retorno =  new Simbolo("temp", "vacio", new Texto("", ""));
         Simbolo exp_l = null;
         Simbolo tipo = null;
         Simbolo tipo_objeto = null;
@@ -868,13 +872,20 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final asignacion n) {
-        R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
-        n.f4.accept(this);
-        return nRes;
+        Simbolo retorno =  new Simbolo("temporal", "", new Texto("", ""));
+        String idVar =  n.f0.tokenImage;
+        Simbolo var =  this.global.Buscar(idVar);
+        if(var != null){
+            if(n.f1.present()){
+                // asignacion objetos
+            }else{
+                Instruccion_declarar asig =  new Instruccion_declarar(this.global);
+                asig.AsignarVar(var, (Simbolo)n.f3.accept(this));
+            }
+        }else{
+            Debuger.Debug("La variable con nombre " + idVar + " no ha sido declarada...", false, null);
+        }        
+        return (R)retorno;
     }
 
     public R visit(final Si n) {
@@ -972,7 +983,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final Para n) {
-        Simbolo retorno = new Simbolo("temp", "", null);
+        Simbolo retorno = new Simbolo("temp", "", new Texto("", ""));
         n.f2.accept(this);
         Ent d  = this.global;
         Simbolo exp_l = (Simbolo) n.f3.accept(this);
@@ -1016,15 +1027,23 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final Mientras n) {
-        R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
-        n.f4.accept(this);
-        n.f5.accept(this);
-        n.f6.accept(this);
-        return nRes;
+        Simbolo retorno = new Simbolo("temporal", "", null);
+        Simbolo exp_l = (Simbolo) n.f2.accept(this);
+        while (((Simbolo) n.f2.accept(this)).v.ABool()) {
+            for (INode_usql node : n.f5.nodes) {
+                retorno = (Simbolo) node.accept(this);
+                if (retorno.v.ACadena().equals(Contexto.RETORNO)) {
+                    return (R) retorno;
+                }
+                if (retorno.v.ACadena().equals(Contexto.DETENER)) {
+                    break;
+                }
+            }
+            if (retorno.v.ACadena().equals(Contexto.DETENER)) {
+                retorno.v = new Texto("vacio", "");
+            }
+        }
+        return (R) retorno;
     }
 
     public R visit(final Detener n) {

@@ -115,3 +115,16 @@ defecto: "estoy en defecto";
 
 }
 
+p = p+5 + "cadena";
+p;
+p = p*38/58;
+p;
+mientras ( p >= 10){
+"valor de p: " + p;
+p =  p-1.0;
+mientras ( p > 10){
+"valor de p: " + p;
+retorno 0;
+}
+}
+

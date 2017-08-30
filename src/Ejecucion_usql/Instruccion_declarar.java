@@ -74,6 +74,15 @@ public class Instruccion_declarar {
         }
     }
     
+    public void AsignarVar(Simbolo iz, Simbolo exp){
+        if(!comprobarTipos(iz, exp))
+            return;
+        iz.v = this.v;
+    }
+    
+    public void AsignarObjeto(Simbolo iz, String padre){
+        
+    }
     public void declararObjeto(){
         
     }
