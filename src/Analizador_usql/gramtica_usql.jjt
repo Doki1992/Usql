@@ -186,13 +186,13 @@ void listasentencias() :
 | otorgar() //si
 | denegar() //si
 | Declarar() //si
-| LOOKAHEAD(6) asignacion()
+| LOOKAHEAD(6) asignacion() 
 | Si()  //si
 | Selecciona() //si
 | Para() //si
-| Mientras()
+| Mientras() //si
 | Imprimir() //si
-| Contar()
+| Contar() 
 | Backup_dump ()
 | Restaurar () 
 | LOOKAHEAD(6) exp_logica() ";" // si

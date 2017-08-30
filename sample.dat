@@ -79,7 +79,7 @@ detener;
 caso 2: 
 imprimir("estoy en el caso " + 2);
 caso 3: 
-imprimir("estoy en el caso " + 3);
+imprimir("estoy en el caso " + 3); retorno 3;
 defecto: "estoy en defecto";
 }
 
@@ -93,10 +93,24 @@ declarar p double = 23;
 declarar p double = 23;
 p;
 !(p<10 || 0);
-Para(declarar uno integer = 0; uno <= 10; ++){
+Para(declarar uno integer = 0; uno <= 11; ++){
 
-si(uno == 10){
-imprimir(10 + "si");
+si(uno > 0){
+si(uno > 0){
+si(uno > 0){
+selecciona(uno){
+caso 1:
+imprimir("estoy en el caso " + 1);
+detener;
+caso 2: 
+imprimir("estoy en el caso " + 2);
+caso 3: 
+imprimir("estoy en el caso " + 3); retorno 3;
+defecto: "estoy en defecto";
+}
+}
+}
+
 }
 
 }

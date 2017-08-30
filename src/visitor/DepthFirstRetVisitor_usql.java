@@ -891,20 +891,22 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
             }
         } else {
             NodeOptional no = (NodeOptional) n.f7;
-            NodeSequence ns = (NodeSequence) no.node;
-            NodeListOptional nlto = (NodeListOptional) ns.nodes.get(2);
-            if (nlto.present()) {
-                for (INode_usql node : nlto.nodes) {
-                    ret = (Simbolo) node.accept(this);
-                    if (ret.v.ACadena().equals(Contexto.RETORNO)) {
-                        return (R) ret;
-                    } else if (ret.v.ACadena().equals(Contexto.DETENER) && flujo) {
-                        return (R) ret;
+            if (no.present()) {
+                NodeSequence ns = (NodeSequence) no.node;
+                NodeListOptional nlto = (NodeListOptional) ns.nodes.get(2);
+                if (nlto.present()) {
+                    for (INode_usql node : nlto.nodes) {
+                        ret = (Simbolo) node.accept(this);
+                        if (ret.v.ACadena().equals(Contexto.RETORNO)) {
+                            return (R) ret;
+                        } else if (ret.v.ACadena().equals(Contexto.DETENER) && flujo) {
+                            return (R) ret;
+                        }
                     }
                 }
             }
         }
-        return (R)ret;
+        return (R) ret;
     }
 
     public R visit(final Selecciona n) {
