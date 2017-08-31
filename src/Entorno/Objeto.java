@@ -20,6 +20,7 @@ public class Objeto extends Valor{
         valor =  new Ent(null);
         this.Tipo = "OBJ";
     }
+    
     @Override
     public String ACadena() {
         return "";

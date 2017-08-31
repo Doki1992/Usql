@@ -128,3 +128,15 @@ retorno 0;
 }
 }
 
+
+declarar bu dos;
+declarar bu2 dos;
+bu.uno = 3;
+p =  bu.uno;
+p;
+bu.uno;
+bu2.uno;
+bu2.uno = 45-10;
+bu2.uno;
+declarar jj dateTIME = 15-07-2017 18:00:00;
+jj;

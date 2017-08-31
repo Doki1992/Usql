@@ -656,7 +656,18 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                         case 0:
                             NodeSequence ns1  =(NodeSequence) choice.choice;
                             NodeToken to = (NodeToken) ns1.nodes.get(1);
-                            //iz;
+                            Simbolo padre =  this.global.Buscar(token1.tokenImage);
+                            if(padre != null){
+                                Objeto ob1 = (Objeto) padre.v;
+                                Simbolo hijo =  ob1.valor.Buscar(to.tokenImage);
+                                if(hijo != null){
+                                    iz.v = hijo.v;
+                                }else{
+                                    Debuger.Debug("El objeto con nombre " + token1.tokenImage + " no tiene ningun atributo con nombre " + to.tokenImage + "...", false, null);
+                                }
+                            }else{
+                                Debuger.Debug("El objeto con nombre " + token1.tokenImage + " no existe..." , false, null);
+                            }
                             return (R)iz;
                         case 1:
                             //hacer la llamada del metodo
@@ -874,13 +885,13 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 tipo_objeto = new Simbolo ("temp", tok.tokenImage, null);
                 break;
         }  
-        if(tipo !=  null){
+        if(tipo !=  null && Contexto.EsObjeto(tipo.tipo) == false){
             Instruccion_declarar Dec =  new Instruccion_declarar(this.global);
             Dec.declararVar(tipo, exp_l, primerid, lista_ide);
         }else{
-            
-        }
-        
+            Instruccion_declarar dec1  = new Instruccion_declarar(this.global);
+            dec1.declararObjeto(primerid.nombre, (tipo ==  null)?tipo_objeto.tipo:tipo.tipo);
+        }        
         return (R)retorno;
     }
 
@@ -890,7 +901,10 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
         Simbolo var =  this.global.Buscar(idVar);
         if(var != null){
             if(n.f1.present()){
-                // asignacion objetos
+                NodeSequence ns =  (NodeSequence) n.f1.node;
+                NodeToken tok =  (NodeToken) ns.nodes.get(1);
+                Instruccion_declarar asig14 =  new Instruccion_declarar(this.global);
+                asig14.AsignarObjeto(var, tok.tokenImage, (Simbolo)n.f3.accept(this));
             }else{
                 Instruccion_declarar asig =  new Instruccion_declarar(this.global);
                 asig.AsignarVar(var, (Simbolo)n.f3.accept(this));

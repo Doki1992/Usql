@@ -92,12 +92,7 @@ public class Contexto {
         }
     }
     public static boolean ExisteColumna(LinkedList<Simbolo> valores, String columna){
-        for(Simbolo s: valores){
-            if(s.nombre.equals(columna)){
-                return true;
-            }
-        }
-        return false;
+        return valores.stream().anyMatch((s) -> (s.nombre.equals(columna)));
     }
     
     public static int  ObtenerPosicion(LinkedList<Simbolo> valores, String columna){
@@ -111,5 +106,22 @@ public class Contexto {
         return 0;
     }
     
+    public static boolean EsObjeto(String tipo){
+        if(ENT.equals(tipo)){
+            return false;
+        }else if(DOB.equals(tipo)){
+            return false;
+        }else if(TEX.equals(tipo)){
+            return false;
+        }else if(BOl.equals(tipo)){
+            return false;
+        }else if(DAT.equals(tipo)){
+            return false;
+        }else if(DATH.equals(tipo)){
+            return false;
+        }else{
+            return true;
+        }
+    }
     
 }

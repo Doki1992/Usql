@@ -5,12 +5,22 @@
  */
 package Ejecucion_usql;
 
+import Analizador_xml.ParseException;
+import Analizador_xml.XmlParser;
+import static Ejecucion_usql.Instruccion_alterar.GenerarTextoObjetoNuevo;
 import Entorno.*;
+import arbolxml.INode;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import proyecto.Admon_archivo;
 import proyecto.Contexto;
 import proyecto.Debuger;
 import syntaxtree.INode_usql;
 import syntaxtree.NodeListOptional;
 import syntaxtree.*;
+import visitorxml.DepthFirstRetVisitor;
 
 /**
  *
@@ -21,6 +31,12 @@ public class Instruccion_declarar {
     Ent entorno;
     String tipo;
     Valor v;
+    
+    private static final String BD_OBJ = Contexto.CanonicalPath + "/Bases/objetos/";
+    private static XmlParser parser;
+    private static Admon_archivo ar = new Admon_archivo();
+    private static Ent levantado;
+    
     public Instruccion_declarar(Ent entorno){
         this.entorno =  entorno;
     }
@@ -30,7 +46,9 @@ public class Instruccion_declarar {
     }
     
     private boolean comprobarTipos(Simbolo tipo, Simbolo exp){
-        if(tipo.tipo.equals(Contexto.TEX)){
+        if(exp == null){
+            return true;
+        }else if(tipo.tipo.equals(Contexto.TEX)){
             this.tipo = Contexto.TEX;
             this.v = new Texto(exp.v.ACadena(), "");
             return true;
@@ -80,11 +98,53 @@ public class Instruccion_declarar {
         iz.v = this.v;
     }
     
-    public void AsignarObjeto(Simbolo iz, String padre){
-        
+    public void AsignarObjeto(Simbolo iz, String hijo, Simbolo exp){
+        if(iz.v.Tipo.equals(Contexto.OBJ)){
+            Objeto obj =  (Objeto)iz.v;
+            Simbolo son =  obj.valor.Buscar(hijo);
+            if(son != null){
+                AsignarVar(son, exp);
+            }else{
+                Debuger.Debug("El objeto " + iz.nombre + " no tiene ningun atributo con nombre " + hijo + "...", false, null);
+            }
+        }else{
+            Debuger.Debug("Error la variable " + iz.nombre + " no es un objeto..." , false, null);
+        }
     }
-    public void declararObjeto(){
-        
+    
+    public void declararObjeto(String nombreOjeto, String nombreTipoObjeto){
+        Objeto obj =  this.LeerObjetos(nombreTipoObjeto);
+        if(obj !=  null){
+            Objeto  ob =  new Objeto("");
+            ob.valor.tabla =  new HashMap<>(obj.valor.tabla);
+            Simbolo nuevoObjeto =  new Simbolo(nombreOjeto, nombreTipoObjeto, ob);
+            this.entorno.insertar(nuevoObjeto.nombre, nuevoObjeto);
+            Debuger.Debug("Objeto creado exitosamente... " + nombreOjeto + " ...!");
+        }
+    }
+    
+    private Objeto LeerObjetos(String identificador) {
+        String contenidoTexto;
+        try {
+            contenidoTexto = ar.LeerRegistroBd(0, Contexto.EnUso.path_obj, ar.Tamano(Contexto.EnUso.path_obj));
+            parser = new XmlParser(new ByteArrayInputStream(contenidoTexto.getBytes(StandardCharsets.UTF_8)));
+            INode init = parser.Inicio();
+            DepthFirstRetVisitor<Simbolo> v = new DepthFirstRetVisitor<>();
+            init.accept(v);
+            levantado = v.levantado;
+            if (levantado.existe(identificador)) {
+               return ((Objeto)levantado.Buscar(identificador).v); 
+            } else {
+                Debuger.Debug("Error el objeto " + identificador + " no existe...");
+            }
+        } catch (IOException ex) {
+            Debuger.Debug(ex);
+        } catch (ParseException ex) {
+            Debuger.Debug(ex);
+        } catch (NullPointerException ex) {
+            Debuger.Debug("Error no se ha seleccionado una base de datos ...");
+        }
+        return null;
     }
     
 }
