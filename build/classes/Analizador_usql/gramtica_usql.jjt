@@ -289,7 +289,7 @@ void tipo() :
 |"bool"
 |"date"
 |"datetime"
-| <S_IDENTIFICADORa
+| <S_IDENTIFICADOR>
 }
 
 void complemento_campo(): 
