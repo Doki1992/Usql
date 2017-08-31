@@ -136,7 +136,7 @@ p =  bu.uno;
 p;
 bu.uno;
 bu2.uno;
-bu2.uno = 45-10;
+bu2.uno1 = 45-10;
 bu2.uno;
 declarar jj dateTIME = 15-07-2017 18:00:00;
 jj;
