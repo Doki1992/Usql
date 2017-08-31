@@ -19,6 +19,8 @@ public interface IRetVisitor<R> {
 
   public R visit(final lista_xml n);
 
+  public R visit(final row n);
+
   public R visit(final usuarioxml n);
 
   public R visit(final procedimiento n);
@@ -36,6 +38,8 @@ public interface IRetVisitor<R> {
   public R visit(final Tablaxml n);
 
   public R visit(final lista_row n);
+
+  public R visit(final reg n);
 
   public R visit(final atributo n);
 

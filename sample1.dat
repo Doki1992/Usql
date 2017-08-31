@@ -1,3 +1,5 @@
+
+
 <tabla><nombre>uno4</nombre><permiso>""</permiso><path>"/home/mike/NetBeansProjects/Proyecto/Bases/tablas/@MIKE13_uno4.bd"</path><rows><int>dos<nulo>0</nulo></int><int>tres<nulo>1</nulo></int><int>b<for>uno4</for></int></rows><seek>600</seek></tabla>
 
 
@@ -50,7 +52,5 @@ mike
 <src>"hola min"</src>
 </proc>
 
-
-
-<usuario><nombre>user1</nombre><seek>1200</seek><clave>""hola""</clave></usuario>
+<rows><dos>"mike"</dos> <dos><dos1>""</dos1><dos2>""</dos2></dos></rows>
 

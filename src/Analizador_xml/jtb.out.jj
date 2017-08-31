@@ -171,31 +171,58 @@ lista_xml lista_xml() :
   objeto n5 = null;
   procedimiento n6 = null;
   usuarioxml n7 = null;
+  row n8 = null;
 }
 {
   (
     n1 = Db()
-    { n0 = new NodeChoice(n1, 0, 7); }
+    { n0 = new NodeChoice(n1, 0, 8); }
   |
     n2 = Tablaxml()
-    { n0 = new NodeChoice(n2, 1, 7); }
+    { n0 = new NodeChoice(n2, 1, 8); }
   |
     n3 = proc()
-    { n0 = new NodeChoice(n3, 2, 7); }
+    { n0 = new NodeChoice(n3, 2, 8); }
   |
     n4 = obj()
-    { n0 = new NodeChoice(n4, 3, 7); }
+    { n0 = new NodeChoice(n4, 3, 8); }
   |
     n5 = objeto()
-    { n0 = new NodeChoice(n5, 4, 7); }
+    { n0 = new NodeChoice(n5, 4, 8); }
   |
     n6 = procedimiento()
-    { n0 = new NodeChoice(n6, 5, 7); }
+    { n0 = new NodeChoice(n6, 5, 8); }
   |
     n7 = usuarioxml()
-    { n0 = new NodeChoice(n7, 6, 7); }
+    { n0 = new NodeChoice(n7, 6, 8); }
+  |
+    n8 = row()
+    { n0 = new NodeChoice(n8, 7, 8); }
   )
   { return new lista_xml(n0); }
+}
+
+row row() :
+{
+  // --- JTB generated node declarations ---
+  NodeToken n0 = null;
+  Token n1 = null;
+  NodeList n2 = new NodeList();
+  reg n3 = null;
+  NodeToken n4 = null;
+  Token n5 = null;
+}
+{
+  n1 = "<rows>"
+  { n0 = JTBToolkit.makeNodeToken(n1); }
+  (
+    n3 = reg()
+    { n2.addNode(n3); }
+  )+
+  { n2.nodes.trimToSize(); }
+  n5 = "</rows>"
+  { n4 = JTBToolkit.makeNodeToken(n5); }
+  { return new row(n0, n2, n4); }
 }
 
 usuarioxml usuarioxml() :
@@ -627,6 +654,42 @@ lista_row lista_row() :
   n7 = < K_idenf >
   { n6 = JTBToolkit.makeNodeToken(n7); }
   { return new lista_row(n0, n2, n4, n6); }
+}
+
+reg reg() :
+{
+  // --- JTB generated node declarations ---
+  NodeToken n0 = null;
+  Token n1 = null;
+  NodeChoice n2 = null;
+  NodeToken n3 = null;
+  Token n4 = null;
+  NodeList n5 = new NodeList();
+  reg n6 = null;
+  NodeToken n7 = null;
+  Token n8 = null;
+}
+{
+  n1 = < K_iden >
+  { n0 = JTBToolkit.makeNodeToken(n1); }
+  (
+    (
+      n4 = < CADENA_LITERAL >
+      { n3 = JTBToolkit.makeNodeToken(n4); }
+      { n2 = new NodeChoice(n3, 0, 2); }
+    |
+      (
+        n6 = reg()
+        { n5.addNode(n6); }
+      )+
+      { n5.nodes.trimToSize(); }
+      { n2 = new NodeChoice(n5, 1, 2); }
+    )
+    
+  )
+  n8 = < K_idenf >
+  { n7 = JTBToolkit.makeNodeToken(n8); }
+  { return new reg(n0, n2, n7); }
 }
 
 atributo atributo() :

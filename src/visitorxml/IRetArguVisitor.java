@@ -19,6 +19,8 @@ public interface IRetArguVisitor<R, A> {
 
   public R visit(final lista_xml n, final A argu);
 
+  public R visit(final row n, final A argu);
+
   public R visit(final usuarioxml n, final A argu);
 
   public R visit(final procedimiento n, final A argu);
@@ -36,6 +38,8 @@ public interface IRetArguVisitor<R, A> {
   public R visit(final Tablaxml n, final A argu);
 
   public R visit(final lista_row n, final A argu);
+
+  public R visit(final reg n, final A argu);
 
   public R visit(final atributo n, final A argu);
 

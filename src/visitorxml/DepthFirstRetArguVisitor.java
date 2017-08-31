@@ -70,6 +70,14 @@ public class DepthFirstRetArguVisitor<R, A> implements IRetArguVisitor<R, A> {
     return nRes;
   }
 
+  public R visit(final row n, final A argu) {
+    R nRes = null;
+    n.f0.accept(this, argu);
+    n.f1.accept(this, argu);
+    n.f2.accept(this, argu);
+    return nRes;
+  }
+
   public R visit(final usuarioxml n, final A argu) {
     R nRes = null;
     n.f0.accept(this, argu);
@@ -195,6 +203,14 @@ public class DepthFirstRetArguVisitor<R, A> implements IRetArguVisitor<R, A> {
     n.f1.accept(this, argu);
     n.f2.accept(this, argu);
     n.f3.accept(this, argu);
+    return nRes;
+  }
+
+  public R visit(final reg n, final A argu) {
+    R nRes = null;
+    n.f0.accept(this, argu);
+    n.f1.accept(this, argu);
+    n.f2.accept(this, argu);
     return nRes;
   }
 

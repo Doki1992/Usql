@@ -19,6 +19,8 @@ public interface IVoidVisitor {
 
   public void visit(final lista_xml n);
 
+  public void visit(final row n);
+
   public void visit(final usuarioxml n);
 
   public void visit(final procedimiento n);
@@ -36,6 +38,8 @@ public interface IVoidVisitor {
   public void visit(final Tablaxml n);
 
   public void visit(final lista_row n);
+
+  public void visit(final reg n);
 
   public void visit(final atributo n);
 

@@ -59,6 +59,12 @@ public class DepthFirstVoidArguVisitor<A> implements IVoidArguVisitor<A> {
     n.f0.accept(this, argu);
   }
 
+  public void visit(final row n, final A argu) {
+    n.f0.accept(this, argu);
+    n.f1.accept(this, argu);
+    n.f2.accept(this, argu);
+  }
+
   public void visit(final usuarioxml n, final A argu) {
     n.f0.accept(this, argu);
     n.f1.accept(this, argu);
@@ -167,6 +173,12 @@ public class DepthFirstVoidArguVisitor<A> implements IVoidArguVisitor<A> {
     n.f1.accept(this, argu);
     n.f2.accept(this, argu);
     n.f3.accept(this, argu);
+  }
+
+  public void visit(final reg n, final A argu) {
+    n.f0.accept(this, argu);
+    n.f1.accept(this, argu);
+    n.f2.accept(this, argu);
   }
 
   public void visit(final atributo n, final A argu) {

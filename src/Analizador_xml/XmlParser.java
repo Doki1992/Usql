@@ -32,6 +32,7 @@ public class XmlParser implements XmlParserConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case K_db:
       case K_tabla:
+      case K_rows:
       case K_procedure:
       case K_object:
       case K_obj:
@@ -65,34 +66,39 @@ public class XmlParser implements XmlParserConstants {
   objeto n5 = null;
   procedimiento n6 = null;
   usuarioxml n7 = null;
+  row n8 = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case K_db:
       n1 = Db();
-      n0 = new NodeChoice(n1, 0, 7);
+      n0 = new NodeChoice(n1, 0, 8);
       break;
     case K_tabla:
       n2 = Tablaxml();
-      n0 = new NodeChoice(n2, 1, 7);
+      n0 = new NodeChoice(n2, 1, 8);
       break;
     case K_procedure:
       n3 = proc();
-      n0 = new NodeChoice(n3, 2, 7);
+      n0 = new NodeChoice(n3, 2, 8);
       break;
     case K_object:
       n4 = obj();
-      n0 = new NodeChoice(n4, 3, 7);
+      n0 = new NodeChoice(n4, 3, 8);
       break;
     case K_obj:
       n5 = objeto();
-      n0 = new NodeChoice(n5, 4, 7);
+      n0 = new NodeChoice(n5, 4, 8);
       break;
     case K_proc:
       n6 = procedimiento();
-      n0 = new NodeChoice(n6, 5, 7);
+      n0 = new NodeChoice(n6, 5, 8);
       break;
     case K_usuario:
       n7 = usuarioxml();
-      n0 = new NodeChoice(n7, 6, 7);
+      n0 = new NodeChoice(n7, 6, 8);
+      break;
+    case K_rows:
+      n8 = row();
+      n0 = new NodeChoice(n8, 7, 8);
       break;
     default:
       jj_la1[1] = jj_gen;
@@ -100,6 +106,36 @@ public class XmlParser implements XmlParserConstants {
       throw new ParseException();
     }
     {if (true) return new lista_xml(n0);}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public row row() throws ParseException {
+  // --- JTB generated node declarations ---
+  NodeToken n0 = null;
+  Token n1 = null;
+  NodeList n2 = new NodeList();
+  reg n3 = null;
+  NodeToken n4 = null;
+  Token n5 = null;
+    n1 = jj_consume_token(K_rows);
+    n0 = JTBToolkit.makeNodeToken(n1);
+    label_2:
+    while (true) {
+      n3 = reg();
+      n2.addNode(n3);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case K_iden:
+        ;
+        break;
+      default:
+        jj_la1[2] = jj_gen;
+        break label_2;
+      }
+    }
+    n2.nodes.trimToSize();
+    n5 = jj_consume_token(K_rowsf);
+    n4 = JTBToolkit.makeNodeToken(n5);
+    {if (true) return new row(n0, n2, n4);}
     throw new Error("Missing return statement in function");
   }
 
@@ -211,7 +247,7 @@ public class XmlParser implements XmlParserConstants {
     n18 = JTBToolkit.makeNodeToken(n19);
     n21 = jj_consume_token(K_atr);
     n20 = JTBToolkit.makeNodeToken(n21);
-    label_2:
+    label_3:
     while (true) {
       n23 = lista_row();
       n22.addNode(n23);
@@ -220,8 +256,8 @@ public class XmlParser implements XmlParserConstants {
         ;
         break;
       default:
-        jj_la1[2] = jj_gen;
-        break label_2;
+        jj_la1[3] = jj_gen;
+        break label_3;
       }
     }
     n22.nodes.trimToSize();
@@ -317,7 +353,7 @@ public class XmlParser implements XmlParserConstants {
     n18 = JTBToolkit.makeNodeToken(n19);
     n21 = jj_consume_token(K_atr);
     n20 = JTBToolkit.makeNodeToken(n21);
-    label_3:
+    label_4:
     while (true) {
       n23 = lista_row();
       n22.addNode(n23);
@@ -326,8 +362,8 @@ public class XmlParser implements XmlParserConstants {
         ;
         break;
       default:
-        jj_la1[3] = jj_gen;
-        break label_3;
+        jj_la1[4] = jj_gen;
+        break label_4;
       }
     }
     n22.nodes.trimToSize();
@@ -397,7 +433,7 @@ public class XmlParser implements XmlParserConstants {
       n2.addNode(n3);
       break;
     default:
-      jj_la1[4] = jj_gen;
+      jj_la1[5] = jj_gen;
       ;
     }
     n10 = lista_db();
@@ -495,7 +531,7 @@ public class XmlParser implements XmlParserConstants {
     n18 = JTBToolkit.makeNodeToken(n19);
     n21 = jj_consume_token(K_rows);
     n20 = JTBToolkit.makeNodeToken(n21);
-    label_4:
+    label_5:
     while (true) {
       n23 = lista_row();
       n22.addNode(n23);
@@ -504,8 +540,8 @@ public class XmlParser implements XmlParserConstants {
         ;
         break;
       default:
-        jj_la1[5] = jj_gen;
-        break label_4;
+        jj_la1[6] = jj_gen;
+        break label_5;
       }
     }
     n22.nodes.trimToSize();
@@ -537,7 +573,7 @@ public class XmlParser implements XmlParserConstants {
     n0 = JTBToolkit.makeNodeToken(n1);
     n3 = jj_consume_token(S_IDENTIFICADOR);
     n2 = JTBToolkit.makeNodeToken(n3);
-    label_5:
+    label_6:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case K_nulo:
@@ -548,8 +584,8 @@ public class XmlParser implements XmlParserConstants {
         ;
         break;
       default:
-        jj_la1[6] = jj_gen;
-        break label_5;
+        jj_la1[7] = jj_gen;
+        break label_6;
       }
       n5 = atributo();
       n4.addNode(n5);
@@ -558,6 +594,53 @@ public class XmlParser implements XmlParserConstants {
     n7 = jj_consume_token(K_idenf);
     n6 = JTBToolkit.makeNodeToken(n7);
     {if (true) return new lista_row(n0, n2, n4, n6);}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public reg reg() throws ParseException {
+  // --- JTB generated node declarations ---
+  NodeToken n0 = null;
+  Token n1 = null;
+  NodeChoice n2 = null;
+  NodeToken n3 = null;
+  Token n4 = null;
+  NodeList n5 = new NodeList();
+  reg n6 = null;
+  NodeToken n7 = null;
+  Token n8 = null;
+    n1 = jj_consume_token(K_iden);
+    n0 = JTBToolkit.makeNodeToken(n1);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case CADENA_LITERAL:
+      n4 = jj_consume_token(CADENA_LITERAL);
+        n3 = JTBToolkit.makeNodeToken(n4);
+        n2 = new NodeChoice(n3, 0, 2);
+      break;
+    case K_iden:
+      label_7:
+      while (true) {
+        n6 = reg();
+          n5.addNode(n6);
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case K_iden:
+          ;
+          break;
+        default:
+          jj_la1[8] = jj_gen;
+          break label_7;
+        }
+      }
+        n5.nodes.trimToSize();
+        n2 = new NodeChoice(n5, 1, 2);
+      break;
+    default:
+      jj_la1[9] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    n8 = jj_consume_token(K_idenf);
+    n7 = JTBToolkit.makeNodeToken(n8);
+    {if (true) return new reg(n0, n2, n7);}
     throw new Error("Missing return statement in function");
   }
 
@@ -666,7 +749,7 @@ public class XmlParser implements XmlParserConstants {
       n0 = new NodeChoice(n29, 4, 5);
       break;
     default:
-      jj_la1[7] = jj_gen;
+      jj_la1[10] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -683,7 +766,7 @@ public class XmlParser implements XmlParserConstants {
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[8];
+  final private int[] jj_la1 = new int[11];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static private int[] jj_la1_2;
@@ -693,13 +776,13 @@ public class XmlParser implements XmlParserConstants {
       jj_la1_init_2();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x2020000,0x2020000,0x0,0x0,0x800000,0x0,0x0,0x0,};
+      jj_la1_0 = new int[] {0x22020000,0x22020000,0x0,0x0,0x0,0x800000,0x0,0x0,0x0,0x0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x22a00000,0x22a00000,0x0,0x0,0x0,0x0,0xaa800,0xaa800,};
+      jj_la1_1 = new int[] {0x22a00000,0x22a00000,0x0,0x0,0x0,0x0,0x0,0xaa800,0x0,0x0,0xaa800,};
    }
    private static void jj_la1_init_2() {
-      jj_la1_2 = new int[] {0x8,0x8,0x20,0x20,0x0,0x20,0x0,0x0,};
+      jj_la1_2 = new int[] {0x8,0x8,0x20,0x20,0x20,0x0,0x20,0x0,0x20,0x420,0x0,};
    }
 
   /** Constructor with InputStream. */
@@ -713,7 +796,7 @@ public class XmlParser implements XmlParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -727,7 +810,7 @@ public class XmlParser implements XmlParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -737,7 +820,7 @@ public class XmlParser implements XmlParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -747,7 +830,7 @@ public class XmlParser implements XmlParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -756,7 +839,7 @@ public class XmlParser implements XmlParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -765,7 +848,7 @@ public class XmlParser implements XmlParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -821,7 +904,7 @@ public class XmlParser implements XmlParserConstants {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 11; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

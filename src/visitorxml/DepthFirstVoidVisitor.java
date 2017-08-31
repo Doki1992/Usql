@@ -59,6 +59,12 @@ public class DepthFirstVoidVisitor implements IVoidVisitor {
     n.f0.accept(this);
   }
 
+  public void visit(final row n) {
+    n.f0.accept(this);
+    n.f1.accept(this);
+    n.f2.accept(this);
+  }
+
   public void visit(final usuarioxml n) {
     n.f0.accept(this);
     n.f1.accept(this);
@@ -167,6 +173,12 @@ public class DepthFirstVoidVisitor implements IVoidVisitor {
     n.f1.accept(this);
     n.f2.accept(this);
     n.f3.accept(this);
+  }
+
+  public void visit(final reg n) {
+    n.f0.accept(this);
+    n.f1.accept(this);
+    n.f2.accept(this);
   }
 
   public void visit(final atributo n) {

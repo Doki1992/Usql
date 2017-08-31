@@ -20,6 +20,8 @@ public interface IVoidArguVisitor<A> {
 
   public void visit(final lista_xml n, final A argu);
 
+  public void visit(final row n, final A argu);
+
   public void visit(final usuarioxml n, final A argu);
 
   public void visit(final procedimiento n, final A argu);
@@ -37,6 +39,8 @@ public interface IVoidArguVisitor<A> {
   public void visit(final Tablaxml n, final A argu);
 
   public void visit(final lista_row n, final A argu);
+
+  public void visit(final reg n, final A argu);
 
   public void visit(final atributo n, final A argu);
 

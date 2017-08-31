@@ -162,7 +162,7 @@ Db()
 void row() : 
 {}
 {
-"<rows>">  (reg())+ "</rows>">
+"<rows>"  (reg())+ "</rows>"
 }
 
 void usuarioxml():
