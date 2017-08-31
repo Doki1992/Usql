@@ -155,8 +155,15 @@ Db()
 |objeto()
 |procedimiento()
 |usuarioxml()
+|row()
 }
 
+
+void row() : 
+{}
+{
+"<rows>">  (reg())+ "</rows>">
+}
 
 void usuarioxml():
 {}
@@ -211,6 +218,12 @@ void lista_row():
 {}
 {
 <K_iden> <S_IDENTIFICADOR> (atributo())* <K_idenf> 
+}
+
+void reg() : 
+{}
+{
+ <K_iden> (<CADENA_LITERAL> | (reg ())+ ) <K_idenf> 
 }
 
 void atributo():
