@@ -61,7 +61,7 @@ public class DepthFirstVoidVisitor implements IVoidVisitor {
     n.f0.accept(this);
   }
 
-  public void visit(final listasentencias n) {    
+  public void visit(final listasentencias n) {
     switch (n.f0.which) {
             case 0:
                 //crear base de datos
@@ -87,7 +87,7 @@ public class DepthFirstVoidVisitor implements IVoidVisitor {
                     case 5:
                         choice.choice.accept(this);
                         break;
-                }
+  }
                 break;
             case 1:
                 n.f0.choice.accept(this);
@@ -213,7 +213,6 @@ public class DepthFirstVoidVisitor implements IVoidVisitor {
   }
 
   public void visit(final crear_base n) {
-    
     n.f0.accept(this);
     n.f1.accept(this);
     n.f2.accept(this);

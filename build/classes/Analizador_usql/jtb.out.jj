@@ -837,6 +837,8 @@ complemento_campo complemento_campo() :
   Token n13 = null;
   NodeToken n14 = null;
   Token n15 = null;
+  NodeToken n16 = null;
+  Token n17 = null;
 }
 {
   (
@@ -852,22 +854,25 @@ complemento_campo complemento_campo() :
     { n5 = JTBToolkit.makeNodeToken(n6); }
     { n0 = new NodeChoice(n5, 2, 6); }
   |
-    { n7 = new NodeSequence(2); }
+    { n7 = new NodeSequence(3); }
     n9 = "llave_foranea"
     { n8 = JTBToolkit.makeNodeToken(n9); }
     { n7.addNode(n8); }
     n11 = < S_IDENTIFICADOR >
     { n10 = JTBToolkit.makeNodeToken(n11); }
     { n7.addNode(n10); }
+    n13 = < S_IDENTIFICADOR >
+    { n12 = JTBToolkit.makeNodeToken(n13); }
+    { n7.addNode(n12); }
     { n0 = new NodeChoice(n7, 3, 6); }
   |
-    n13 = "autoincrementable"
-    { n12 = JTBToolkit.makeNodeToken(n13); }
-    { n0 = new NodeChoice(n12, 4, 6); }
-  |
-    n15 = "unico"
+    n15 = "autoincrementable"
     { n14 = JTBToolkit.makeNodeToken(n15); }
-    { n0 = new NodeChoice(n14, 5, 6); }
+    { n0 = new NodeChoice(n14, 4, 6); }
+  |
+    n17 = "unico"
+    { n16 = JTBToolkit.makeNodeToken(n17); }
+    { n0 = new NodeChoice(n16, 5, 6); }
   )
   { return new complemento_campo(n0); }
 }
