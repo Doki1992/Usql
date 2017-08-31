@@ -34,6 +34,7 @@ public class Contexto {
     public static final String DATH = "dateh";
     public static final String DB = "BD";
     public static final String COL = "COL";
+    public static final String CUE = "CUE";    
     public static final String FP = "FP";
     public static final String OBJ = "OBJ";
     public static final String TB = "TB";

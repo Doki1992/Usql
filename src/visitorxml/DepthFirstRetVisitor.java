@@ -9,90 +9,100 @@ import proyecto.*;
 public class DepthFirstRetVisitor<R> implements IRetVisitor<R> {
 
     public Ent levantado = new Ent(null);
-    public Ent levantado_user =  new Ent(null);
+    public Ent levantado_user = new Ent(null);
+    public Cuerpo_tabla registros;
 
-  public R visit(final NodeChoice n) {
-    final R nRes = n.choice.accept(this);
-    return nRes;
-  }
-
-  public R visit(final NodeList n) {
-    R nRes = null;
-    for (final Iterator<INode> e = n.elements(); e.hasNext();) {
-      @SuppressWarnings("unused")
-      final R sRes = e.next().accept(this);
+    public void SetCuerpoTabla(Cuerpo_tabla cp) {
+        this.registros = cp;
     }
-    return nRes;
-  }
 
-  public R visit(final NodeListOptional n) {
-    if (n.present()) {
-      R nRes = null;
-      for (final Iterator<INode> e = n.elements(); e.hasNext();) {
-        @SuppressWarnings("unused")
-        R sRes = e.next().accept(this);
+    public R visit(final NodeChoice n) {
+        final R nRes = n.choice.accept(this);
+        return nRes;
+    }
+
+    public R visit(final NodeList n) {
+        R nRes = null;
+        for (final Iterator<INode> e = n.elements(); e.hasNext();) {
+            @SuppressWarnings("unused")
+            final R sRes = e.next().accept(this);
         }
-      return nRes;
+        return nRes;
+    }
+
+    public R visit(final NodeListOptional n) {
+        if (n.present()) {
+            R nRes = null;
+            for (final Iterator<INode> e = n.elements(); e.hasNext();) {
+                @SuppressWarnings("unused")
+                R sRes = e.next().accept(this);
+            }
+            return nRes;
         } else {
-      return null;
-  }
+            return null;
+        }
     }
 
-  public R visit(final NodeOptional n) {
-    if (n.present()) {
-      final R nRes = n.node.accept(this);
-      return nRes;
-    } else
-    return null;
-  }
-
-  public R visit(final NodeSequence n) {
-    R nRes = null;
-    for (final Iterator<INode> e = n.elements(); e.hasNext();) {
-      @SuppressWarnings("unused")
-      R subRet = e.next().accept(this);
+    public R visit(final NodeOptional n) {
+        if (n.present()) {
+            final R nRes = n.node.accept(this);
+            return nRes;
+        } else {
+            return null;
+        }
     }
-    return nRes;
-  }
 
-  public R visit(final NodeToken n) {
-    R nRes = null;
-    @SuppressWarnings("unused")
-    final String tkIm = n.tokenImage;
-    return nRes;
-  }
+    public R visit(final NodeSequence n) {
+        R nRes = null;
+        for (final Iterator<INode> e = n.elements(); e.hasNext();) {
+            @SuppressWarnings("unused")
+            R subRet = e.next().accept(this);
+        }
+        return nRes;
+    }
 
-  public R visit(final Inicio n) {
-    R nRes = null;
-    n.f0.accept(this);
-    n.f1.accept(this);
-    return nRes;
-  }
+    public R visit(final NodeToken n) {
+        R nRes = null;
+        @SuppressWarnings("unused")
+        final String tkIm = n.tokenImage;
+        return nRes;
+    }
 
-  public R visit(final lista_xml n) {
-    R nRes = null;
-    n.f0.accept(this);
-    return nRes;
-  }
+    public R visit(final Inicio n) {
+        R nRes = null;
+        n.f0.accept(this);
+        n.f1.accept(this);
+        return nRes;
+    }
 
-  public R visit(final row n) {
-    R nRes = null;
-    n.f0.accept(this);
-    n.f1.accept(this);
-    n.f2.accept(this);
-    return nRes;
-  }
+    public R visit(final lista_xml n) {
+        R nRes = null;
+        n.f0.accept(this);
+        return nRes;
+    }
 
-  public R visit(final usuarioxml n) {
-     Usuario_ent user =  new Usuario_ent(n.f2.tokenImage, n.f8.tokenImage);
-        user.seek =  Integer.parseInt(n.f5.tokenImage);
-        Simbolo s =  new Simbolo(user.nombre, "", user);
+    public R visit(final row n) {
+        R nRes = null;
+        LinkedList<Simbolo> fila = new LinkedList<>();
+        for (INode node : n.f1.nodes) {
+            Simbolo re = (Simbolo) node.accept(this);
+            fila.add(re);
+        }
+
+        this.registros.registros.add(fila);
+        return null;
+    }
+
+    public R visit(final usuarioxml n) {
+        Usuario_ent user = new Usuario_ent(n.f2.tokenImage, n.f8.tokenImage);
+        user.seek = Integer.parseInt(n.f5.tokenImage);
+        Simbolo s = new Simbolo(user.nombre, "", user);
         levantado_user.insertar(s.nombre, s);
-        return (R)s;
-  }
+        return (R) s;
+    }
 
-  public R visit(final procedimiento n) {
- FuncionProc val = new FuncionProc(null);
+    public R visit(final procedimiento n) {
+        FuncionProc val = new FuncionProc(null);
         n.f2.accept(this); // seek    
         n.f5.accept(this);//nombre    
         n.f8.accept(this);//permisos    
@@ -108,10 +118,10 @@ public class DepthFirstRetVisitor<R> implements IRetVisitor<R> {
         Simbolo func = new Simbolo(n.f5.tokenImage, val.Tipo, val);
         levantado.insertar(func.nombre, func);
         return (R) func;
-  }
+    }
 
-  public R visit(final proc n) {
-   R nRes = null;
+    public R visit(final proc n) {
+        R nRes = null;
         n.f0.accept(this);
         n.f1.accept(this);
         n.f2.accept(this);//aqui esta el path..
@@ -120,10 +130,10 @@ public class DepthFirstRetVisitor<R> implements IRetVisitor<R> {
         Simbolo path = new Simbolo("path", Contexto.TEX, new Texto(n.f2.tokenImage, Contexto.TEX));
         nRes = (R) path;
         return nRes;
-  }
+    }
 
-  public R visit(final objeto n) {
-     R nRes = null;
+    public R visit(final objeto n) {
+        R nRes = null;
         Objeto obj = new Objeto("");
         Simbolo sObj;
         obj.seek = Integer.parseInt(n.f2.tokenImage);
@@ -137,10 +147,10 @@ public class DepthFirstRetVisitor<R> implements IRetVisitor<R> {
         sObj = new Simbolo(n.f5.tokenImage, n.f5.tokenImage, obj);
         levantado.insertar(sObj.nombre, sObj);
         return nRes;
-  }
+    }
 
-  public R visit(final obj n) {
-    R nRes = null;
+    public R visit(final obj n) {
+        R nRes = null;
         n.f0.accept(this);
         n.f1.accept(this);
         n.f2.accept(this);//aqui esta el path..
@@ -149,10 +159,10 @@ public class DepthFirstRetVisitor<R> implements IRetVisitor<R> {
         Simbolo path = new Simbolo("path", Contexto.TEX, new Texto(n.f2.tokenImage, Contexto.TEX));
         nRes = (R) path;
         return nRes;
-  }
+    }
 
-  public R visit(final Db n) {
-    R nRes = null;
+    public R visit(final Db n) {
+        R nRes = null;
         n.f0.accept(this);
         n.f1.accept(this); //este es el seek    
         Simbolo s = (Simbolo) n.f2.accept(this); //el simbolo;
@@ -163,10 +173,10 @@ public class DepthFirstRetVisitor<R> implements IRetVisitor<R> {
         this.levantado.tabla.put(s.nombre, s);
         n.f3.accept(this);
         return nRes;
-  }
+    }
 
-  public R visit(final lista_db n) {
-     R nRes = null;
+    public R visit(final lista_db n) {
+        R nRes = null;
         Valor v = new Bd(0, n.f1.tokenImage, n.f4.tokenImage, "");
         n.f0.accept(this);
         n.f1.accept(this); //nombre
@@ -176,10 +186,10 @@ public class DepthFirstRetVisitor<R> implements IRetVisitor<R> {
         n.f5.accept(this);
         nRes = (R) new Simbolo(n.f1.tokenImage, v.Tipo, v);
         return nRes;
-  }
+    }
 
-  public R visit(final Tablaxml n) {
-   R nRes = null;
+    public R visit(final Tablaxml n) {
+        R nRes = null;
         Simbolo t;
         n.f2.accept(this);//nombre token    
         n.f5.accept(this);//string permisos    
@@ -200,10 +210,10 @@ public class DepthFirstRetVisitor<R> implements IRetVisitor<R> {
         t.v = val;
         this.levantado.insertar(t.nombre, t);
         return nRes;
-  }
+    }
 
-  public R visit(final lista_row n) {
-         R nRes = null;
+    public R visit(final lista_row n) {
+        R nRes = null;
         Simbolo s;
         n.f0.accept(this); //tipo atri    
         n.f1.accept(this); //nombre columna
@@ -213,25 +223,42 @@ public class DepthFirstRetVisitor<R> implements IRetVisitor<R> {
         NodeListOptional nlo = n.f2; //atributos
         if (nlo.present()) {
             for (int c = 0; c < nlo.size(); c++) {
-                Simbolo atrib = (Simbolo) nlo.nodes.get(c).accept(this);                
+                Simbolo atrib = (Simbolo) nlo.nodes.get(c).accept(this);
                 val.atributos.add(atrib);
             }
         }
         s = new Simbolo(nombre_c, val.Tipo, val);
         nRes = (R) s;
         return nRes;
-  }
+    }
 
-  public R visit(final reg n) {
-    R nRes = null;
-    n.f0.accept(this);
-    n.f1.accept(this);
-    n.f2.accept(this);
-    return nRes;
-  }
+    public R visit(final reg n) {
+        Simbolo retorno = new Simbolo("", "", null);
+        Objeto t = new Objeto("");
+        String nombre = n.f0.tokenImage.replace("<", "").replace(">", "");
+        switch (n.f1.which) {
+            case 0:
+                NodeToken tok = (NodeToken) n.f1.choice;
+                String valor = tok.tokenImage;
+                retorno.nombre = nombre;
+                retorno.v = new Texto(valor, "");
+                retorno.tipo = Contexto.TEX;
+                break;
+            case 1:
+                NodeList lista = (NodeList) n.f1.choice;
+                for (INode node : lista.nodes) {
+                    t.valor.insertar(nombre, (Simbolo) node.accept(this));
+                }
+                retorno.tipo = Contexto.OBJ;
+                retorno.v = t;
+                break;
+        }
 
-  public R visit(final atributo n) {
-       R nRes = null;
+        return (R) retorno;
+    }
+
+    public R visit(final atributo n) {
+        R nRes = null;
         NodeChoice nc = n.f0;
         NodeSequence ns = (NodeSequence) nc.choice;
         Simbolo s = null;
@@ -254,5 +281,5 @@ public class DepthFirstRetVisitor<R> implements IRetVisitor<R> {
         }
         nRes = (R) s;
         return nRes;
-  }
+    }
 }

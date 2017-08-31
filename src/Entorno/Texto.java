@@ -24,12 +24,20 @@ public class Texto extends  Valor{
 
     @Override
     public int AEntero() {
-        return 0;
+        try {
+            return Integer.parseInt(valor);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @Override
     public double ADoble() {
-        return 0.0;
+        try {
+            return Double.parseDouble(valor);
+        } catch (Exception e) {
+            return 0.0;
+        }
     }
 
     @Override

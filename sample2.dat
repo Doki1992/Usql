@@ -1,10 +1,42 @@
 CREAr BASE_DATOs @MIKE;
-@f = 11-02-2017;
-declarar uno, dos, tres, cuatro date = 11-20-2017 12:30:12;
-hola(d,d,"mike",123456,3);
-crear tabla dato(bool es);
+CREAr BASE_DATOs @MIKE1;
+CREAr BASE_DATOs @MIKE13;
+CREAr BASE_DATOs @MIKE14;
+crear usuario user21 colocar password = "hola mundo";
+crear usuario user213 colocar password = "hola mundo";
+crear usuario user212 colocar password = "hola mundo";
+crear usuario user214 colocar password = "hola mundo";
+crear usuario user215 colocar password = "hola mundo";
+usar @MIKE13;
+crear tabla uno4(integer dos no nulo, integer tres nulo, integer dos);
+crear tabla uno44(integer dos no nulo, integer tres nulo , miko uno);
+crear tabla uno45(integer dos no nulo, integer tres nulo llave_foranea uno4 dos12, miko uno);
 
-crear objeto b(bool mike, integer b);
+
+crear objeto dos(integer uno, integer tres);
+crear objeto dos4(integer uno, integer tres);
+crear objeto dos41(integer uno, integer tres);
+
+crear funcion set_salario (double a, integer b , carro ac) double {
+seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
+otorgar permisos usuario1, p.mike;
+otorgar permisos usuario1, p.*;
+denegar permisos usuario1, p.mike;
+denegar permisos usuario1, p.*;
+}
+
+
+crear funcion set_salario1 (double a, integer b , carro ac) double {
+seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
+otorgar permisos usuario1, p.mike;
+otorgar permisos usuario1, p.*;
+denegar permisos usuario1, p.mike;
+denegar permisos usuario1, p.*;
+}
 
 crear procedimiento set_salario122 (double a, integer b){
 seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
@@ -15,96 +47,96 @@ denegar permisos usuario1, p.mike;
 denegar permisos usuario1, p.*;
 }
 
-crear funcion set_salario (double a, integer b) double {
-seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
-seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
-otorgar permisos usuario1, p.mike;
-otorgar permisos usuario1, p.*;
-denegar permisos usuario1, p.mike;
-denegar permisos usuario1, p.*;
+
+alterar tabla uno4 agregar (integer b llave_foranea uno4 dos);
+##alterar tabla uno4 agregar (integer c llave_foranea uno4, date d, date f);
+alterar tabla uno4 quitar c,d;
+alterar tabla uno4 quitar b;
+alterar tabla uno4 quitar f,tres;
+alterar objeto dos agregar (integer cuatro, integer cinco);
+alterar objeto dos quitar cuatro, tres;
+
+alterar usuario user21 cambiar password = "13223";
+eliminar tabla uno44;
+eliminar base_datos @MIKE14;
+alterar objeto dos quitar cuatro, tres;
+eliminar usuario user212;
+alterar usuario user215 cambiar password = "HOLA MUNDO COMO ESTAS";
+eliminar objeto dos4;
+otorgar permisos user21, @MIKE13.*;
+denegar permisos user21, @MIKE13.*;
+
+!!!!!!(-3>4 || 3<2);
+imprimir(2+2);
+imprimir(1.0*5.12);
+
+si(1>3){imprimir("antes de detener");  CREAr BASE_DATOs @MIKE13;}sino {imprimir("else");}
+
+selecciona(1){
+caso 1:
+imprimir("estoy en el caso " + 1);
+detener;
+caso 2: 
+imprimir("estoy en el caso " + 2);
+caso 3: 
+imprimir("estoy en el caso " + 3); retorno 3;
+defecto: "estoy en defecto";
+}
+
+declarar a,b date = 20-02-2015;
+declarar @jota date = 20-02-1995;
+@jota;  
+a;
+declarar @jota1 date = @jota;
+
+declarar p double = 23;
+declarar p double = 23;
+p;
+!(p<10 || 0);
+Para(declarar uno integer = 0; uno <= 11; ++){
+
+si(uno > 0){
+si(uno > 0){
+si(uno > 0){
+selecciona(uno){
+caso 1:
+imprimir("estoy en el caso " + 1);
+detener;
+caso 2: 
+imprimir("estoy en el caso " + 2);
+caso 3: 
+imprimir("estoy en el caso " + 3); retorno 3;
+defecto: "estoy en defecto";
+}
+}
+}
+
+}
+
+}
+
+p =  100;
+p;
+p = p*38/58;
+p;
+mientras ( p >= 10){
+"valor de p: " + p;
+p =  p-1.0;
+mientras ( p > 10){
+"valor de p: " + p;
+retorno 0;
+}
 }
 
 
-
-
-crear usuario user1 colocar password = "hola mundo";
-
-alterar tabla b agregar (bool h nulo , bool h nulo);
-alterar tabla b agregar (bool h);
-
-alterar objeto c  agregar (bool h, bool c);
-alterar objeto c  agregar (bool h);
-
-alterar tabla b quitar h,d,c;
-alterar objeto b quitar h; 
-ALTERAR usuario este cambiar password =  "123";
-
-eliminar usuario b;
-eliminar objeto b;
-eliminar base_datos b;
-eliminar tabla b;
-
-insertar en tabla m (1+1,1-1);
-insertar en tabla m (uno, dos) valores (1+1<23 && !!-23 || 56,1-1);
-actualizar tabla m (a,b) valores (1,2,c) donde 2<3;
-actualizar tabla m (a,b) valores (1,2,c) ;
-borrar en tabla m donde a == 1;
-borrar en tabla m;
-
-seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
-seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
-otorgar permisos usuario1, p.mike;
-otorgar permisos usuario1, p.*;
-denegar permisos usuario1, p.mike;
-denegar permisos usuario1, p.*;
-
-declarar uno, dos, tres, cuatro date = 3;
-declarar uno, dos, tres, cuatro date;
-declarar uno date;
-declarar uno dos;
-uno.dos  = 21;
-uno.dos  = "1235";
-uno.dos  = 2.25;
-uno  = fecha();
-uno  = "1235";
-uno=2.25;
-si(a==b){}
-sino{}
-selecciona("dfdf"){
-caso "d" :seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
-seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
-otorgar permisos usuario1, p.mike;
-otorgar permisos usuario1, p.*;
-denegar permisos usuario1, p.mike;
-denegar permisos usuario1, p.*;
-caso "d" : si(a==b){seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
-seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
-otorgar permisos usuario1, p.mike;
-otorgar permisos usuario1, p.*;
-denegar permisos usuario1, p.mike;
-denegar permisos usuario1, p.*;}
-sino{seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
-seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
-otorgar permisos usuario1, p.mike;
-otorgar permisos usuario1, p.*;
-denegar permisos usuario1, p.mike;
-denegar permisos usuario1, p.*;}
-caso "d" : 
-defecto : 
-}
-
-para(declarar b integer= 12; b<12; ++){}
-
-mientras(v==d){para(declarar b integer= 12; b<12; ++){} detener;}
-
-imprimir("ddd");
-@f  =  fecha_hora();
-@f  =  fecha();
-
-contar (seleccionar *  de mike donde a == 0); 
-BACKUP USQLDUMP Proyecto1 Proyecto1_backup;
-BACKUP COMPLETO Proyecto1 Proyecto1_backup2;
-RESTAURAR USQLDUMP "/home/usuario/backups/backup_prueba.udmp" ;
-RESTAURAR completo "/home/usuario/backups/backup_prueba.udmp" ;
-
-#hola mundo
+declarar bu dos;
+declarar bu2 dos;
+bu.uno = 3;
+p =  bu.uno;
+p;
+bu.uno;
+bu2.uno;
+bu2.uno1 = 45-10;
+bu2.uno;
+declarar jj dateTIME = 15-07-2017 18:00:00;
+jj;

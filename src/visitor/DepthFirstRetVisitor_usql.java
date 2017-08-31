@@ -8,6 +8,7 @@ import Analizador_usql.*;
 import proyecto.*;
 import Entorno.*;
 import Ejecucion_usql.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -161,6 +162,8 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 }
                 break;
             case 4:
+                //insertar
+                Instruccion_insetar.InsertarRegistro((insertar)n.f0.choice, this);
                 break;
             case 5:
                 break;
@@ -423,13 +426,22 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
             case 3:
                 NodeSequence ns = (NodeSequence) n.f0.choice;
                 NodeToken tk = (NodeToken) ns.nodes.get(1);
+                NodeToken tk1 = (NodeToken) ns.nodes.get(2);
                 String referencia = tk.tokenImage;
+                String colRef =  tk1.tokenImage;
                 if (!levantado.existe(referencia)) {
-                    Debuger.Debug("Error la tabla a la que se hace referencia no existe...");
-                    Debuger.Debug("Objeto no encontrado... " + referencia);
+                    Debuger.Debug("Error la tabla a la que se hace referencia no existe...", false, null);
+                    Debuger.Debug("Objeto no encontrado... " + referencia, false, null);
                     return null;
+                }else{
+                    Simbolo ss =  levantado.Buscar(referencia);
+                    Tabla t = (Tabla) ss.v;
+                    if(!Contexto.ExisteColumna(t.valores, colRef)){
+                        Debuger.Debug("Error la tabla no tiene ningun atributo con nombre" + colRef + "...", false, null);                        
+                        return null;
+                    }
                 }
-                s = new Simbolo("for", Contexto.BOl, new Bool(referencia, Contexto.BOl));
+                s = new Simbolo("for", Contexto.BOl, new Bool(referencia+"_"+colRef, Contexto.BOl));
                 break;
             case 4:
                 s = new Simbolo("auto", Contexto.BOl, new Bool("1", Contexto.BOl));
@@ -541,14 +553,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final insertar n) {
-        R nRes = null;
-        n.f0.accept(this);
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
-        n.f4.accept(this);
-        n.f5.accept(this);
-        n.f6.accept(this);
+        R nRes = null;                       
         return nRes;
     }
 
