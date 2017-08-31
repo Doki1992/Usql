@@ -9,8 +9,8 @@ crear usuario user214 colocar password = "hola mundo";
 crear usuario user215 colocar password = "hola mundo";
 usar @MIKE13;
 crear tabla uno4(integer dos no nulo, integer tres nulo, integer dos);
-crear tabla uno44(integer dos no nulo, integer tres nulo, miko uno);
-crear tabla uno45(integer dos no nulo, integer tres nulo, miko uno);
+crear tabla uno44(integer dos no nulo, integer tres nulo , miko uno);
+crear tabla uno45(integer dos no nulo, integer tres nulo llave_foranea uno4 , miko uno);
 
 
 crear objeto dos(integer uno, integer tres);

@@ -298,7 +298,7 @@ void complemento_campo():
 "nulo"
 |"no nulo"
 |"llave_primaria"
-|"llave_foranea" <S_IDENTIFICADOR>
+|"llave_foranea" <S_IDENTIFICADOR> <S_IDENTIFICADOR>
 |"autoincrementable"
 |"unico"
 }
