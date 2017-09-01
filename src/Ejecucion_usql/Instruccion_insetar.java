@@ -25,6 +25,7 @@ import visitorxml.*;
 import proyecto.*;
 import arbolxml.*;
 import java.io.File;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,8 +40,10 @@ public class Instruccion_insetar {
     private static XmlParser parser;
     private static Admon_archivo ar = new Admon_archivo();
     private static Ent levantado;
-
-    private static Tabla LeerTabla(String identificador) {
+    private static Tabla t;
+    private static LinkedList<Simbolo> valoresInsertar =  new LinkedList<>();
+    
+    protected static Tabla LeerTabla(String identificador) {
         String contenidoTexto;
         try {
             contenidoTexto = ar.LeerRegistroBd(0, Contexto.EnUso.path, ar.Tamano(Contexto.EnUso.path));
@@ -63,8 +66,8 @@ public class Instruccion_insetar {
         }
         return null;
     }
-    
-    private static void levantarRegistros (String path, Cuerpo_tabla cp){
+
+    protected static void levantarRegistros (String path, Cuerpo_tabla cp){
         String contenidoTexto;
         try {
             contenidoTexto = ar.LeerRegistroBd(0, path, ar.Tamano(path));
@@ -72,7 +75,7 @@ public class Instruccion_insetar {
             INode init = parser.Inicio();
             DepthFirstRetVisitor<Simbolo> v = new DepthFirstRetVisitor<>();
             v.SetCuerpoTabla(cp);
-            init.accept(v);            
+            init.accept(v);
         } catch (IOException ex) {
             Debuger.Debug(ex);
         } catch (ParseException ex) {
@@ -80,18 +83,372 @@ public class Instruccion_insetar {
         } catch (NullPointerException ex) {
             Debuger.Debug("Error no se ha seleccionado una base de datos ...");
         }
-        
-        
+
+
     }
 
     public static void InsertarRegistro(insertar n, DepthFirstRetVisitor_usql este) {
-        Tabla t = LeerTabla(n.f3.tokenImage);
-        Cuerpo_tabla cp =  new Cuerpo_tabla(); 
+        t = LeerTabla(n.f3.tokenImage);
+        Cuerpo_tabla cp =  new Cuerpo_tabla();
         levantarRegistros(t.path.replace("\"", ""), cp);
+        LinkedList<Simbolo> valores = new LinkedList<>();
+        LinkedList<String> columnas = new LinkedList<>();
         if (t != null) {
             t.cuerpo =  cp;
+            AgregarNulo();
+            asignarListas(n, este, valores, columnas);
+            if(columnas.isEmpty()){
+               insertarNormal(valores);
+            }else{
+
+            }
         } else {
             Debuger.Debug("Error al insertar, la tabla con nombre " + n.f3.tokenImage + " no existe...", false, null);
         }
+    }
+
+    private static LinkedList<Simbolo> obtenerValoresAinsertar(insertar n, DepthFirstRetVisitor_usql este, int which, LinkedList<Simbolo> valores) {
+        switch (which) {
+            case 0:
+                syntaxtree.NodeSequence vals1 = (syntaxtree.NodeSequence) n.f5.choice;
+                syntaxtree.NodeListOptional resto1 = (syntaxtree.NodeListOptional) vals1.nodes.get(6);
+                valores.add((Simbolo)((lista_expresion)vals1.nodes.get(5)).f0.accept(este));
+                for(INode_usql node : resto1.nodes){
+                    syntaxtree.NodeSequence ns =  (syntaxtree.NodeSequence) node;
+                    valores.add((Simbolo)((lista_expresion)ns.nodes.get(1)).f0.accept(este));
+                }
+                return valores;
+            case 1:
+                syntaxtree.NodeSequence vals = (syntaxtree.NodeSequence) n.f5.choice;
+                syntaxtree.NodeListOptional resto = (syntaxtree.NodeListOptional) vals.nodes.get(1);
+                valores.add((Simbolo)((lista_expresion)vals.nodes.get(0)).f0.accept(este));
+                for(INode_usql node : resto.nodes){
+                    syntaxtree.NodeSequence ns =  (syntaxtree.NodeSequence) node;
+                    valores.add((Simbolo)((lista_expresion)ns.nodes.get(1)).f0.accept(este));
+                }
+                return valores;
+        }
+        return null;
+    }
+
+    private static LinkedList<String> obtenerColumnas(insertar n, DepthFirstRetVisitor_usql este, LinkedList<String> columnas) {
+        syntaxtree.NodeSequence vals1 = (syntaxtree.NodeSequence) n.f5.choice;
+        syntaxtree.NodeListOptional resto = (syntaxtree.NodeListOptional) vals1.nodes.get(1);
+        columnas.add(((syntaxtree.NodeToken) vals1.nodes.get(0)).tokenImage);
+        for (INode_usql node : resto.nodes) {
+            syntaxtree.NodeSequence ns = (syntaxtree.NodeSequence) node;
+            columnas.add(((syntaxtree.NodeToken)ns.nodes.get(1)).tokenImage);
+        }
+        return columnas;
+    }
+
+    @SuppressWarnings("UnusedAssignment")
+    private static void asignarListas(insertar n, DepthFirstRetVisitor_usql este, LinkedList<Simbolo> valores, LinkedList<String> columnas){
+         switch(n.f5.which){
+                case 0:
+                    valores = obtenerValoresAinsertar(n, este, 0,valores);
+                    columnas = obtenerColumnas(n, este, columnas);
+                    break;
+                case 1:
+                    valores = obtenerValoresAinsertar(n, este, 1,valores);
+                    break;
+            }
+    }
+
+    @SuppressWarnings("UnnecessaryReturnStatement")
+    private static void insertarNormal(LinkedList<Simbolo> valores){        
+        boolean continuar =  false;
+        if(valores.size() <= t.valores.size()){
+           continuar =  RealizarVerificaciones(valores);           
+           if(continuar){
+               String r = generarTextoRegistro();
+               try {
+                   ar.EscribirRegistroBd(1000*t.cuerpo.registros.size(), r, t.path.replace("\"", ""));
+               } catch (IOException ex) {
+                   Debuger.Debug(ex);
+               }
+           } else {
+               Debuger.Debug("Hay errores en la operacion de insercion en la tabla proceso fallido ...", false, null);
+               return;
+           }
+        } else {
+            Debuger.Debug("La cantidad de valores no es correcta... ", false, null);
+            Debuger.Debug("No se completo el proceso de insercion... ", false, null);
+            return;
+        }
+
+    }
+
+    @SuppressWarnings("UnusedAssignment")
+    private static Boolean RealizarVerificaciones(LinkedList<Simbolo> valores) {
+        Boolean continuar = false;
+        continuar = verificarValoresQueNoVienen(valores.size()); 
+        if(continuar){
+            continuar = VerificarTipos(valores);        
+        }else{
+            Debuger.Debug("Existen valores que no aceptan valores null...", false, null);
+        }
+        if(continuar){
+            continuar = VerificarPrimaria(valores);
+        }     
+        if(continuar){
+           continuar = VerificarForanea(valores);  
+        }               
+        return continuar;
+    }
+
+    private static Boolean VerificarForanea(LinkedList<Simbolo> valores) {
+        Boolean continuar = false;
+        int dif = t.valores.size() - valores.size();
+        for (int i = dif; i < t.valores.size(); i++) {
+            Columna c =  (Columna) t.valores.get(i).v;
+            String valor =  valores.get((dif==0)?i:i-dif).v.ACadena();
+            boolean esForanea =  contieneForanea(c.atributos);
+            if(esForanea){
+                String ref =  obtenerForanea(c.atributos);
+                continuar = VerificarIntegridadReferencial(valor, ref);
+                if(!continuar){
+                    Debuger.Debug("Violacion de integridad referencial...", false, null);
+                    break;                    
+                }                
+            }
+        }
+        return continuar;
+    }
+    
+    private static Boolean VerificarIntegridadReferencial(String valor, String ref) {
+        boolean existeForanea = false;
+        String [] datos =  ref.split("_");
+        String nombreTabla =  datos[0];
+        String nombreColumna =  datos[1];
+        Tabla t =  LeerTabla(nombreTabla);
+        Cuerpo_tabla cp =  new Cuerpo_tabla();
+        levantarRegistros(t.path.replace("\"", ""), cp);
+        t.cuerpo = cp;
+        int posColum =  Contexto.ObtenerPosicion(t.valores, nombreColumna);
+        for (LinkedList<Simbolo> fila : t.cuerpo.registros) {
+            Simbolo data = fila.get(posColum);
+            if (data.v.ACadena().equals(valor)) {
+                existeForanea = true;
+                break;
+            }
+        }
+        return existeForanea;
+    }
+
+    private static Boolean contieneForanea(LinkedList<Simbolo> valores){
+         for(Simbolo s : valores){
+            if(s.nombre.equals("for"))
+                return true;
+        }
+        return false;        
+    }
+    
+     private static String obtenerForanea(LinkedList<Simbolo> valores){
+         for(Simbolo s : valores){
+            if(s.nombre.equals("for"))
+                return s.v.ACadena();
+        }
+        return "";        
+    }
+    
+    private static Boolean VerificarPrimaria(LinkedList<Simbolo> valores){
+        Boolean continuar = false;
+        int dif =  t.valores.size() - valores.size();        
+        for(int i =  dif; i< t.valores.size(); i++){
+            Columna c =  (Columna) t.valores.get(i).v;
+            String valor =  valores.get((dif==0)?i:i-dif).v.ACadena();
+            boolean esPrimaria =  contienePrimaria(c.atributos);
+            if(esPrimaria){
+                continuar =  VerificarUnicidad(valor, i);
+                if(!continuar){
+                    Debuger.Debug("Violacion de integridad de entidad la llave primaria debe de ser unica...", false, null);
+                    break;
+                }
+                    
+            }
+        }
+        return continuar;
+    }
+    
+    private static boolean VerificarUnicidad(String valor, int posColum){
+        boolean unica = true;
+        for(LinkedList<Simbolo> fila :  t.cuerpo.registros){
+            Simbolo data =  fila.get(posColum);
+            if(data.v.ACadena().equals(valor)){
+                unica =  false;
+                break;
+            }
+        }
+        return unica;
+    }
+    
+    private static String nombreColumnaPrimaria(){        
+        for(Simbolo s :  t.valores){
+            Columna c =  (Columna) s.v;
+            if(contienePrimaria(c.atributos)){
+                return s.nombre;
+            }
+        }
+        return "";
+    }
+    private static Boolean verificarValoresQueNoVienen(int tamVal) {
+        int dif = t.valores.size() - tamVal;
+        boolean omitir = false;        
+        for (int i = 0; i < dif; i++) {
+            Columna c = (Columna) t.valores.get(i).v;            
+            Simbolo insertar = new Simbolo(t.valores.get(i).nombre, t.valores.get(i).tipo, null);
+            boolean unico =  contieneUnico(c.atributos);
+            boolean primaria =  contienePrimaria(c.atributos);
+            for (Simbolo s : c.atributos) {
+                if (s.nombre.equals("nulo")) {
+                    omitir = s.v.ABool();
+                    if (omitir == true && !unico && !primaria) {
+                        insertar.v = new Texto("", Contexto.TEX);
+                        valoresInsertar.add(insertar);
+                    }else omitir =  false;                    
+                }
+                if (s.nombre.equals("auto")) {
+                    if ((omitir = EsNumerico(t.valores.get(i).tipo))){                        
+                        FijarValorAutoincremento(t.valores.get(i).nombre, insertar);
+                        valoresInsertar.add(insertar);
+                    }
+                    break;
+                }               
+            }
+            if(omitir==false)return omitir;
+        }
+        return omitir;
+    }
+
+    private static void FijarValorAutoincremento(String nombreColumna, Simbolo insertar) {
+        int posColumna = Contexto.ObtenerPosicion(t.valores, nombreColumna);
+        if (t.cuerpo.registros.isEmpty()) {
+            int val = 0;
+            insertar.v = new Texto(Integer.toString(val), Contexto.TEX);
+        } else {
+            LinkedList<Simbolo> ultimoReg = t.cuerpo.registros.getLast();
+            int val = ultimoReg.get(posColumna).v.AEntero() + 1;
+            insertar.v = new Texto(Integer.toString(val), Contexto.TEX);
+        }
+
+    }
+
+    private static void AgregarNulo() {
+        for (Simbolo val : t.valores) {
+            Columna c = (Columna) val.v;
+            if (!Contexto.TieneNulo(c.atributos)) {
+                Simbolo nulo = new Simbolo("nulo", Contexto.BOl, new Bool("1", Contexto.BOl));
+                c.atributos.add(nulo);
+            }
+        }
+
+    }
+    
+    private static boolean EsNumerico(String tipo) {
+        if (tipo.equals(Contexto.ENT) || tipo.equals(Contexto.DOB)) {
+            return true;
+        } else {
+            Debuger.Debug("Error los valores autoincrementables deben de ser de tipo numerico", false, null);
+            return false;
+        }
+    }
+    
+    private static boolean VerificarTipos(LinkedList<Simbolo> valores){
+        int dif =  t.valores.size() - valores.size();
+        Instruccion_declarar dec  = new Instruccion_declarar(null);
+        boolean CoincidenTipos =  false;
+        Simbolo insertar;
+        for(int i =  dif; i < t.valores.size(); i++){
+            Simbolo val =  t.valores.get(i);
+            Simbolo aux =  new Simbolo(val.nombre, val.tipo, null);           
+            Simbolo vald =  valores.get((dif==0)?i:i-dif);
+            if(dec.comprobarTipos(val, vald)){
+                CoincidenTipos = true; 
+                insertar  =  new Simbolo (val.nombre,val.tipo,null);
+                insertar.v =  dec.v;
+                valoresInsertar.add(insertar);
+            }else if (ComprobarTipoObjeto(aux, vald)){
+                CoincidenTipos = true;
+                insertar =  new Simbolo(val.nombre, val.tipo, null);
+                insertar.v =  vald.v;
+                valoresInsertar.add(insertar);
+            }else{
+                Debuger.Debug("Error de tipos al insertar...", false, null);
+               return false;
+            }
+        }        
+        return CoincidenTipos;
+    }
+    
+     protected static boolean ComprobarTipoObjeto(Simbolo iz, Simbolo exp){
+        if(Contexto.EsObjeto(iz.tipo) && exp.v.Tipo.equals(Contexto.OBJ)){
+            Objeto o =  (Objeto) exp.v;         
+            if(iz.tipo.equals(exp.tipo)){
+                Objeto nuevo =  new Objeto("");
+                nuevo.valor.tabla =  new HashMap<>(o.valor.tabla);
+                iz.v =  nuevo;
+                return true;
+            }else{
+                Debuger.Debug("Error de tipos objetos no son del mismo tipo", false, null);                
+                return false;
+            }
+        }
+        return false;
+    }
+     
+    private static Boolean contieneUnico(LinkedList<Simbolo> valores){
+        for(Simbolo s : valores){
+            if(s.nombre.equals("unico"))
+                return true;
+        }
+        return false;
+    }
+    
+    private static Boolean contienePrimaria(LinkedList<Simbolo> valores){
+         for(Simbolo s : valores){
+            if(s.nombre.equals("prim"))
+                return true;
+        }
+        return false;
+    }
+    
+    protected  static String generarTextoRegistro(){
+        StringBuilder texto =  new StringBuilder();
+        texto.append("<rows>");
+        for(Simbolo s :  valoresInsertar){
+            if(Contexto.EsObjeto(s.tipo)){
+                 texto.append("<")
+                        .append(s.nombre)
+                        .append(">");
+                Objeto o =  (Objeto) s.v;
+                for(Simbolo ob :  o.valor.tabla.values()){
+                    texto.append("<")
+                        .append(s.nombre)
+                        .append(">")
+                        .append("\"")
+                        .append(s.v.ACadena())
+                        .append("\"")
+                        .append("</")
+                        .append(s.nombre)
+                        .append(">");
+                }
+                texto.append("</")
+                        .append(s.nombre)
+                        .append(">");
+            } else {
+                texto.append("<")
+                        .append(s.nombre)
+                        .append(">")
+                        .append("\"")
+                        .append(s.v.ACadena())
+                        .append("\"")
+                        .append("</")
+                        .append(s.nombre)
+                        .append(">");
+            }
+        }
+        valoresInsertar.clear();
+        return texto.toString();
     }
 }

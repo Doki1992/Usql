@@ -666,7 +666,8 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                                 Objeto ob1 = (Objeto) padre.v;
                                 Simbolo hijo =  ob1.valor.Buscar(to.tokenImage);
                                 if(hijo != null){
-                                    iz.v = hijo.v;
+                                    iz.v = hijo.v; 
+                                    iz.tipo =  hijo.tipo;
                                 }else{
                                     Debuger.Debug("El objeto con nombre " + token1.tokenImage + " no tiene ningun atributo con nombre " + to.tokenImage + "...", false, null);
                                 }
@@ -681,6 +682,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 }
                 Simbolo aux = global.Buscar(token1.tokenImage);
                 iz.v = aux.v;
+                iz.tipo = aux.tipo;
                 break;
             case 4:
                 NodeToken tok_cadena = (NodeToken) nc.choice;

@@ -107,6 +107,15 @@ public class Contexto {
         return 0;
     }
     
+    public static boolean TieneNulo(LinkedList<Simbolo> valores){
+        for(Simbolo s :  valores){
+            if(s.nombre.equals("nulo")){
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public static boolean EsObjeto(String tipo){
         if(ENT.equals(tipo)){
             return false;
@@ -124,5 +133,8 @@ public class Contexto {
             return true;
         }
     }
+    
+    
+    
     
 }

@@ -247,10 +247,12 @@ public class DepthFirstRetVisitor<R> implements IRetVisitor<R> {
             case 1:
                 NodeList lista = (NodeList) n.f1.choice;
                 for (INode node : lista.nodes) {
-                    t.valor.insertar(nombre, (Simbolo) node.accept(this));
+                    Simbolo n1 = (Simbolo) node.accept(this);
+                    t.valor.insertar(n1.nombre, n1);
                 }
                 retorno.tipo = Contexto.OBJ;
                 retorno.v = t;
+                retorno.nombre = nombre;
                 break;
         }
 

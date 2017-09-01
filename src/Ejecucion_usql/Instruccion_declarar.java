@@ -45,7 +45,7 @@ public class Instruccion_declarar {
         return null;
     }
     
-    private boolean comprobarTipos(Simbolo tipo, Simbolo exp){
+    protected boolean comprobarTipos(Simbolo tipo, Simbolo exp){
         if(exp == null){
             return true;
         }else if(tipo.tipo.equals(Contexto.TEX)){
@@ -93,6 +93,18 @@ public class Instruccion_declarar {
     }
     
     public void AsignarVar(Simbolo iz, Simbolo exp){
+        if(Contexto.EsObjeto(iz.tipo) && exp.v.Tipo.equals(Contexto.OBJ)){
+            Objeto i =  (Objeto) iz.v;
+            Objeto d =  (Objeto) exp.v;
+            if(i.valor.tabla.size() ==  d.valor.tabla.size()){
+                Objeto nuevo =  new Objeto("");
+                nuevo.valor.tabla =  new HashMap<>(d.valor.tabla);
+                iz.v =  nuevo;
+                return;
+            }else{
+                Debuger.Debug("Error de tipos objetos no son del mismo tipo", false, null);                
+            }
+        }
         if(!comprobarTipos(iz, exp))
             return;
         iz.v = this.v;

@@ -1,8 +1,15 @@
 usar @MIKE13;
 crear objeto conjunto(integer a, integer b);
-crear tabla estudiante(integer id, texto nombre, conjunto num);
-##eliminar tabla estudiante;
+crear tabla carnet(integer id);
+crear tabla estudiante(Integer id no nulo unico autoincrementable, integer nombre llave_foranea carnet id no nulo,
+integer p llave_primaria,  conjunto num no nulo);
 ##eliminar objeto conjunto;
 ##insertar en tabla   (a,b,c) valores (1,1,d);
-insertar en tabla estudiante (1,1,d);
+##insertar en tabla estudiante (d,d,d) valores (1,1,1);
+declarar d integer  = 0;
+declarar obj conjunto;
+insertar en tabla estudiante (2,5,obj);
+##crear tabla uno45(integer dos no nulo, integer tres nulo llave_foranea estudiante id, conjunto uno);
+##eliminar tabla estudiante;
+##eliminar tabla carnet;
 
