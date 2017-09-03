@@ -168,6 +168,7 @@ public class Instruccion_insetar {
                    Debuger.Debug(ex);
                }
            } else {
+               valoresInsertar.clear();
                Debuger.Debug("Hay errores en la operacion de insercion en la tabla proceso fallido ...", false, null);
                return;
            }
@@ -193,12 +194,49 @@ public class Instruccion_insetar {
         }     
         if(continuar){
            continuar = VerificarForanea(valores);  
-        }               
+        } 
+        if(continuar){
+            continuar = VerificarUnicos(valores);
+        }
         return continuar;
     }
 
+    private static Boolean VerificarUnicos(LinkedList<Simbolo> valores){
+        Boolean continuar =  true;
+        int dif = t.valores.size() - valores.size();
+         for (int i = dif; i < t.valores.size(); i++) {
+            Columna c =  (Columna) t.valores.get(i).v;
+            String valor =  valores.get((dif==0)?i:i-dif).v.ACadena();
+            boolean esUnica =  contieneUnico(c.atributos);
+            if(esUnica){
+                continuar =  VerificarUnico(valor, i);
+            }
+         }
+        return continuar;
+    }
+    
+    private static Boolean VerificarUnico(String valor, int posColum){
+        boolean unica = true;
+        for(LinkedList<Simbolo> fila :  t.cuerpo.registros){
+            Simbolo data =  fila.get(posColum);
+            if(data.v.ACadena().equals(valor)){
+                unica =  false;
+                break;
+            }
+        }
+        return unica;
+    }
+    
+    private static Boolean contieneUnico(LinkedList<Simbolo> valores){
+         for(Simbolo s : valores){
+            if(s.nombre.equals("unico"))
+                return true;
+        }
+        return false;  
+    }
+    
     private static Boolean VerificarForanea(LinkedList<Simbolo> valores) {
-        Boolean continuar = false;
+        Boolean continuar = true;
         int dif = t.valores.size() - valores.size();
         for (int i = dif; i < t.valores.size(); i++) {
             Columna c =  (Columna) t.valores.get(i).v;
@@ -253,7 +291,7 @@ public class Instruccion_insetar {
     }
     
     private static Boolean VerificarPrimaria(LinkedList<Simbolo> valores){
-        Boolean continuar = false;
+        Boolean continuar = true;
         int dif =  t.valores.size() - valores.size();        
         for(int i =  dif; i< t.valores.size(); i++){
             Columna c =  (Columna) t.valores.get(i).v;
@@ -294,7 +332,7 @@ public class Instruccion_insetar {
     }
     private static Boolean verificarValoresQueNoVienen(int tamVal) {
         int dif = t.valores.size() - tamVal;
-        boolean omitir = false;        
+        boolean omitir = true;        
         for (int i = 0; i < dif; i++) {
             Columna c = (Columna) t.valores.get(i).v;            
             Simbolo insertar = new Simbolo(t.valores.get(i).nombre, t.valores.get(i).tipo, null);
@@ -389,7 +427,7 @@ public class Instruccion_insetar {
                 nuevo.valor.tabla =  new HashMap<>(o.valor.tabla);
                 iz.v =  nuevo;
                 return true;
-            }else{
+            } else {
                 Debuger.Debug("Error de tipos objetos no son del mismo tipo", false, null);                
                 return false;
             }
@@ -397,13 +435,7 @@ public class Instruccion_insetar {
         return false;
     }
      
-    private static Boolean contieneUnico(LinkedList<Simbolo> valores){
-        for(Simbolo s : valores){
-            if(s.nombre.equals("unico"))
-                return true;
-        }
-        return false;
-    }
+    
     
     private static Boolean contienePrimaria(LinkedList<Simbolo> valores){
          for(Simbolo s : valores){
@@ -419,36 +451,37 @@ public class Instruccion_insetar {
         for(Simbolo s :  valoresInsertar){
             if(Contexto.EsObjeto(s.tipo)){
                  texto.append("<")
-                        .append(s.nombre)
+                        .append("@"+s.nombre)
                         .append(">");
                 Objeto o =  (Objeto) s.v;
                 for(Simbolo ob :  o.valor.tabla.values()){
                     texto.append("<")
-                        .append(s.nombre)
+                        .append("@"+ob.nombre)
                         .append(">")
                         .append("\"")
-                        .append(s.v.ACadena())
+                        .append(ob.v.ACadena())
                         .append("\"")
                         .append("</")
-                        .append(s.nombre)
+                        .append("@"+ob.nombre)
                         .append(">");
                 }
                 texto.append("</")
-                        .append(s.nombre)
+                        .append("@"+s.nombre)
                         .append(">");
             } else {
                 texto.append("<")
-                        .append(s.nombre)
+                        .append("@"+s.nombre)
                         .append(">")
                         .append("\"")
                         .append(s.v.ACadena())
                         .append("\"")
                         .append("</")
-                        .append(s.nombre)
+                        .append("@"+s.nombre)
                         .append(">");
             }
         }
         valoresInsertar.clear();
+        texto.append("</rows>");
         return texto.toString();
     }
 }
