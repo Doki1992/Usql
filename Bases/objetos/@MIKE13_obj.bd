@@ -1,1 +1,1 @@
-<obj><seek>0</seek><nombre>conjunto</nombre><permiso>""</permiso><atr><int>a</int><int>b</int></atr></obj>
+<obj><seek>0</seek><nombre>poblacion</nombre><permiso>""</permiso><atr><int>a</int><texto>nomb</texto></atr></obj>

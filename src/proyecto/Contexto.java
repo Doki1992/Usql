@@ -6,6 +6,8 @@
 package proyecto;
 
 import Entorno.Bd;
+import Entorno.Ent;
+import Entorno.Objeto;
 import Entorno.Simbolo;
 import java.io.File;
 import java.io.IOException;
@@ -133,8 +135,30 @@ public class Contexto {
             return true;
         }
     }
-    
-    
-    
-    
+
+    public static Simbolo DevolverSegunTipoObjetoUsql(Simbolo padre, String h, String p, Ent global) {
+        Simbolo iz =  new Simbolo("temp", "", null);
+        iz = (padre ==  null)?global.Buscar(p + "." + h):padre;
+        if (padre != null) {
+            switch (padre.v.Tipo) {
+                case OBJ:
+                    Objeto ob1 = (Objeto) padre.v;
+                    Simbolo hijo = ob1.valor.Buscar(h);
+                    if (hijo != null) {
+                        iz.v = hijo.v;
+                        iz.tipo = hijo.tipo;
+                    } else {
+                        Debuger.Debug("El objeto con nombre " + p + " no tiene ningun atributo con nombre " + h + "...", false, null);
+                    }
+                    break;
+                case TB:
+                    iz = global.Buscar(padre.nombre);
+                    break;
+            }
+        } else {
+            Debuger.Debug("El objeto con nombre " + p + " no existe...", false, null);
+        }
+        return iz;
+    }
+
 }

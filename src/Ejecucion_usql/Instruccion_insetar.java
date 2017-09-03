@@ -343,7 +343,7 @@ public class Instruccion_insetar {
                     omitir = s.v.ABool();
                     if (omitir == true && !unico && !primaria) {
                         insertar.v = new Texto("", Contexto.TEX);
-                        valoresInsertar.add(insertar);
+                        valoresInsertar.add(insertar);                        
                     }else omitir =  false;                    
                 }
                 if (s.nombre.equals("auto")) {

@@ -21,6 +21,9 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     private boolean flujo =  false;
     private Ent global =  new Ent(null);
     
+    public Ent obtenerGlobal(){return this.global;}
+    public void vaciarGlobal(){this.global =  null;}
+    public void fijarGlobal(Ent nuevo){this.global =  nuevo;}
     
     public R visit(final NodeChoice n) {
         final R nRes = n.choice.accept(this);
@@ -170,6 +173,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
             case 6:
                 break;
             case 7:
+                Instruccion_seleccionar.SeleccionarRegistro((seleccionar)n.f0.choice, this);
                 break;
             case 8:
                 //otorgar 
@@ -662,19 +666,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                             NodeSequence ns1  =(NodeSequence) choice.choice;
                             NodeToken to = (NodeToken) ns1.nodes.get(1);
                             Simbolo padre =  this.global.Buscar(token1.tokenImage);
-                            if(padre != null){
-                                Objeto ob1 = (Objeto) padre.v;
-                                Simbolo hijo =  ob1.valor.Buscar(to.tokenImage);
-                                if(hijo != null){
-                                    iz.v = hijo.v; 
-                                    iz.tipo =  hijo.tipo;
-                                }else{
-                                    Debuger.Debug("El objeto con nombre " + token1.tokenImage + " no tiene ningun atributo con nombre " + to.tokenImage + "...", false, null);
-                                }
-                            }else{
-                                Debuger.Debug("El objeto con nombre " + token1.tokenImage + " no existe..." , false, null);
-                            }
-                            return (R)iz;
+                            return (R)(Contexto.DevolverSegunTipoObjetoUsql(padre,to.tokenImage, token1.tokenImage,this.global));                            
                         case 1:
                             //hacer la llamada del metodo
                             break;
@@ -1003,7 +995,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final caso n) {
-        Simbolo retorno  =  new Simbolo("temp", "", null);
+        Simbolo retorno  =  new Simbolo("temp", "", new Texto("vacio", ""));
         for(INode_usql node : n.f3.nodes){
             retorno = (Simbolo) node.accept(this);
             if(retorno.v.ACadena().equals(Contexto.RETORNO)){
