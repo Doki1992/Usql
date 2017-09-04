@@ -30,9 +30,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.function.Predicate;
+
 
 public class Instruccion_seleccionar {
 

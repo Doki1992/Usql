@@ -179,10 +179,10 @@ void listasentencias() :
 | "usar" <S_IDENTIFICADOR> ";"
 | "alterar" (alterar_tabla() | alterar_objeto() | alterar_usuario()) ";"  
 | "eliminar"  (eliminar_usuario() | eliminar_tabla() | eliminar_base() | eliminar_objeto()) ";"
-| insertar() 
-| actualizar()
+| insertar()  //si a medias
+| actualizar() 
 | borrar()
-| seleccionar()
+| seleccionar() //si
 | otorgar() //si
 | denegar() //si
 | Declarar() //si
