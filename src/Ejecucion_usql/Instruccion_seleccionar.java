@@ -29,12 +29,14 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.function.Predicate;
 
 public class Instruccion_seleccionar {
     
     private static String ordeneraPor = "";
-    private static boolean esDecendente = false;
+    private static boolean esDecendente = true;
     private static boolean esTodo =  false;
     private static LinkedList<String> listaColumnas =  new LinkedList<>();
     private static LinkedList<String> listaNombreTablas =  new LinkedList<>();
@@ -43,25 +45,53 @@ public class Instruccion_seleccionar {
     private static DepthFirstRetVisitor_usql este =  null;
     private static Cuerpo_tabla producto_cartesiano =  new Cuerpo_tabla();
     private static Ent valoresTabla;
-    private static Cuerpo_tabla resultado;
+    private static Cuerpo_tabla resultado =  new Cuerpo_tabla();
+    private static LinkedList<Integer> posiciones =  new LinkedList<>();
     
-    public static void SeleccionarRegistro(seleccionar n, DepthFirstRetVisitor_usql este){
+      private static void limpiarComponentes() {
+        ordeneraPor = "";
+        esDecendente = false;
+        esTodo = false;
+        listaColumnas = new LinkedList<>();
+        listaNombreTablas = new LinkedList<>();
+        listaTablas = new LinkedList<>();
+        exp = null;
+        este = null;
+        producto_cartesiano = new Cuerpo_tabla();
+        valoresTabla = null;
+        resultado = null;
+        posiciones =  new LinkedList<>();
+    }
+    public static Simbolo SeleccionarRegistro(seleccionar n, DepthFirstRetVisitor_usql este){
         IniciarComponentesConsulta(n);
-        if(!listaTablas.isEmpty()){
-            Simbolo vista = new Simbolo("temp", Contexto.TB, null);
+        Simbolo vista = new Simbolo("temp", Contexto.TB, null);
+        if(!listaTablas.isEmpty()){            
             CrearVista(vista);  
             valoresTabla =  new Ent(este.obtenerGlobal());
             este.vaciarGlobal();
             este.fijarGlobal(valoresTabla);
-            Cuerpo_tabla resultado_parcial  = new Cuerpo_tabla();
-            for(LinkedList<Simbolo> reg : ((Tabla)vista.v).cuerpo.registros ){
+            Cuerpo_tabla resultado_temporal  = new Cuerpo_tabla();
+            int  it = 0;
+            for(LinkedList<Simbolo> reg : ((Tabla)vista.v).cuerpo.registros ){                
                 AsignaValores((Tabla)vista.v, reg);
                 if(((Simbolo)exp.accept(este)).v.ABool()){
-                    resultado_parcial.registros.add(reg);
-                }
+                    
+                    resultado_temporal.registros.add(reg);                    
+                }               
             }
+            ((Tabla)vista.v).cuerpo =  resultado_temporal;            
+            CrearResultadoFinal(((Tabla)vista.v));
+            imprimir((Tabla)vista.v);
+            limpiarComponentes();
         } else {
             Debuger.Debug("Enserio Mike enserio !", false, null);
+        }
+        return vista;
+    }
+    
+    private static void imprimir(Tabla t){
+        for(LinkedList<Simbolo> reg :  t.cuerpo.registros){
+            imprimirRegistro(reg, t.valores);
         }
     }
     
@@ -71,6 +101,91 @@ public class Instruccion_seleccionar {
         CrearSuperTabla();
         temp.cuerpo = producto_cartesiano; 
         vista.v =  temp;
+    }
+    
+    private static LinkedList<Simbolo> aplicarOperadorPi(Tabla t) {
+        LinkedList<Simbolo> nuevoValores = new LinkedList<>();
+        if (!esTodo) {
+            int size = t.valores.size();
+            for (int i = 0; i < size; i++) {
+                Simbolo colum = t.valores.get(i);
+                for (String nom : listaColumnas) {
+                    if ((colum.nombre.contains(nom) && colum.nombre.contains(".")) || colum.nombre.equals(nom)) {
+                        nuevoValores.add(colum);
+                        posiciones.add(i);
+                    }
+                }
+            }
+        }else{
+            nuevoValores = t.valores;
+        }
+        return nuevoValores;
+    }
+    
+    private static Cuerpo_tabla generarNuevoEncabezado(Tabla t) {
+        if (posiciones.isEmpty()) {
+            for (LinkedList<Simbolo> reg : t.cuerpo.registros) {              
+                resultado.registros.add(reg);
+            }
+        } else {
+            for (LinkedList<Simbolo> reg : t.cuerpo.registros) {
+                LinkedList<Simbolo> regNuevo = new LinkedList<>();
+                for (Integer i : posiciones) {
+                    regNuevo.add(reg.get(i));
+                }
+                resultado.registros.add(regNuevo);
+            }
+        }
+        return resultado;
+    }
+    
+    private static void CrearResultadoFinal(Tabla t){
+        t.valores = aplicarOperadorPi(t);
+        t.cuerpo =  generarNuevoEncabezado(t);
+        if(!esDecendente){
+            int posReg = 0;
+            if(Contexto.ExisteColumna(t.valores, ordeneraPor)){
+                posReg = Contexto.ObtenerPosicion(t.valores, ordeneraPor);
+                crearListaOrdenada(t.cuerpo, posReg,t.valores.get(posReg).tipo);                
+            }else{
+                Debuger.Debug("Error la columna con nombre " + ordeneraPor + " no existe..", false, null);
+            }
+        }
+    }
+    
+    private static void crearListaOrdenada(Cuerpo_tabla cuerpo, int posReg, String tipo){
+        for (int j = 0; j < cuerpo.registros.size(); j++) {
+            switch (tipo) {
+                case Contexto.TEX:
+                    Simbolo val =  cuerpo.registros.get(j).get(posReg);
+                    inicio:
+                    for(int i = 0; i < cuerpo.registros.size(); i++){
+                        Simbolo aux =  cuerpo.registros.get(i).get(posReg);
+                        if(val.v.ACadena().compareTo(aux.v.ACadena())>0){
+                            LinkedList<Simbolo> auxreg =  cuerpo.registros.get(j);
+                            cuerpo.registros.set(j, cuerpo.registros.get(i));
+                            cuerpo.registros.set(i,auxreg);                            
+                        }
+                    }
+                    break;
+                case Contexto.BOl:
+                    
+                    break;
+                case Contexto.ENT:
+
+                    break;
+                case Contexto.DOB:
+
+                    break;
+                case Contexto.DAT:
+
+                    break;
+                case Contexto.DATH:
+
+                    break;
+                default:
+            }
+        }
     }
     
     private static void AsignaValores(Tabla t, LinkedList<Simbolo> registro) {
@@ -182,8 +297,12 @@ public class Instruccion_seleccionar {
         for (Simbolo s : listaTablas) {
             Tabla t = (Tabla) s.v;
             for (Simbolo ss : t.valores) {
-                ss.nombre = s.nombre + "." + ss.nombre;
-                encabezado.add(ss);
+                if(contieneEncabezado(ss.nombre, encabezado)){
+                    ss.nombre = s.nombre + "." + ss.nombre;
+                    encabezado.add(ss);
+                }else{
+                    encabezado.add(ss);
+                }                
             }
         }
         return encabezado;
@@ -216,5 +335,19 @@ public class Instruccion_seleccionar {
             Tabla t = (Tabla) s.v;
             RealizarProdcutoCartesiano(producto_cartesiano, t.cuerpo);
         }
+    }
+    
+    private static void imprimirRegistro(LinkedList<Simbolo> valores, LinkedList<Simbolo>encabezado){
+        String encabe = "";
+        for(Simbolo s : encabezado){
+            encabe += s.nombre + "                  " ;
+        }
+        Debuger.Debug(encabe);
+        encabe = "";
+        for(Simbolo s :  valores){
+            encabe += s.v.ACadena() + "                 " ;
+        }
+        Debuger.Debug(encabe);
+        
     }
 }

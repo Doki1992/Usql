@@ -13,6 +13,9 @@ import arbolxml.*;
 import visitor.*;
 import visitorxml.*;
 import Entorno.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 /**
  *
@@ -23,8 +26,11 @@ public class proyecto {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws FileNotFoundException, IOException, ParseException_usql {
-        // TODO code application logic here              
+    public static void main(String[] args) throws FileNotFoundException, IOException, ParseException_usql, java.text.ParseException {
+        // TODO code application logic here   
+        SimpleDateFormat dd =  new SimpleDateFormat("dd-MM-yyyy");
+        Date d = dd.parse("20-02-1889");
+                
         Contexto.ObtenerPathCononico();
         UsqlParser a = new UsqlParser(new java.io.FileInputStream("sample.dat"));
         INode_usql init  = a.Inicio();

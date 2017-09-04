@@ -137,8 +137,7 @@ public class Contexto {
     }
 
     public static Simbolo DevolverSegunTipoObjetoUsql(Simbolo padre, String h, String p, Ent global) {
-        Simbolo iz =  new Simbolo("temp", "", null);
-        iz = (padre ==  null)?global.Buscar(p + "." + h):padre;
+        Simbolo iz = new Simbolo("temp", "", null);
         if (padre != null) {
             switch (padre.v.Tipo) {
                 case OBJ:
@@ -152,11 +151,22 @@ public class Contexto {
                     }
                     break;
                 case TB:
-                    iz = global.Buscar(padre.nombre);
+                    //iz = global.Buscar(padre.nombre);
                     break;
             }
         } else {
-            Debuger.Debug("El objeto con nombre " + p + " no existe...", false, null);
+            Simbolo aux = global.Buscar(p + "." + h);
+            if (aux != null) {
+                iz.v = aux.v;
+                iz.tipo = aux.tipo;
+                iz.nombre = aux.nombre;
+            } else {
+                aux = global.Buscar(h);
+                iz.v = aux.v;
+                iz.nombre =  aux.nombre;
+                iz.tipo =  aux.tipo;
+            }
+
         }
         return iz;
     }

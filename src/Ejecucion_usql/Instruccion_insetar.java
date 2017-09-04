@@ -163,7 +163,7 @@ public class Instruccion_insetar {
            if(continuar){
                String r = generarTextoRegistro();
                try {
-                   ar.EscribirRegistroBd(1000*t.cuerpo.registros.size(), r, t.path.replace("\"", ""));
+                   ar.EscribirRegistroBd(500*t.cuerpo.registros.size(), r, t.path.replace("\"", ""));
                } catch (IOException ex) {
                    Debuger.Debug(ex);
                }
@@ -256,7 +256,7 @@ public class Instruccion_insetar {
     
     private static Boolean VerificarIntegridadReferencial(String valor, String ref) {
         boolean existeForanea = false;
-        String [] datos =  ref.split("_");
+        String [] datos =  ref.split("#");
         String nombreTabla =  datos[0];
         String nombreColumna =  datos[1];
         Tabla t =  LeerTabla(nombreTabla);

@@ -1,10 +1,18 @@
+CREAr BASE_DATOs @MIKE13;
 usar @MIKE13;
-declarar obj poblacion;
-obj.a = 4;
-declarar obj1 poblacion;
 
-obj1 = obj;
-obj1.a = obj.a *25;
+declarar obj1 poblacion;
+declarar o poblacion;
+declarar uno integer = 25;
+obj1.a = uno*35*uno;
+obj1.a = uno*obj1.a;
 obj1.a;
-obj.a;
-seleccionar id, nombre de estado, depto, muni donde estado.id == obj.a ordenar por id desc;
+declarar bo bool = !!(25<35);
+bo;
+ uno +bo;
+uno;
+o = obj1;
+o.a;
+
+seleccionar  id, id_estado, id_depto de muni, depto, estado donde estado.id == id_estado && depto.id == id_depto  &&  estado.id == 5;
+

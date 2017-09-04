@@ -445,7 +445,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                         return null;
                     }
                 }
-                s = new Simbolo("for", Contexto.BOl, new Bool(referencia+"_"+colRef, Contexto.BOl));
+                s = new Simbolo("for", Contexto.BOl, new Bool(referencia+"#"+colRef, Contexto.BOl));
                 break;
             case 4:
                 s = new Simbolo("auto", Contexto.BOl, new Bool("1", Contexto.BOl));
@@ -652,7 +652,10 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 break;
             case 2:
                 NodeSequence ns_exp_log = (NodeSequence) nc.choice;
-                iz = (Simbolo) ns_exp_log.nodes.get(1).accept(this);
+                Simbolo aux1 = (Simbolo) ns_exp_log.nodes.get(1).accept(this);
+                iz.nombre = aux1.nombre;
+                iz.tipo =  aux1.tipo;
+                iz.v = aux1.v;
                 break;
             case 3:
                 //identificadores por el momento me falta...
@@ -775,7 +778,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
             for (INode_usql node : op.nodes) {
                 NodeSequence ns = (NodeSequence) node;
                 Simbolo derecho = (Simbolo) ns.nodes.get(1).accept(this);
-                izquierdo.v = Operaciones_aritmeticas.OperacionAnd(izquierdo, derecho);
+                izquierdo.v = Operaciones_aritmeticas.OperacionAnd(izquierdo, derecho);                
             }
         }
         return (R) izquierdo;

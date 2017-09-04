@@ -25,6 +25,8 @@ import visitorxml.*;
 import proyecto.*;
 import arbolxml.*;
 import java.io.File;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -571,6 +573,7 @@ public class Operaciones_aritmeticas {
             Debuger.Debug("Operarador minus solo se puede aplicar a expresiones de tipo numerico...");
             s.v = null;
         }
+        
         return s.v;
     }
 }

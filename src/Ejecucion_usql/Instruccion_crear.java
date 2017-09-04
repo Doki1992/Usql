@@ -400,6 +400,7 @@ public class Instruccion_crear {
                 .append("</usuario>");        
         return texto.toString();
     }
+    
     public static void CrearDirectorioTabla(String nombre_directorio) {
         File file = new File(BD_BASES + Contexto.EnUso.nombre + "_" + nombre_directorio);
         file.mkdir();
