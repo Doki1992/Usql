@@ -94,7 +94,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final listasentencias n) {
-        Simbolo retorno =  new Simbolo("temp", "", new Texto("", ""));
+        Simbolo retorno = new Simbolo("temp", "", new Texto("", ""));
         switch (n.f0.which) {
             case 0:
                 //crear base de datos
@@ -126,7 +126,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 NodeToken Tusar = (NodeToken) Usar.nodes.get(1);
                 String NombreBase = Tusar.tokenImage;
                 Instruccion_usar.UsarBase(NombreBase);
-                Contexto.Backup =  true;
+                Contexto.Backup = true;
                 break;
             case 2:
                 NodeSequence dd_alterar = (NodeSequence) n.f0.choice;
@@ -166,15 +166,20 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 break;
             case 4:
                 //insertar
-                Instruccion_insetar.InsertarRegistro((insertar)n.f0.choice, this);
+                Instruccion_insetar.InsertarRegistro((insertar) n.f0.choice, this);
                 break;
             case 5:
                 break;
             case 6:
                 break;
-            case 7:
-                Instruccion_seleccionar.SeleccionarRegistro((seleccionar)n.f0.choice, this);
-                break;
+            case 7: {
+                try {
+                    Instruccion_seleccionar.SeleccionarRegistro((seleccionar) n.f0.choice, this);
+                } catch (java.text.ParseException ex) {
+                    Debuger.Debug(ex);
+                }
+            }
+            break;
             case 8:
                 //otorgar 
                 INode_usql dd_otorgar = (INode_usql) n.f0.choice;
@@ -186,19 +191,19 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 break;
             case 10:
                 INode_usql dd_declarar = (INode_usql) n.f0.choice;
-                return (R) dd_declarar.accept(this);                   
+                return (R) dd_declarar.accept(this);
             case 11:
                 INode_usql dd_asignacion = (INode_usql) n.f0.choice;
-                return (R) dd_asignacion.accept(this);  
+                return (R) dd_asignacion.accept(this);
             case 12:
                 INode_usql dd_si = (INode_usql) n.f0.choice;
-                return (R) dd_si.accept(this);                
+                return (R) dd_si.accept(this);
             case 13:
                 INode_usql dd_selecciona = (INode_usql) n.f0.choice;
-                return (R) dd_selecciona.accept(this);                 
+                return (R) dd_selecciona.accept(this);
             case 14:
                 INode_usql dd_para = (INode_usql) n.f0.choice;
-                return (R) dd_para.accept(this);                                 
+                return (R) dd_para.accept(this);
             case 15:
                 INode_usql dd_mientras = (INode_usql) n.f0.choice;
                 return (R) dd_mientras.accept(this);
@@ -218,7 +223,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 Debuger.Debug(null, false, (Simbolo) dd_expresion.nodes.get(0).accept(this));
                 break;
         }
-        return (R)retorno;
+        return (R) retorno;
     }
 
     public R visit(final eliminar_usuario n) {
@@ -702,7 +707,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 iz.v = new Fecha_tipo(token.tokenImage, "");
                 if (op.present()) {
                     NodeToken tok = (NodeToken) op.node;
-                    iz.v = new Fecha_hora_tipo(token.tokenImage + tok.tokenImage, "");
+                    iz.v = new Fecha_hora_tipo(token.tokenImage +" "+ tok.tokenImage, "");
                 }
                 break;
         }

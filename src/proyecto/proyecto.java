@@ -28,9 +28,8 @@ public class proyecto {
      */
     public static void main(String[] args) throws FileNotFoundException, IOException, ParseException_usql, java.text.ParseException {
         // TODO code application logic here   
-        SimpleDateFormat dd =  new SimpleDateFormat("dd-MM-yyyy");
-        Date d = dd.parse("20-02-1889");
-                
+        SimpleDateFormat dd =  new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        Date d = dd.parse("20-02-1889 18:00:00");        
         Contexto.ObtenerPathCononico();
         UsqlParser a = new UsqlParser(new java.io.FileInputStream("sample.dat"));
         INode_usql init  = a.Inicio();

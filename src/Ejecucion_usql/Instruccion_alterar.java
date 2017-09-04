@@ -218,7 +218,7 @@ public class Instruccion_alterar {
                 LimpiarEspacioTabla(t1.seek);
                 ar.EscribirRegistroBd(t1.seek, GenerarTextoTablaNueva(tabla), Contexto.EnUso.path);
             } else {
-
+                Debuger.Debug("La tabla con nombre " + identificador + " no existe...", true, null);
             }
         } catch (IOException ex) {
             Debuger.Debug(ex);

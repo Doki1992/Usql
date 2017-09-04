@@ -235,7 +235,7 @@ public class DepthFirstRetVisitor<R> implements IRetVisitor<R> {
     public R visit(final reg n) {
         Simbolo retorno = new Simbolo("", "", null);
         Objeto t = new Objeto("");
-        String nombre = n.f0.tokenImage.replace("<", "").replace(">", "").replace("@", "");
+        String nombre = n.f0.tokenImage.replace("<", "").replace(">", "").replace("#", "");
         switch (n.f1.which) {
             case 0:
                 NodeToken tok = (NodeToken) n.f1.choice;
