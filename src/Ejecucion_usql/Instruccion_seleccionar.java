@@ -70,8 +70,7 @@ public class Instruccion_seleccionar {
             valoresTabla = new Ent(este.obtenerGlobal());
             este.vaciarGlobal();
             este.fijarGlobal(valoresTabla);
-            Cuerpo_tabla resultado_temporal = new Cuerpo_tabla();
-            int it = 0;
+            Cuerpo_tabla resultado_temporal = new Cuerpo_tabla();            
             for (LinkedList<Simbolo> reg : ((Tabla) vista.v).cuerpo.registros) {
                 AsignaValores((Tabla) vista.v, reg);
                 if (((Simbolo) exp.accept(este)).v.ABool()) {
@@ -442,7 +441,7 @@ public class Instruccion_seleccionar {
         return encabezado;
     }
 
-    private static boolean contieneEncabezado(String nombre, LinkedList<Simbolo> valores) {
+    protected static boolean contieneEncabezado(String nombre, LinkedList<Simbolo> valores) {
         return valores.stream().anyMatch((Simbolo a) -> a.nombre.equals(nombre));
     }
 
