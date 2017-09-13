@@ -1,0 +1,109 @@
+    
+options {
+  JAVA_UNICODE_ESCAPE = true;
+  IGNORE_CASE=true ;
+
+}
+
+PARSER_BEGIN(PlyParser)
+package Analizador_ply;
+import java.io.FileNotFoundException;
+public class PlyParser {
+public static void main (String args []) throws FileNotFoundException{
+PlyParser parser;
+    System.out.println("Reading from standard input. . .");
+    parser = new PlyParser(new java.io.FileInputStream("ply.dat"));
+    try {
+      INode root = parser.Inicio();
+      System.out.println("Parsed successfully.");
+      //root.accept(new FreeVarFinder());
+    }
+    catch (ParseException e) {
+      System.out.println(e.getMessage());
+      System.out.println("Encountered errors during parse.");
+    }
+
+}
+}
+PARSER_END(PlyParser)
+
+/* ESPACIO EN BLACO */
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+
+}
+
+/* COMENTARIOS*/
+
+SPECIAL_TOKEN:
+{
+   <LINE_COMMENT: "#"(~["\r","\n"])*>
+|  <MULTI_LINE_COMMENT: "#*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "#">
+}
+
+
+/* PALABRAS RESERVADAS Y REPRESENTACIONES LITERALES */
+
+
+
+
+TOKEN : 
+{
+<#VERDADERO: "1">
+|<#FALSO: "0">
+}
+
+
+TOKEN : /* COSNTANTES NUMERICAS */
+{
+	< #S_NUMBERO: <FLOAT>
+	    | <FLOAT> ( ["e","E"] ([ "-","+"])? <FLOAT> )?
+    	>
+  | 	< FLOAT: <INTEGER> "." <INTEGER> > 	        	
+  | 	< INTEGER: ( <DIGITO> )+ >
+  |     <DATE :  <DIGITO><DIGITO> ["-"] <DIGITO><DIGITO> ["-"] <DIGITO><DIGITO> <DIGITO><DIGITO>>
+  |     <HORA :  <DIGITO><DIGITO> [":"] <DIGITO><DIGITO> [":"] <DIGITO><DIGITO> > 
+  | 	< #DIGITO: ["0" - "9"] >
+}
+
+TOKEN :
+{
+<K_prueba: "prueba">
+|<K_dospuntos: ":">
+|<K_coma: ",">
+|<K_ciz: "[">
+|<K_cder: "]">
+|<K_igm: "=>">
+
+}
+TOKEN:
+{
+    < S_IDENTIFICADOR:  (["@"])? (<LETRA>)+ (<DIGITO> | <LETRA> |<ESPECIAL>)* >
+  | < #LETRA: ["a"-"z", "A"-"Z"] >
+  | < #ESPECIAL: "$" | "_" | "#">
+  /*| < S_BIND: ":" ( <S_NUMBERO> | <S_IDENTIFICADOR> ("." <S_IDENTIFICADOR>)?) >*/
+  | < CADENA_LITERAL: "\"" (~["\n","\r","\""])* "\"" >
+}
+void Inicio():
+{}
+{
+  "[" valor() ("," valor())* "]" (<EOF>)?
+}
+
+void valor():
+{}
+{  
+  <CADENA_LITERAL> operador() (<CADENA_LITERAL>| <INTEGER> | <S_IDENTIFICADOR> | Inicio())        
+}
+
+void operador():
+{}
+{
+  ":" | "=>"
+}

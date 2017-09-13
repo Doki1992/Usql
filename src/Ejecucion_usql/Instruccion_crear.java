@@ -7,6 +7,7 @@ package Ejecucion_usql;
 
 import Analizador_xml.*;
 import Analizador_usql.*;
+import static Ejecucion_usql.Instruccion_login.generarArbol;
 import Entorno.*;
 import arbolxml.*;
 import java.io.ByteArrayInputStream;
@@ -53,16 +54,64 @@ public class Instruccion_crear {
                 GenerarArchivoBd(base.f1.tokenImage);
                 GenerarArchivoFun(base.f1.tokenImage);
                 GenerarArchivoObj(base.f1.tokenImage);
+                GenerarRespuestaCrear("base creada exitosamente...", 0);
             } else {
-                Debuger.Debug("Error la base con nombre " + base.f1.tokenImage + " ya existe.");
+                Debuger.Debug("Error la base con nombre " + base.f1.tokenImage + " ya existe.",false,null);
+                GenerarRespuestaCrear("Error la base con nombre " + base.f1.tokenImage + " ya existe.", 1);
             }
         } catch (IOException ex) {
             Debuger.Debug(ex.getMessage());
         } catch (ParseException ex) {
-            Debuger.Debug(ex.getMessage());
+            Debuger.Debug(ex.getMessage(), false, null);
+            GenerarRespuestaCrear(ex.getMessage(), 2);
         }
     }
 
+    public static void GenerarRespuestaCrear(String msg, int status){
+        StringBuilder texto =  new StringBuilder();
+        switch(status){
+            case 0:
+                texto.append("[")
+                        .append("\"")
+                        .append("validar")
+                        .append("\"")
+                        .append(":")
+                        .append(1700)
+                        .append(",")
+                        .append("\"")
+                        .append("ok")
+                        .append("\"")
+                        .append(":")
+                        .append("\"")
+                        .append(msg)
+                        .append("\"")
+                        .append(",");
+                texto.append("\"").append("arbol").append("\"");
+                generarArbol(texto);  
+                texto.append("]");
+                Contexto.PaqueteRespuesta =  texto.toString();
+                break;
+            case 1:                
+            case 2:
+                texto.append("[")
+                        .append("\"")
+                        .append("validar")
+                        .append("\"")
+                        .append(":")
+                        .append(1600)
+                        .append(",")
+                        .append("\"")
+                        .append("error")
+                        .append("\"")
+                        .append(":")
+                        .append("\"")
+                        .append(msg)
+                        .append("\"")
+                        .append("]");
+                Contexto.PaqueteRespuesta =  texto.toString();
+                break;                
+        }
+    }
     public static String GeneraTextoBd(crear_base base) throws IOException {
         StringBuilder texto = new StringBuilder();
         texto.append("<db>").append("<seek>").append(300 * levantado.tabla.size())

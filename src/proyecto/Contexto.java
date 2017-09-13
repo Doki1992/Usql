@@ -9,6 +9,7 @@ import Entorno.Bd;
 import Entorno.Ent;
 import Entorno.Objeto;
 import Entorno.Simbolo;
+import Entorno.Usuario_ent;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -19,6 +20,7 @@ import java.util.LinkedList;
  */
 public class Contexto {
     public  static Bd EnUso = null;//new Bd(0, "@MIKE", BD_BASES + "@MIKE.bd", "");
+    public  static Usuario_ent UsuarioEnUso =  null;
     public static final int ENTERO=0;
     public static final int BOOL=1;
     public static final int TEXTO=2;
@@ -49,6 +51,7 @@ public class Contexto {
     public static String contenidoBitacora = "";     
     private static final File FILE =  new File(".");
     public static  String CanonicalPath;
+    public static  String PaqueteRespuesta = "";
     
     public static void LimpiarBackUp(String path, int size, Admon_archivo ar) throws IOException{
         for(int i  = 0; i< size; i++){
