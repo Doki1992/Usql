@@ -31,7 +31,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-
 public class Instruccion_seleccionar {
 
     private static String ordeneraPor = "";
@@ -70,13 +69,17 @@ public class Instruccion_seleccionar {
             valoresTabla = new Ent(este.obtenerGlobal());
             este.vaciarGlobal();
             este.fijarGlobal(valoresTabla);
-            Cuerpo_tabla resultado_temporal = new Cuerpo_tabla();            
-            for (LinkedList<Simbolo> reg : ((Tabla) vista.v).cuerpo.registros) {
-                AsignaValores((Tabla) vista.v, reg);
-                if (((Simbolo) exp.accept(este)).v.ABool()) {
-                    resultado_temporal.registros.add(reg);
+            Cuerpo_tabla resultado_temporal = new Cuerpo_tabla();
+            if (exp == null) {
+                resultado_temporal =  producto_cartesiano;
+            } else {
+                for (LinkedList<Simbolo> reg : ((Tabla) vista.v).cuerpo.registros) {
+                    AsignaValores((Tabla) vista.v, reg);
+                    if (((Simbolo) exp.accept(este)).v.ABool()) {
+                        resultado_temporal.registros.add(reg);
+                    }
                 }
-            }
+            }            
             ((Tabla) vista.v).cuerpo = resultado_temporal;
             CrearResultadoFinal(((Tabla) vista.v));
             imprimir((Tabla) vista.v);
@@ -140,6 +143,7 @@ public class Instruccion_seleccionar {
     private static void CrearResultadoFinal(Tabla t) throws java.text.ParseException {
         t.valores = aplicarOperadorPi(t);
         t.cuerpo = generarNuevoEncabezado(t);
+        generarRespuestaDatos(t.cuerpo);
         if (!esDecendente) {
             int posReg = 0;
             if (Contexto.ExisteColumna(t.valores, ordeneraPor)) {
@@ -158,7 +162,14 @@ public class Instruccion_seleccionar {
             }
         }
     }
-
+    
+    protected static void generarRespuestaDatos(Cuerpo_tabla cuerpo){
+        int size =  cuerpo.registros.size();
+        if(size == 0){
+            
+        }
+    }
+    
     private static void crearListaOrdenadaDesc(Cuerpo_tabla cuerpo, int posReg, String tipo) throws java.text.ParseException {
         Simbolo val;
         for (int j = 0; j < cuerpo.registros.size(); j++) {

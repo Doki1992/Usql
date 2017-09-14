@@ -22,7 +22,7 @@ public class Servidor {
     public Servidor(){
         try {
             ServerSocket serversocket =  new ServerSocket(9999);
-            Debuger.Debug("Servidor encendido...");
+            Debuger.Debug("Servidor encendido...", false, null);
             while (true) {                
                 Socket cliente =  serversocket.accept();
                 Runnable hiloCliente  = new HiloServidor("", cliente);

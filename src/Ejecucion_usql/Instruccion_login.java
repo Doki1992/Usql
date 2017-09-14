@@ -47,6 +47,7 @@ public class Instruccion_login {
     private static XmlParser parser;
     private static Admon_archivo ar = new Admon_archivo();
     private static Ent levantado;
+    private static String nombreActual = "";
     
     
     public static void IniciarSesion(String usuario, String clave){
@@ -152,6 +153,7 @@ public class Instruccion_login {
         int penultimo = 1;
         for(Simbolo s :  bases.tabla.values()){
             Bd actual = (Bd) s.v; 
+            nombreActual = actual.nombre;
             texto.append("{")
                     .append("|")
                     .append(s.nombre.replace("\"", ""))
@@ -201,7 +203,11 @@ public class Instruccion_login {
                     .append(s.nombre.replace("\"", ""))
                     .append("|")
                     .append(",|type| :")
-                    .append("|table|}");
+                    .append("|table|,")
+                    .append("|padre| :")
+                    .append("|")
+                    .append(nombreActual)
+                    .append("|}");
             if(penultimo<size){
                 texto.append(",");
             }   
@@ -222,7 +228,11 @@ public class Instruccion_login {
                     .append(s.nombre.replace("\"", ""))
                     .append("|")
                     .append(",|type| :")
-                    .append("|object|}");
+                    .append("|object|,")
+                    .append("|padre| :")
+                    .append("|")
+                    .append(nombreActual)
+                    .append("|}");
             if(penultimo<size){
                 texto.append(",");
             } 
@@ -242,7 +252,11 @@ public class Instruccion_login {
                     .append(s.nombre)
                     .append("|")
                     .append(",|type| :")
-                    .append("|user|")
+                    .append("|user|,")
+                    .append("|padre| :")
+                    .append("|")
+                    .append(nombreActual)
+                    .append("|")
                     .append("}");
             if(penultimo<size){
                 texto.append(",");
@@ -264,8 +278,12 @@ public class Instruccion_login {
                     .append(":|")
                     .append(s.nombre.replace("\"", ""))
                     .append("|")
-                     .append(",|type| :")
-                    .append("|fuction|}");
+                    .append(",|type| :")
+                    .append("|fuction|,")
+                    .append("|padre| :")
+                    .append("|")
+                    .append(nombreActual)
+                    .append("|}");
             if(penultimo<size){
                 texto.append(",");
             } 

@@ -50,14 +50,17 @@ public class Instruccion_usar {
                 Simbolo pathObject = RecuperarObje(bd);
                 bd.path_obj = pathObject.v.ACadena();
                 bd.path_proc =  pathProc.v.ACadena();
-                Contexto.EnUso = bd;                
+                Contexto.EnUso = bd;
+                Instruccion_crear.GenerarRespuestaCrear("se ha seleccionado la BD" + NombreBase, 3);
             } else {
-                Debuger.Debug("Error la base de datos con nombre " + NombreBase + " no existe...");
+                Debuger.Debug("Error la base de datos con nombre " + NombreBase + " no existe...",false, null);
+                Instruccion_crear.GenerarRespuestaCrear("Error la base de datos con nombre " + NombreBase + " no existe...", 1);
             }
         } catch (IOException ex) {
             Debuger.Debug(ex.getMessage());
         } catch (ParseException ex) {
             Debuger.Debug(ex.getMessage());
+            Instruccion_crear.GenerarRespuestaCrear(ex.getMessage(), 1);
         }
 
     }
@@ -86,5 +89,7 @@ public class Instruccion_usar {
         DepthFirstRetVisitor<Simbolo> v = new DepthFirstRetVisitor<>();
         return init.accept(v);
     }
+     
+     
 
 }

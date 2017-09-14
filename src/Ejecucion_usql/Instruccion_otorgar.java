@@ -83,7 +83,8 @@ public class Instruccion_otorgar {
                 BdOtorgar.path_obj =  BD_OBJ + id + "_obj.bd";
                 BdOtorgar.path_proc =  BD_FUNC + id + "_func.bd";
             }else {
-                Debuger.Debug("Error no existe la bd con nombre " + id);
+                Debuger.Debug("Error no existe la bd con nombre " + id, false, null);
+                Instruccion_crear.GenerarRespuestaCrear("Error no existe la bd con nombre " + id, 1);
             }
         } catch (IOException ex) {
             Debuger.Debug(ex);
@@ -96,19 +97,27 @@ public class Instruccion_otorgar {
     
     private static void agregarPermisos(Tabla cont) throws IOException{
         Simbolo user =  cont.valores.get(1);
+        if(Instruccion_login.levantarUsuarios().Buscar(user.nombre)==null){
+            Debuger.Debug("No existe el usuario con nombre " + user.nombre + "...", false, null);
+            Instruccion_crear.GenerarRespuestaCrear("No existe el usuario con nombre " + user.nombre + "...", 1);
+            return;
+        }
         Simbolo objeto =  cont.valores.get(2);
         LinkedList<Simbolo> objetosUsql =  new LinkedList<>();
         objetosUsql.addAll(levantado.tabla.values());
         for(Simbolo s : objetosUsql){
             if(objeto.nombre.equals("*")){
                 EscribirTexto(s, user.nombre);
-                Debuger.Debug("Agregando permisos a objeto usql " + s.nombre + "...");
+                Debuger.Debug("Agregando permisos a objeto usql " + s.nombre + "...", false,null);
+                Instruccion_crear.GenerarRespuestaCrear("Agregando permisos a objeto usql " + s.nombre + "...", 3);
             }else if(objeto.nombre.equals(s.nombre)){
                 EscribirTexto(s, user.nombre);
-                Debuger.Debug("Agregando permisos a objeto usql " + s.nombre + "...");
+                Debuger.Debug("Agregando permisos a objeto usql " + s.nombre + "...", false,null);
+                Instruccion_crear.GenerarRespuestaCrear("Agregando permisos a objeto usql " + s.nombre + "...", 3);
             }else{
-//                Debuger.Debug("No exite ningun objeto uslq con el nombre " + objeto.nombre + "...");
-//                break;
+    //            Debuger.Debug("No exite ningun objeto uslq con el nombre " + objeto.nombre + "...", false, null);
+    //            Instruccion_crear.GenerarRespuestaCrear("No exite ningun objeto uslq con el nombre " + objeto.nombre + "...", 1);
+    //            break;
             }
         }
     }

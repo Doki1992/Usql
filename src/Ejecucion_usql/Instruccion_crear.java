@@ -109,7 +109,32 @@ public class Instruccion_crear {
                         .append("\"")
                         .append("]");
                 Contexto.PaqueteRespuesta =  texto.toString();
-                break;                
+                break;  
+            case 3:
+                texto.append("[")
+                        .append("\"")
+                        .append("validar")
+                        .append("\"")
+                        .append(":")
+                        .append(1700)
+                        .append(",")
+                        .append("\"")
+                        .append("ok")
+                        .append("\"")
+                        .append(":")
+                        .append("\"")
+                        .append(msg)
+                        .append("\"")
+                        .append(",")
+                        .append("\"")
+                        .append("base")
+                        .append("\":")
+                        .append("\"")
+                        .append(Contexto.EnUso.nombre)
+                        .append("\"")
+                        .append("]");
+                Contexto.PaqueteRespuesta =  texto.toString();
+                break;
         }
     }
     public static String GeneraTextoBd(crear_base base) throws IOException {
