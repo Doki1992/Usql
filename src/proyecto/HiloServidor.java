@@ -51,8 +51,10 @@ public class HiloServidor implements Runnable {
         } catch (IOException ex) {
             Debuger.Debug(ex);
         } catch (ParseException_usql ex) {
-            Debuger.Debug(ex);            
-        }
+            Debuger.Debug(ex.getMessage(),false, null);    
+            Instruccion_crear.GenerarRespuestaCrear(ex.getMessage(),1);
+            
+        } 
     }
     
     private void ejecutarAccion(Simbolo s) throws IOException, ParseException_usql{
@@ -69,7 +71,7 @@ public class HiloServidor implements Runnable {
                 break;
             case 1800:
                 Simbolo inst = obj.valor.Buscar("instruccion");
-                Instruccion_principal.instruccionPrincipal(inst.v.ACadena());
+                Instruccion_principal.instruccionPrincipal(inst.v.ACadena().replace("#", "\""));
                 break;
         }        
     }
@@ -77,7 +79,7 @@ public class HiloServidor implements Runnable {
     private Simbolo obtenerContenido(String texto) throws FileNotFoundException {
         PlyParser parser;
         Simbolo accept = null;
-        System.out.println("Reading from standard input. . .");
+        System.out.println("Reading from standard input. . .");        
         parser = new PlyParser(new ByteArrayInputStream(texto.getBytes(StandardCharsets.UTF_8)));
         try {
             INode root = parser.Inicio();

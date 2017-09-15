@@ -337,7 +337,7 @@ public class Instruccion_login {
             INode init = parser.Inicio();
             DepthFirstRetVisitor<Simbolo> v = new DepthFirstRetVisitor<>();
             init.accept(v);
-            levantado = v.levantado;            
+            local = v.levantado;            
         } catch (IOException ex) {
             Debuger.Debug(ex);
         } catch (ParseException ex) {

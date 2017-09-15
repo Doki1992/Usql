@@ -36,6 +36,7 @@ public class Instruccion_seleccionar {
     private static String ordeneraPor = "";
     private static boolean esDecendente = true;
     private static boolean esTodo = false;
+    private static boolean Orden = false;
     private static LinkedList<String> listaColumnas = new LinkedList<>();
     private static LinkedList<String> listaNombreTablas = new LinkedList<>();
     private static LinkedList<Simbolo> listaTablas = new LinkedList<>();
@@ -57,7 +58,7 @@ public class Instruccion_seleccionar {
         este = null;
         producto_cartesiano = new Cuerpo_tabla();
         valoresTabla = null;
-        resultado = null;
+        resultado = new Cuerpo_tabla();
         posiciones = new LinkedList<>();
     }
 
@@ -86,6 +87,7 @@ public class Instruccion_seleccionar {
             limpiarComponentes();
         } else {
             Debuger.Debug("Enserio Mike enserio !", false, null);
+            Instruccion_crear.GenerarRespuestaCrear("Error no se ha seleccionado una BD...", 1);
         }
         return vista;
     }
@@ -143,8 +145,8 @@ public class Instruccion_seleccionar {
     private static void CrearResultadoFinal(Tabla t) throws java.text.ParseException {
         t.valores = aplicarOperadorPi(t);
         t.cuerpo = generarNuevoEncabezado(t);
-        generarRespuestaDatos(t.cuerpo);
-        if (!esDecendente) {
+        generarRespuestaDatos(t.cuerpo, t.valores);
+        if (!esDecendente && Orden) {
             int posReg = 0;
             if (Contexto.ExisteColumna(t.valores, ordeneraPor)) {
                 posReg = Contexto.ObtenerPosicion(t.valores, ordeneraPor);
@@ -152,7 +154,7 @@ public class Instruccion_seleccionar {
             } else {
                 Debuger.Debug("Error la columna con nombre " + ordeneraPor + " no existe..", false, null);
             }
-        } else {
+        } else if(esDecendente && Orden){
             int posReg = 0;
             if (Contexto.ExisteColumna(t.valores, ordeneraPor)) {
                 posReg = Contexto.ObtenerPosicion(t.valores, ordeneraPor);
@@ -163,10 +165,55 @@ public class Instruccion_seleccionar {
         }
     }
     
-    protected static void generarRespuestaDatos(Cuerpo_tabla cuerpo){
+    protected static void generarRespuestaDatos(Cuerpo_tabla cuerpo, LinkedList<Simbolo> encabezado){
         int size =  cuerpo.registros.size();
-        if(size == 0){
+        StringBuilder texto =  new StringBuilder();
+        if(size > 0){
+            texto.append("[")
+                    .append("\"")
+                    .append("validar")
+                    .append("\"")
+                    .append(":")                    
+                    .append(1700)
+                    .append(",")
+                    .append("\"")
+                    .append("datos")
+                    .append("\":")
+                    .append("[")
+                    ;
+            for(int i = 0 ; i< size; i++){
+                texto.append("\"registro")
+                        .append(i)
+                        .append("\":")
+                        .append("[");
+                crearTextoRegistro(texto,cuerpo.registros.get(i), encabezado);
+                texto.append("]");
+                if(i<size-1){
+                    texto.append(",");
+                }
+            }
+            texto.append("]");
+            texto.append("]");
+            Contexto.PaqueteRespuesta =  texto.toString();
+        }else{
             
+        }
+    }
+    
+    
+    protected static void crearTextoRegistro(StringBuilder texto, LinkedList<Simbolo> reg, LinkedList<Simbolo> encabezado){
+        
+        for(int i = 0; i< encabezado.size(); i++){
+            texto.append("\"")
+                    .append(encabezado.get(i).nombre)
+                    .append("\":")
+                    .append("\"")
+                    .append(reg.get(i).v.ACadena())
+                    .append("\"")
+                    ;
+            if(i < encabezado.size() - 1){
+                texto.append(",");
+            }
         }
     }
     
@@ -421,6 +468,7 @@ public class Instruccion_seleccionar {
                 syntaxtree.NodeOptional ns3 = (syntaxtree.NodeOptional) ns2.nodes.get(3);
                 ordeneraPor = ((syntaxtree.NodeToken) ns2.nodes.get(2)).tokenImage;
                 if (ns3.present()) {
+                    Orden = true;
                     syntaxtree.NodeChoice nc = (syntaxtree.NodeChoice) ns3.node;
                     switch (nc.which) {
                         case 0:

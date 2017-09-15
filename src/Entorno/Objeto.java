@@ -23,7 +23,14 @@ public class Objeto extends Valor{
     
     @Override
     public String ACadena() {
-        return "";
+        StringBuilder texto =  new StringBuilder();
+        for(Simbolo s : this.valor.tabla.values()){
+            texto.append(s.nombre)
+                    .append("->")
+                    .append(s.v.ACadena())
+                    .append("\n");
+        }
+        return texto.toString();
     }
 
     @Override

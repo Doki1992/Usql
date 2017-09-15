@@ -25,6 +25,16 @@ public class Debuger {
         }else{
             Debug((x==null?s.v.ACadena():x));
             Impresiones.add((x==null?s.v.ACadena():x));
+           // imprimir();
+        }
+    }
+    
+    public static void imprimir(){
+        Uiservidor.consolaServidor.setText("");
+        String contenidoPasado = "";
+        for(Object o : Impresiones){            
+             Uiservidor.consolaServidor.setText(contenidoPasado + o.toString());
+             contenidoPasado = Uiservidor.consolaServidor.getText() + "\n";
         }
     }
 }

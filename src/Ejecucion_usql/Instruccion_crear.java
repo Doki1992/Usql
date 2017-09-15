@@ -196,14 +196,18 @@ public class Instruccion_crear {
             if (!levantado.existe(tabla.f1.tokenImage)) {
                 ar.EscribirRegistroBd(600 + 500 * levantado.tabla.size(), CrearTextoTabla(tabla), BD_BASES + Contexto.EnUso.nombre + ".bd");
                 GenerarArchivoTabla(BD_TABLA + Contexto.EnUso.nombre +"_"+ tabla.f1.tokenImage + ".bd");
+                Debuger.Debug("Se ha creado la tabla correctamente " + tabla.f1.tokenImage,false, null);
+                GenerarRespuestaCrear("Se ha creado la tabla correctamente " + tabla.f1.tokenImage, 0);
             } else {
-                Debuger.Debug("Error la tabla " + tabla.f1.tokenImage + " ya exite");
+                Debuger.Debug("Error la tabla " + tabla.f1.tokenImage + " ya exite",false, null);
+                GenerarRespuestaCrear("Error la tabla " + tabla.f1.tokenImage + " ya exite", 1);
             }
         } catch (IOException ex) {
             Debuger.Debug(ex.getMessage());
         } catch (ParseException ex) {
-            Debuger.Debug(ex.getMessage());
-        } catch (NullPointerException ex) {
+            Debuger.Debug(ex.getMessage(), false, null);
+            GenerarRespuestaCrear(ex.getMessage(), 1);
+        } catch (NullPointerException ex){
             Debuger.Debug("Error no se ha seleccionado una base de datos ...");
         }
     }
@@ -271,14 +275,17 @@ public class Instruccion_crear {
             levantado = v.levantado;
             if (!levantado.existe(objeto.f1.tokenImage)) {
                 ar.EscribirRegistroBd(500 * levantado.tabla.size(), CrearTextoObjeto(objeto), Contexto.EnUso.path_obj);
-                Debuger.Debug("Escribiendo objeto " + objeto.f1.tokenImage);
+                Debuger.Debug("Escribiendo objeto " + objeto.f1.tokenImage, false, null);
+                GenerarRespuestaCrear("Escribiendo objeto " + objeto.f1.tokenImage, 0);
             } else {
                 Debuger.Debug("Error el objeto " + objeto.f1.tokenImage + " ya exite");
+                GenerarRespuestaCrear("Error el objeto " + objeto.f1.tokenImage + " ya exite", 1);
             }
         } catch (IOException ex) {
             Debuger.Debug(ex);
         } catch (ParseException ex) {
-            Debuger.Debug(ex);
+            Debuger.Debug(ex, false, null);
+            GenerarRespuestaCrear(ex.getMessage(), 1);
         } catch (NullPointerException ex) {
             Debuger.Debug("Error no se ha seleccionado ninguna BD...");
         }
@@ -328,13 +335,18 @@ public class Instruccion_crear {
             levantado = v.levantado;
             if(!levantado.existe(funcion.f1.tokenImage)){
                 ar.EscribirRegistroBd(10000 * levantado.tabla.size(), CrearTextoFuncion(funcion), Contexto.EnUso.path_proc);
+                GenerarRespuestaCrear("Se ha creado la funcion " + funcion.f1.tokenImage, 0);
+                Debuger.Debug("Se ha creado la funcion " + funcion.f1.tokenImage, false, null);
             }else{
-                Debuger.Debug("Error la funcion con nombre " + funcion.f1.tokenImage + " ya existe...");
+                Debuger.Debug("Error la funcion con nombre " + funcion.f1.tokenImage + " ya existe...", false, null);
+                GenerarRespuestaCrear("Error la funcion con nombre " + funcion.f1.tokenImage + " ya existe...", 1);
             }
         } catch (IOException | ParseException ex) {
-            Debuger.Debug(ex);
+            Debuger.Debug(ex,false, null);
+            GenerarRespuestaCrear(ex.getMessage(), 1);
         } catch(NullPointerException ex){
             Debuger.Debug("Error no se ha seleccionado ninguna BD...");            
+            GenerarRespuestaCrear(ex.getMessage(), 1);
         }
     }
 
@@ -349,13 +361,18 @@ public class Instruccion_crear {
             levantado = v.levantado;
             if(!levantado.existe(procedimiento.f1.tokenImage)){
                 ar.EscribirRegistroBd(10000 * levantado.tabla.size(), CrearTextoProcedimiento(procedimiento), Contexto.EnUso.path_proc);
+                GenerarRespuestaCrear("Se ha creado la procedimiento " + procedimiento.f1.tokenImage, 0);
+                Debuger.Debug("Se ha creado la procedimiento " + procedimiento.f1.tokenImage, false, null);
             }else{
-                Debuger.Debug("Error el procedimiento con nombre " + procedimiento.f1.tokenImage + " ya existe...");
+                Debuger.Debug("Error la funcion con nombre " + procedimiento.f1.tokenImage + " ya existe...", false, null);
+                GenerarRespuestaCrear("Error la funcion con nombre " + procedimiento.f1.tokenImage + " ya existe...", 1);
             }
         } catch (IOException | ParseException ex) {
-            Debuger.Debug(ex);
+            Debuger.Debug(ex,false, null);
+            GenerarRespuestaCrear(ex.getMessage(), 1);
         } catch(NullPointerException ex){
             Debuger.Debug("Error no se ha seleccionado ninguna BD...");            
+            GenerarRespuestaCrear(ex.getMessage(), 1);
         }
     }
     public static String CrearTextoFuncion(crear_funcion funcion){

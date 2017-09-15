@@ -1,6 +1,1 @@
-CREAr BASE_DATOs @MIKE13;
-"||";
-usar @MIKE13;
-
-seleccionar id, nombre, fe, f de estado, depto, muni ;
-##insertar en tabla muni ("soy la muni " + "nueva", 3, 21-02-2017, 21-02-2017 18:00:00);
+crear procedimiento ddddddddddddd ( ) {a("ddddddd");a("ddddddd");a("ddddddd");a("ddddddd");a("ddddddd");a("ddddddd"); }

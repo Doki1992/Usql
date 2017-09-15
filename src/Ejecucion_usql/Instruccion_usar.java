@@ -52,6 +52,7 @@ public class Instruccion_usar {
                 bd.path_proc =  pathProc.v.ACadena();
                 Contexto.EnUso = bd;
                 Instruccion_crear.GenerarRespuestaCrear("se ha seleccionado la BD" + NombreBase, 3);
+                Debuger.Debug("se ha seleccionado la BD" + NombreBase, false, null);
             } else {
                 Debuger.Debug("Error la base de datos con nombre " + NombreBase + " no existe...",false, null);
                 Instruccion_crear.GenerarRespuestaCrear("Error la base de datos con nombre " + NombreBase + " no existe...", 1);
@@ -59,7 +60,7 @@ public class Instruccion_usar {
         } catch (IOException ex) {
             Debuger.Debug(ex.getMessage());
         } catch (ParseException ex) {
-            Debuger.Debug(ex.getMessage());
+            Debuger.Debug(ex.getMessage(),false, null);
             Instruccion_crear.GenerarRespuestaCrear(ex.getMessage(), 1);
         }
 

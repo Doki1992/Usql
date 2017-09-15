@@ -18,8 +18,7 @@ public class Uiservidor extends javax.swing.JFrame {
      */
     public Uiservidor() throws IOException {
         initComponents();        
-        Contexto.ObtenerPathCononico();
-        Servidor server =  new Servidor();    
+          
     }
 
     /**
