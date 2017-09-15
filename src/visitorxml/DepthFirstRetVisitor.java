@@ -107,7 +107,7 @@ public class DepthFirstRetVisitor<R> implements IRetVisitor<R> {
         n.f5.accept(this);//nombre    
         n.f8.accept(this);//permisos    
         n.f11.accept(this); //lista de parametros  
-        NodeList nl = n.f11;
+        NodeListOptional nl = n.f11;
         for (int c = 0; c < nl.size(); c++) {
             Simbolo s = (Simbolo) nl.nodes.get(c).accept(this);
             val.parametros.add(s);
