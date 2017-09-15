@@ -1,1 +1,11 @@
-crear procedimiento ddddddddddddd ( ) {a("ddddddd");a("ddddddd");a("ddddddd");a("ddddddd");a("ddddddd");a("ddddddd"); }
+usar @MIKE13;
+crear procedimiento set_salario2 (double a, integer b , carro ac)  {
+seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar nombre , fecha_d de uno, dos donde a == 1 ordenar por fecha_d asc ;
+seleccionar * de uno, dos donde a == 1 ordenar por fecha_d  ;
+otorgar permisos usuario1, p.mike;
+otorgar permisos usuario1, p.*;
+denegar permisos usuario1, p.mike;
+denegar permisos usuario1, p.*;
+}
+
