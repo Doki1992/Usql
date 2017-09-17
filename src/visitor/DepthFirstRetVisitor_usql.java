@@ -169,6 +169,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 Instruccion_insetar.InsertarRegistro((insertar) n.f0.choice, this);
                 break;
             case 5:
+                Instruccion_actualizar.ActualizarRegistro((actualizar)n.f0.choice, this);
                 break;
             case 6:
                 break;
@@ -176,7 +177,7 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                 try {
                     Instruccion_seleccionar.SeleccionarRegistro((seleccionar) n.f0.choice, this);
                 } catch (java.text.ParseException ex) {
-                    Debuger.Debug(ex);
+                    Debuger.Debug(ex, false, null);
                 }
             }
             break;

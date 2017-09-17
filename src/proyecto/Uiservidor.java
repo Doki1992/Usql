@@ -5,7 +5,11 @@
  */
 package proyecto;
 
+import Analizador_usql.ParseException_usql;
+import Ejecucion_usql.Instruccion_principal;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -33,7 +37,7 @@ public class Uiservidor extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         consolaServidor = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        comandos = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -41,9 +45,14 @@ public class Uiservidor extends javax.swing.JFrame {
         consolaServidor.setRows(5);
         jScrollPane1.setViewportView(consolaServidor);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        comandos.setColumns(20);
+        comandos.setRows(5);
+        comandos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                comandosKeyPressed(evt);
+            }
+        });
+        jScrollPane2.setViewportView(comandos);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -69,15 +78,29 @@ public class Uiservidor extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void comandosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_comandosKeyPressed
+        try {
+            if(evt.getKeyCode()==10){
+                Instruccion_principal.instruccionPrincipal(comandos.getText());
+                Debuger.imprimir();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Uiservidor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException_usql ex) {
+            Debuger.Debug(ex.getMessage(), false, null);
+            Debuger.imprimir();
+        }
+    }//GEN-LAST:event_comandosKeyPressed
+
     /**
      * @param args the command line arguments
      */
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea comandos;
     public static javax.swing.JTextArea consolaServidor;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

@@ -215,7 +215,7 @@ public class Instruccion_insetar {
         return continuar;
     }
     
-    private static Boolean VerificarUnico(String valor, int posColum){
+    protected static Boolean VerificarUnico(String valor, int posColum){
         boolean unica = true;
         for(LinkedList<Simbolo> fila :  t.cuerpo.registros){
             Simbolo data =  fila.get(posColum);
@@ -227,7 +227,7 @@ public class Instruccion_insetar {
         return unica;
     }
     
-    private static Boolean contieneUnico(LinkedList<Simbolo> valores){
+    protected static Boolean contieneUnico(LinkedList<Simbolo> valores){
          for(Simbolo s : valores){
             if(s.nombre.equals("unico"))
                 return true;

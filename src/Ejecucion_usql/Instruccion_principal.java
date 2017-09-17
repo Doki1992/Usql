@@ -21,7 +21,13 @@ import visitor.DepthFirstRetVisitor_usql;
  */
 public class Instruccion_principal {
 
-    public static void instruccionPrincipal(String instruccion) throws IOException, ParseException_usql {
+    /**
+     *
+     * @param instruccion
+     * @throws IOException
+     * @throws ParseException_usql
+     */
+    public synchronized static void instruccionPrincipal(String instruccion) throws IOException, ParseException_usql {
         Contexto.ObtenerPathCononico();
         UsqlParser a = new UsqlParser(new ByteArrayInputStream(instruccion.getBytes(StandardCharsets.UTF_8)));
         INode_usql init = a.Inicio();

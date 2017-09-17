@@ -180,7 +180,7 @@ void listasentencias() :
 | "alterar" (alterar_tabla() | alterar_objeto() | alterar_usuario()) ";"  
 | "eliminar"  (eliminar_usuario() | eliminar_tabla() | eliminar_base() | eliminar_objeto()) ";"
 | insertar()  //si a medias
-| actualizar() 
+| actualizar()  
 | borrar()
 | seleccionar() //si
 | otorgar() //si

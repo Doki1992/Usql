@@ -66,12 +66,15 @@ public class Instruccion_actualizar {
         
     }
     
-    protected static void ActualizarRegistro(actualizar n, DepthFirstRetVisitor_usql este){
+    
+    
+    public static void ActualizarRegistro(actualizar n, DepthFirstRetVisitor_usql este){
         init(n, este);
         if(comprobarColumnas(listaColumnas)){
             valoresTabla =  new Ent(este.obtenerGlobal());
             este.vaciarGlobal();
             este.fijarGlobal(valoresTabla);
+            obtenerPosiciones();
             if(expresion != null){
                 for(LinkedList<Simbolo>reg : tabla.cuerpo.registros){
                     posActualizar++;
@@ -85,18 +88,43 @@ public class Instruccion_actualizar {
             }else{
                 //actualiza todos los registros
                 for(LinkedList<Simbolo>reg : tabla.cuerpo.registros){
-                    
+                    posActualizar++;
+                    actualizar(reg, posActualizar);
                 }
             }
+            ReIniciarValores();
+        }else{            
             ReIniciarValores();
         }        
     }
     
+    protected  static void obtenerPosiciones(){
+        int pos = 0;
+        for(Simbolo s : tabla.valores){
+            for(String nombre : listaColumnas){
+                if(nombre.equals(s.nombre)){
+                    posiciones.add(pos);
+                    break;
+                }
+            }
+            pos++;
+        }
+    }
+    
+    protected  static void actualizar(LinkedList<Simbolo>reg, int pos){
+        //verificar si es unica
+        //verificar si auto
+        //verificar si foranea
+        //verificar si primaria        
+    }
     private static void generarValoresInsertar(){
         for(String nombre :  listaColumnas){
-            posiciones.add(Contexto.ObtenerPosicion(tabla.valores, nombre));
-            
+            posiciones.add(Contexto.ObtenerPosicion(tabla.valores, nombre));            
         }
+    }
+    
+    protected static void limpiarRegistro(){        
+        
     }
     
     private static void AsignaValores(Tabla t, LinkedList<Simbolo> registro) {
@@ -133,13 +161,13 @@ public class Instruccion_actualizar {
     
     
     private static boolean comprobarColumnas(LinkedList<String>columnas){
-        boolean existe =  true;
+        boolean existe =  true;        
         for(String nombre : columnas){
             existe = Instruccion_seleccionar.contieneEncabezado(nombre, tabla.valores);
             if(!existe){
                 Debuger.Debug("Error la tabla " + nombreTabla + " no tiene ningun atributo con nombre " + nombre + "...", false, null);
-                return existe;
-            }
+                return false;
+            }            
         }
         return existe;
     }
