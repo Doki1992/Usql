@@ -213,7 +213,7 @@ public class XmlParser implements XmlParserConstants {
   Token n19 = null;
   NodeToken n20 = null;
   Token n21 = null;
-  NodeList n22 = new NodeList();
+  NodeListOptional n22 = new NodeListOptional();
   lista_row n23 = null;
   NodeToken n24 = null;
   Token n25 = null;
@@ -249,8 +249,6 @@ public class XmlParser implements XmlParserConstants {
     n20 = JTBToolkit.makeNodeToken(n21);
     label_3:
     while (true) {
-      n23 = lista_row();
-      n22.addNode(n23);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case K_iden:
         ;
@@ -259,6 +257,8 @@ public class XmlParser implements XmlParserConstants {
         jj_la1[3] = jj_gen;
         break label_3;
       }
+      n23 = lista_row();
+      n22.addNode(n23);
     }
     n22.nodes.trimToSize();
     n25 = jj_consume_token(K_atrf);

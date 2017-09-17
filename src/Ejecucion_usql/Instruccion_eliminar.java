@@ -55,16 +55,21 @@ public class Instruccion_eliminar {
                 CorrerRegistroTabla();
                 File file =  new File(val.path.replace("\"", ""));
                 file.delete();
-                Debuger.Debug("Eliminando la tabla " + s.nombre + "...");
+                Debuger.Debug("Eliminando la tabla " + s.nombre + "...",false, null);
+                Instruccion_crear.GenerarRespuestaCrear("Eliminando la tabla " + s.nombre + "...", 0);
             } else {
-                Debuger.Debug("Error la tabla " + tablaEliminar.nombre + " no existe...");
+                Debuger.Debug("Error la tabla " + tablaEliminar.nombre + " no existe...",false, null);
+                Instruccion_crear.GenerarRespuestaCrear("Error la tabla " + tablaEliminar.nombre + " no existe...", 1);
             }
         } catch (IOException ex) {
             Debuger.Debug(ex);
+            Instruccion_crear.GenerarRespuestaCrear(ex.getMessage(), 1);
         } catch (ParseException ex) {
             Debuger.Debug(ex);
+            Instruccion_crear.GenerarRespuestaCrear(ex.getMessage(), 1);            
         } catch (NullPointerException ex) {
-            Debuger.Debug("Error no se ha seleccionado una base de datos ...");
+            Debuger.Debug("Error no se ha seleccionado una base de datos ...",false, null);
+            Instruccion_crear.GenerarRespuestaCrear("Error no se ha seleccionado una base de datos ...", 1);
         }
     }
     private static void LimpiarEspacioTabla(int size) throws IOException {
@@ -126,16 +131,20 @@ public class Instruccion_eliminar {
                 Usuario_ent val = (Usuario_ent) s1.v;                 
                 levantado.tabla.remove(s1.nombre);
                 CorrerRegistroUsuario();
-                Debuger.Debug("Eliminando usuario " + s.nombre);
+                Debuger.Debug("Eliminando usuario " + s.nombre,false, null);
+                Instruccion_crear.GenerarRespuestaCrear("Eliminando usuario " + s.nombre, 0);
             } else {
-                Debuger.Debug("Error el usuario " + s.nombre + " no existe...");
+                Debuger.Debug("Error el usuario " + s.nombre + " no existe...",false, null);
+                Instruccion_crear.GenerarRespuestaCrear("Error el usuario " + s.nombre + " no existe...", 1);
             }
         } catch (IOException ex) {
             Debuger.Debug(ex);
         } catch (ParseException ex) {
-            Debuger.Debug(ex);
+            Debuger.Debug(ex, false, null);
+            Instruccion_crear.GenerarRespuestaCrear(ex.getMessage(), 1);
         } catch (NullPointerException ex) {
             Debuger.Debug("Error no se ha seleccionado una base de datos ...");
+            Instruccion_crear.GenerarRespuestaCrear(ex.getMessage(), 1);
         }
     }
     
@@ -155,24 +164,29 @@ public class Instruccion_eliminar {
                 CorrerRegistroBd();
                 File file =  new File(val.path.replace("\"", ""));
                 file.delete();
-                Debuger.Debug("Eliminando la bd " + s.nombre + "...");
+                Debuger.Debug("Eliminando la bd " + s.nombre + "...", false, null);
                 String path_func = BD_FUNC + s.nombre+"_"+"func.bd";
                 file = new File(path_func);
                 file.delete();
-                Debuger.Debug("Eliminando archivo de funciones " +  "...");
+                Debuger.Debug("Eliminando archivo de funciones " +  "...", false, null);
                 String path_obj = BD_OBJ + s.nombre+"_"+"obj.bd";
                 file = new File(path_obj);
                 file.delete();
-                Debuger.Debug("Eliminando archivo de objetos " +  "...");
+                Debuger.Debug("Eliminando archivo de objetos " +  "...", false, null);
+                Instruccion_crear.GenerarRespuestaCrear("eliminando BD " + bdEliminar.nombre, 0);
             } else {
-                Debuger.Debug("Error la bd " + bdEliminar.nombre + " no existe...");
+                Debuger.Debug("Error la bd " + bdEliminar.nombre + " no existe...", false, null);
+                Instruccion_crear.GenerarRespuestaCrear("Error la bd " + bdEliminar.nombre + " no existe...", 1);
             }
         } catch (IOException ex) {
-            Debuger.Debug(ex);
+            Debuger.Debug(ex, false, null);
+            Instruccion_crear.GenerarRespuestaCrear(ex.getMessage(), 1);
         } catch (ParseException ex) {
-            Debuger.Debug(ex);
+            Debuger.Debug(ex, false, null);
+            Instruccion_crear.GenerarRespuestaCrear(ex.getMessage(), 1);
         } catch (NullPointerException ex) {
             Debuger.Debug("Error no se ha seleccionado una base de datos ...");
+            Instruccion_crear.GenerarRespuestaCrear("Error no se ha seleccionado una base de datos ...", 1);
         }
     }
     private static void CorrerRegistroUsuario() throws IOException{
@@ -259,16 +273,21 @@ public class Instruccion_eliminar {
                 Objeto val = (Objeto) s.v;                 
                 levantado.tabla.remove(objeto.nombre);
                 CorrerRegistroObjeto();                
-                Debuger.Debug("Eliminando objeto " + s.nombre + "...");
+                Debuger.Debug("Eliminando objeto " + s.nombre + "...", false, null);
+                Instruccion_crear.GenerarRespuestaCrear("Eliminando objeto " + s.nombre + "...", 0);
             } else {
-                Debuger.Debug("Error objeto " + objeto.nombre + " no existe...");
+                Debuger.Debug("Error objeto " + objeto.nombre + " no existe...",false, null);
+                Instruccion_crear.GenerarRespuestaCrear("Error objeto " + objeto.nombre + " no existe...", 1);
             }
         } catch (IOException ex) {
-            Debuger.Debug(ex);
+            Debuger.Debug(ex,false, null);
+            Instruccion_crear.GenerarRespuestaCrear(ex.getMessage(), 1);
         } catch (ParseException ex) {
             Debuger.Debug(ex);
+            Instruccion_crear.GenerarRespuestaCrear(ex.getMessage(), 1);
         } catch (NullPointerException ex) {
-            Debuger.Debug("Error no se ha seleccionado una base de datos ...");
+            Debuger.Debug("Error no se ha seleccionado una base de datos ...",false, null);
+            Instruccion_crear.GenerarRespuestaCrear("Error no se ha seleccionado una base de datos ...", 1);
         }
     }
     

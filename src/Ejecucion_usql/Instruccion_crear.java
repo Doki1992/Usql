@@ -460,14 +460,17 @@ public class Instruccion_crear {
             levantado = v.levantado_user;            
             if (!levantado.existe(usuario.f1.tokenImage)) {
                 ar.EscribirRegistroBd(300 * (levantado.tabla.size()), GenerarTextoUsuario(usuario), BD_USUARIO);
-                Debuger.Debug("Creando usuario " +usuario.f1.tokenImage);
+                Debuger.Debug("Creando usuario " +usuario.f1.tokenImage, false, null);
+                GenerarRespuestaCrear("Creando usuario " +usuario.f1.tokenImage, 0);
             }else {
-                Debuger.Debug("Error el usuario " + usuario.f1.tokenImage + " ya existe...");
+                Debuger.Debug("Error el usuario " + usuario.f1.tokenImage + " ya existe...", false, null);
+                GenerarRespuestaCrear("Error el usuario " + usuario.f1.tokenImage + " ya existe...", 1);
             }
         } catch (IOException ex) {
             Debuger.Debug(ex);
         } catch (ParseException ex) {
-            Debuger.Debug(ex);
+            Debuger.Debug(ex,false, null);
+            GenerarRespuestaCrear(ex.getMessage(), 1);
         } catch(NullPointerException ex){
             Debuger.Debug("Error no se ha seleccionado ninguna BD...");            
         }                    

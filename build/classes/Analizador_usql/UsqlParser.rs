@@ -1,2 +1,0 @@
-Analizador_usql.UsqlParser
-Analizador_usql.JTBToolkit

@@ -25,7 +25,7 @@ public class Debuger {
         }else{
             Debug((x==null?s.v.ACadena():x));
             Impresiones.add((x==null?s.v.ACadena():x));
-           // imprimir();
+            //imprimir();
         }
     }
     

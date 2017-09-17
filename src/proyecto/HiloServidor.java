@@ -48,12 +48,17 @@ public class HiloServidor implements Runnable {
             this.socket.getOutputStream().write(Contexto.PaqueteRespuesta.getBytes());
             this.socket.close();
             Contexto.PaqueteRespuesta = "";
+            Debuger.imprimir();
         } catch (IOException ex) {
             Debuger.Debug(ex);
         } catch (ParseException_usql ex) {
             Debuger.Debug(ex.getMessage(),false, null);    
-            Instruccion_crear.GenerarRespuestaCrear(ex.getMessage(),1);
-            
+            Instruccion_crear.GenerarRespuestaCrear(ex.mensaje().replace("\"", ""),1);            
+            try {
+                this.socket.getOutputStream().write(Contexto.PaqueteRespuesta.getBytes());
+            } catch (IOException ex1) {
+                Logger.getLogger(HiloServidor.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         } 
     }
     
@@ -71,7 +76,7 @@ public class HiloServidor implements Runnable {
                 break;
             case 1800:
                 Simbolo inst = obj.valor.Buscar("instruccion");
-                Instruccion_principal.instruccionPrincipal(inst.v.ACadena().replace("#", "\""));
+                Instruccion_principal.instruccionPrincipal(inst.v.ACadena().replace("!", "\""));
                 break;
         }        
     }

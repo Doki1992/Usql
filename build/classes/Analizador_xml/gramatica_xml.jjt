@@ -173,7 +173,7 @@ void usuarioxml():
 void procedimiento():
 {}
 {
-"<proc>"  "<seek>" <INTEGER>"</seek>" "<nombre>"<S_IDENTIFICADOR> "</nombre>" "<permiso>" <CADENA_LITERAL>"</permiso>" "<atr>"  (lista_row())+ "</atr>" "<src>"<CADENA_LITERAL> "</src>" "</proc>"
+"<proc>"  "<seek>" <INTEGER>"</seek>" "<nombre>"<S_IDENTIFICADOR> "</nombre>" "<permiso>" <CADENA_LITERAL>"</permiso>" "<atr>"  (lista_row())* "</atr>" "<src>"<CADENA_LITERAL> "</src>" "</proc>"
 }
 void proc():
 {}

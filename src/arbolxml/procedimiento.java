@@ -27,7 +27,7 @@ public class procedimiento implements INode {
 
   public NodeToken f10;
 
-  public NodeList f11;
+  public NodeListOptional f11;
 
   public NodeToken f12;
 
@@ -41,7 +41,7 @@ public class procedimiento implements INode {
 
   private static final long serialVersionUID = 144L;
 
-  public procedimiento(final NodeToken n0, final NodeToken n1, final NodeToken n2, final NodeToken n3, final NodeToken n4, final NodeToken n5, final NodeToken n6, final NodeToken n7, final NodeToken n8, final NodeToken n9, final NodeToken n10, final NodeList n11, final NodeToken n12, final NodeToken n13, final NodeToken n14, final NodeToken n15, final NodeToken n16) {
+  public procedimiento(final NodeToken n0, final NodeToken n1, final NodeToken n2, final NodeToken n3, final NodeToken n4, final NodeToken n5, final NodeToken n6, final NodeToken n7, final NodeToken n8, final NodeToken n9, final NodeToken n10, final NodeListOptional n11, final NodeToken n12, final NodeToken n13, final NodeToken n14, final NodeToken n15, final NodeToken n16) {
     f0 = n0;
     f1 = n1;
     f2 = n2;
@@ -61,7 +61,7 @@ public class procedimiento implements INode {
     f16 = n16;
   }
 
-  public procedimiento(final NodeToken n0, final NodeToken n1, final NodeList n2) {
+  public procedimiento(final NodeToken n0, final NodeToken n1, final NodeListOptional n2) {
     f0 = new NodeToken("<proc>");
     f1 = new NodeToken("<seek>");
     f2 = n0;

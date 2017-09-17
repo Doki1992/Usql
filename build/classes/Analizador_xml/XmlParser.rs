@@ -1,2 +1,0 @@
-Analizador_xml.XmlParser
-Analizador_xml.JTBToolkit

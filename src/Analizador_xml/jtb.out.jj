@@ -302,7 +302,7 @@ procedimiento procedimiento() :
   Token n19 = null;
   NodeToken n20 = null;
   Token n21 = null;
-  NodeList n22 = new NodeList();
+  NodeListOptional n22 = new NodeListOptional();
   lista_row n23 = null;
   NodeToken n24 = null;
   Token n25 = null;
@@ -341,7 +341,7 @@ procedimiento procedimiento() :
   (
     n23 = lista_row()
     { n22.addNode(n23); }
-  )+
+  )*
   { n22.nodes.trimToSize(); }
   n25 = "</atr>"
   { n24 = JTBToolkit.makeNodeToken(n25); }

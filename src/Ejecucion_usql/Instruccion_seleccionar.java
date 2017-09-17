@@ -193,14 +193,55 @@ public class Instruccion_seleccionar {
                 }
             }
             texto.append("]");
+            texto.append(",\"")
+                    .append("reporte")
+                    .append("\":")
+                    ;
+            crearReporteHtml(texto, cuerpo.registros,encabezado);            
             texto.append("]");
             Contexto.PaqueteRespuesta =  texto.toString();
         }else{
-            
+            texto.append("[")
+                    .append("\"")
+                    .append("validar")
+                    .append("\"")
+                    .append(":")                    
+                    .append(1700)
+                    .append(",")
+                    .append("\"")
+                    .append("datos")
+                    .append("\":")
+                    .append("\"\"]");
+            Contexto.PaqueteRespuesta =  texto.toString();
         }
     }
     
+    public static void crearReporteHtml(StringBuilder texto, LinkedList< LinkedList<Simbolo> > reg, LinkedList<Simbolo> encabezado){
+        texto.append("\"");
+        texto.append("<table>")
+                .append("<tr>");
+        
+        for(int i = 0; i<encabezado.size(); i++){
+            texto.append("<th>")
+                    .append(encabezado.get(i).nombre)
+                    .append("</th>");
+        }
+        texto.append("</tr>");
+        
+        for(LinkedList<Simbolo>  reg1 : reg){
+            texto.append("<tr>");
+            for(Simbolo s :  reg1){
+                texto.append("<td>");
+                texto.append(s.v.ACadena());
+                texto.append("<td>");
+            }
+            texto.append("</tr>");
+        }
+        texto.append("</table>");
+        texto.append("\"");
+    }
     
+    /**posible error de indices por aqui**/
     protected static void crearTextoRegistro(StringBuilder texto, LinkedList<Simbolo> reg, LinkedList<Simbolo> encabezado){
         
         for(int i = 0; i< encabezado.size(); i++){
@@ -539,7 +580,7 @@ public class Instruccion_seleccionar {
         for (Simbolo s : valores) {
             encabe += s.v.ACadena() + "                 ";
         }
-        Debuger.Debug(encabe);
+        Debuger.Debug(encabe, false, null);
 
     }
 }
