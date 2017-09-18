@@ -52,6 +52,7 @@ public class Contexto {
     private static final File FILE =  new File(".");
     public static  String CanonicalPath;
     public static  String PaqueteRespuesta = "";
+    public static  Simbolo retorno = null;
     
     public static void LimpiarBackUp(String path, int size, Admon_archivo ar) throws IOException{
         for(int i  = 0; i< size; i++){

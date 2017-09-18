@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static javax.swing.UIManager.get;
 import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
 
 public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
@@ -564,9 +565,11 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final Retorno n) {
-
         Simbolo retorno = (Simbolo) n.f1.accept(this); //retorno de funcion;        
         Simbolo ret = new Simbolo("temp", "", new Texto(Contexto.RETORNO, Contexto.TEX));
+        if (retorno != null) {
+            Contexto.retorno = new Simbolo("temp", retorno.v.Tipo, retorno.v);
+        }
         return (R) ret;
     }
 
@@ -691,8 +694,17 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
                             Simbolo padre = this.global.Buscar(token1.tokenImage);
                             return (R) (Contexto.DevolverSegunTipoObjetoUsql(padre, to.tokenImage, token1.tokenImage, this.global));
                         case 1:
-                            //hacer la llamada del metodo
-                            break;
+                            NodeSequence ns2 = (NodeSequence) choice.choice;
+                            Instruccion_llamada l = new Instruccion_llamada();
+                             {
+                                try {
+                                    return (R) l.ejecutarMetodo(token1.tokenImage, (NodeOptional) ns2.nodes.get(1), (NodeListOptional) ns2.nodes.get(2), this);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(DepthFirstRetVisitor_usql.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (ParseException_usql ex) {
+                                    Debuger.Debug(ex.getMessage(), false, null);
+                                }
+                            }
                     }
                 }
                 Simbolo aux = global.Buscar(token1.tokenImage);
@@ -1133,13 +1145,13 @@ public class DepthFirstRetVisitor_usql<R> implements IRetVisitor<R> {
     }
 
     public R visit(final Backup_dump n) {
-        Simbolo retorno = new Simbolo("", "", new Texto("vacio", ""));
-
+        R nRes = null;
+        n.f0.accept(this);
         n.f1.accept(this);
         n.f2.accept(this);
         n.f3.accept(this);
-
-        return (R) retorno;
+        n.f4.accept(this);
+        return nRes;
     }
 
     public R visit(final Restaurar n) {

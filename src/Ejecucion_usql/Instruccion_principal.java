@@ -33,6 +33,6 @@ public class Instruccion_principal {
         INode_usql init = a.Inicio();
         DepthFirstRetVisitor_usql<Simbolo> v = new DepthFirstRetVisitor_usql<>();
         v.BackUpDump = init;
-        init.accept(v   );
+        init.accept(v);
     }
 }

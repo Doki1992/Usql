@@ -403,7 +403,7 @@ void h():
 <FLOAT>
 |<INTEGER>
 | "(" exp_logica() ")"
-| <S_IDENTIFICADOR> [LOOKAHEAD(10) ("." <S_IDENTIFICADOR> | "("exp_logica()? ("," exp_logica())* ")")]
+| <S_IDENTIFICADOR> [LOOKAHEAD(10) ("." <S_IDENTIFICADOR> | "(" (exp_logica())? ("," exp_logica())* ")")]
 | <CADENA_LITERAL>
 | Fecha()
 | Fecha_hora()

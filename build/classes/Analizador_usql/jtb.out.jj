@@ -1470,28 +1470,29 @@ h h() :
   NodeSequence n21 = null;
   NodeToken n22 = null;
   Token n23 = null;
-  exp_logica n24 = null;
-  NodeListOptional n25 = null;
-  NodeSequence n26 = null;
-  NodeToken n27 = null;
-  Token n28 = null;
-  exp_logica n29 = null;
-  NodeToken n30 = null;
-  Token n31 = null;
-  NodeToken n32 = null;
-  Token n33 = null;
-  Fecha n34 = null;
-  Fecha_hora n35 = null;
-  NodeToken n36 = null;
-  Token n37 = null;
-  NodeToken n38 = null;
-  Token n39 = null;
-  NodeSequence n40 = null;
-  NodeToken n41 = null;
-  Token n42 = null;
-  NodeOptional n43 = new NodeOptional();
-  NodeToken n44 = null;
-  Token n45 = null;
+  NodeOptional n24 = null;
+  exp_logica n25 = null;
+  NodeListOptional n26 = null;
+  NodeSequence n27 = null;
+  NodeToken n28 = null;
+  Token n29 = null;
+  exp_logica n30 = null;
+  NodeToken n31 = null;
+  Token n32 = null;
+  NodeToken n33 = null;
+  Token n34 = null;
+  Fecha n35 = null;
+  Fecha_hora n36 = null;
+  NodeToken n37 = null;
+  Token n38 = null;
+  NodeToken n39 = null;
+  Token n40 = null;
+  NodeSequence n41 = null;
+  NodeToken n42 = null;
+  Token n43 = null;
+  NodeOptional n44 = new NodeOptional();
+  NodeToken n45 = null;
+  Token n46 = null;
 }
 {
   (
@@ -1520,7 +1521,8 @@ h h() :
     { n11.addNode(n12); }
     [
       LOOKAHEAD( 10 )
-      { n25 = new NodeListOptional(); }
+      { n24 = new NodeOptional(); }
+      { n26 = new NodeListOptional(); }
       (
         (
           { n16 = new NodeSequence(2); }
@@ -1536,22 +1538,25 @@ h h() :
           n23 = "("
           { n22 = JTBToolkit.makeNodeToken(n23); }
           { n21.addNode(n22); }
-          n24 = exp_logica()
+          (
+            n25 = exp_logica()
+            { n24.addNode(n25); }
+          )?
           { n21.addNode(n24); }
           (
-            { n26 = new NodeSequence(2); }
-            n28 = ","
-            { n27 = JTBToolkit.makeNodeToken(n28); }
+            { n27 = new NodeSequence(2); }
+            n29 = ","
+            { n28 = JTBToolkit.makeNodeToken(n29); }
+            { n27.addNode(n28); }
+            n30 = exp_logica()
+            { n27.addNode(n30); }
             { n26.addNode(n27); }
-            n29 = exp_logica()
-            { n26.addNode(n29); }
-            { n25.addNode(n26); }
           )*
-          { n25.nodes.trimToSize(); }
-          { n21.addNode(n25); }
-          n31 = ")"
-          { n30 = JTBToolkit.makeNodeToken(n31); }
-          { n21.addNode(n30); }
+          { n26.nodes.trimToSize(); }
+          { n21.addNode(n26); }
+          n32 = ")"
+          { n31 = JTBToolkit.makeNodeToken(n32); }
+          { n21.addNode(n31); }
           { n15 = new NodeChoice(n21, 1, 2); }
         )
         
@@ -1561,35 +1566,35 @@ h h() :
     { n11.addNode(n14); }
     { n0 = new NodeChoice(n11, 3, 10); }
   |
-    n33 = < CADENA_LITERAL >
-    { n32 = JTBToolkit.makeNodeToken(n33); }
-    { n0 = new NodeChoice(n32, 4, 10); }
+    n34 = < CADENA_LITERAL >
+    { n33 = JTBToolkit.makeNodeToken(n34); }
+    { n0 = new NodeChoice(n33, 4, 10); }
   |
-    n34 = Fecha()
-    { n0 = new NodeChoice(n34, 5, 10); }
+    n35 = Fecha()
+    { n0 = new NodeChoice(n35, 5, 10); }
   |
-    n35 = Fecha_hora()
-    { n0 = new NodeChoice(n35, 6, 10); }
+    n36 = Fecha_hora()
+    { n0 = new NodeChoice(n36, 6, 10); }
   |
-    n37 = "1"
-    { n36 = JTBToolkit.makeNodeToken(n37); }
-    { n0 = new NodeChoice(n36, 7, 10); }
+    n38 = "1"
+    { n37 = JTBToolkit.makeNodeToken(n38); }
+    { n0 = new NodeChoice(n37, 7, 10); }
   |
-    n39 = "0"
-    { n38 = JTBToolkit.makeNodeToken(n39); }
-    { n0 = new NodeChoice(n38, 8, 10); }
+    n40 = "0"
+    { n39 = JTBToolkit.makeNodeToken(n40); }
+    { n0 = new NodeChoice(n39, 8, 10); }
   |
-    { n40 = new NodeSequence(2); }
-    n42 = < DATE >
-    { n41 = JTBToolkit.makeNodeToken(n42); }
-    { n40.addNode(n41); }
+    { n41 = new NodeSequence(2); }
+    n43 = < DATE >
+    { n42 = JTBToolkit.makeNodeToken(n43); }
+    { n41.addNode(n42); }
     [
-      n45 = < HORA >
-      { n44 = JTBToolkit.makeNodeToken(n45); }
-      { n43.addNode(n44); }
+      n46 = < HORA >
+      { n45 = JTBToolkit.makeNodeToken(n46); }
+      { n44.addNode(n45); }
     ]
-    { n40.addNode(n43); }
-    { n0 = new NodeChoice(n40, 9, 10); }
+    { n41.addNode(n44); }
+    { n0 = new NodeChoice(n41, 9, 10); }
   )
   { return new h(n0); }
 }
