@@ -74,8 +74,7 @@ TOKEN : /* COSNTANTES NUMERICAS */
 
 TOKEN :
 {
-<K_prueba: "prueba">
-|<K_db: "<db>">
+<K_db: "<db>">
 |<K_dbf: "</db>">
 |<K_nombre: "<nombre>">
 |<K_nombref: "</nombre>">
