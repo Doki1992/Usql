@@ -42,6 +42,9 @@ public class Instruccion_insetar {
     private static Ent levantado;
     private static Tabla t;
     private static LinkedList<Simbolo> valoresInsertar =  new LinkedList<>();
+    private static LinkedList<Simbolo> valoresInsertarEspecial =  new LinkedList<>();
+    private static LinkedList<Integer> posiciones =  new LinkedList<>();
+    private static LinkedList<Integer> posicionesQueNo =  new LinkedList<>();
     
     protected static Tabla LeerTabla(String identificador) {
         String contenidoTexto;
@@ -99,14 +102,146 @@ public class Instruccion_insetar {
             asignarListas(n, este, valores, columnas);
             if(columnas.isEmpty()){
                insertarNormal(valores);
-            }else{
-
+            } else {
+               obtenerValoresInsertar(columnas, t);
+               iniciarValoresEspecial();
+               insertarEspecial(valores,columnas);
             }
         } else {
             Debuger.Debug("Error al insertar, la tabla con nombre " + n.f3.tokenImage + " no existe...", false, null);
+        }        
+        posiciones.clear();
+        posicionesQueNo.clear();
+        valoresInsertarEspecial.clear();
+    }
+    
+    private static void iniciarValoresEspecial(){
+        for(Simbolo t: t.valores){
+            valoresInsertarEspecial.add(new Simbolo(t.nombre, t.tipo, new Texto("","")));
         }
     }
+    
+    private static void insertarEspecial (LinkedList<Simbolo> valores, LinkedList<String> columna){
+        //para los que no van solo si acepta null
+        if (valores.size() == columna.size()) {
 
+            Boolean continua = verificaTiposEspecial(valores);
+
+            if (continua) {
+                continua = aceptaNulos();
+            }
+            if (continua) {
+                continua = valoresAuto(t.valores);
+            }
+            if (continua) {
+                continua = verificarUnicosEspecial(valores);
+            }
+            if (continua) {
+                continua = VerificarForaneaEspecial(valores);
+            }
+            if (continua) {
+
+                asignarValoresQueVienen(valores);
+                valoresInsertar = valoresInsertarEspecial;
+                String r = generarTextoRegistro();
+                try {
+                    ar.EscribirRegistroBd(500 * t.cuerpo.registros.size(), r, t.path.replace("\"", ""));
+                } catch (IOException ex) {
+                    Debuger.Debug(ex);
+                }
+                Debuger.Debug("registro insertado correctamente", false, null);
+
+            }
+        } else {
+            Debuger.Debug("los valores no coinciden con la cantidad de columnas", false, null);
+        }
+
+        valoresInsertar.clear();
+        valoresInsertarEspecial.clear();
+        posiciones.clear();
+        posicionesQueNo.clear();
+    }
+
+    private static void asignarValoresQueVienen(LinkedList<Simbolo> valores){
+        int j =0;
+        for(Integer i : posiciones){
+            valores.get(j).v.Tipo = valoresInsertarEspecial.get(i).tipo;
+            valoresInsertarEspecial.get(i).v = valores.get(j).v;
+            j++;        
+        }
+    }
+    
+    private static boolean valoresAuto(LinkedList<Simbolo> valores) {
+        boolean continua = true;
+        for (int i = 0; i < valores.size(); i++) {
+            Simbolo a = valores.get(i);
+            Columna c = (Columna) a.v;
+            for (Simbolo s : c.atributos) {
+                if (s.nombre.equals("auto")) {
+                    continua = EsNumerico(a.tipo);
+                    if (continua) {
+                        Simbolo insertar = new Simbolo(a.nombre, a.tipo, null);
+                        FijarValorAutoincremento(a.nombre, insertar);
+                        valoresInsertarEspecial.get(i).nombre = a.nombre;
+                        valoresInsertarEspecial.get(i).tipo = a.tipo;
+                        valoresInsertarEspecial.get(i).v = insertar.v;
+                    }
+                }
+            }
+        }
+        return continua;
+    }
+    
+    
+    
+    private static Boolean aceptaNulos(){
+        Boolean continuar = true;
+        for(Integer i : posicionesQueNo){
+          continuar = tieneNulo((Columna)t.valores.get(i).v, i, t.valores.get(i));
+        }
+        return continuar;
+    }
+    
+    private static Boolean tieneNulo(Columna c, int pos, Simbolo in){
+        boolean esauto = contieneAuto(c.atributos);
+        boolean esprim = contienePrimaria(c.atributos);
+        if(esprim && !esauto){
+            Debuger.Debug("Error la llave primaria no puede ser nula", false, null);
+            return false;
+        }
+        for(Simbolo s : c.atributos){            
+            if(s.nombre.equals("nulo")){
+                boolean a =  s.v.ABool();
+                if(a){
+                    valoresInsertarEspecial.get(pos).nombre = in.nombre;
+                    valoresInsertarEspecial.get(pos).v = in.v;
+                    valoresInsertarEspecial.get(pos).tipo = in.tipo;
+                    return a;
+                }
+                
+            }
+        }
+        return true;
+    }
+    
+    protected static void obtenerValoresInsertar(LinkedList<String> listaColumnas, Tabla tabla) {
+        int j = 0;
+        for(String nombre :  listaColumnas) {
+            int i = Contexto.ObtenerPosicion(tabla.valores, nombre);
+            posiciones.add(i);            
+        }
+        for(Simbolo s : tabla.valores){
+            posicionesQueNo.add(j);
+            j++;
+        }
+        for(Integer  i : posiciones){
+            if(posicionesQueNo.contains(i)){
+                posicionesQueNo.remove(i);
+            }
+        }                
+    }
+    
+    
     private static LinkedList<Simbolo> obtenerValoresAinsertar(insertar n, DepthFirstRetVisitor_usql este, int which, LinkedList<Simbolo> valores) {
         switch (which) {
             case 0:
@@ -175,9 +310,10 @@ public class Instruccion_insetar {
         } else {
             Debuger.Debug("La cantidad de valores no es correcta... ", false, null);
             Debuger.Debug("No se completo el proceso de insercion... ", false, null);
+            valoresInsertar.clear();
             return;
         }
-
+        valoresInsertar.clear();
     }
 
     @SuppressWarnings("UnusedAssignment")
@@ -207,6 +343,19 @@ public class Instruccion_insetar {
          for (int i = dif; i < t.valores.size(); i++) {
             Columna c =  (Columna) t.valores.get(i).v;
             String valor =  valores.get((dif==0)?i:i-dif).v.ACadena();
+            boolean esUnica =  contieneUnico(c.atributos);
+            if(esUnica){
+                continuar =  VerificarUnico(valor, i);
+            }
+         }
+        return continuar;
+    }
+    
+    private static Boolean verificarUnicosEspecial(LinkedList<Simbolo> valores){
+        Boolean continuar =  true;
+        for (int i = 0; i <  posiciones.size(); i++) {
+            Columna c =  (Columna) t.valores.get(posiciones.get(i)).v;
+            String valor =  valores.get(i).v.ACadena();
             boolean esUnica =  contieneUnico(c.atributos);
             if(esUnica){
                 continuar =  VerificarUnico(valor, i);
@@ -254,7 +403,25 @@ public class Instruccion_insetar {
         return continuar;
     }
     
-    private static Boolean VerificarIntegridadReferencial(String valor, String ref) {
+    protected static boolean VerificarForaneaEspecial(LinkedList<Simbolo> valores) {
+        Boolean continuar = true;        
+        for (int i = 0; i < posiciones.size(); i++) {
+            Columna c =  (Columna) t.valores.get(posiciones.get(i)).v;
+            String valor =  valores.get(i).v.ACadena();
+            boolean esForanea =  contieneForanea(c.atributos);
+            if(esForanea){
+                String ref =  obtenerForanea(c.atributos);
+                continuar = VerificarIntegridadReferencial(valor, ref);
+                if(!continuar){
+                    Debuger.Debug("Violacion de integridad referencial...", false, null);
+                    break;                    
+                }                
+            }
+        }
+        return continuar;
+    }
+    
+    protected static Boolean VerificarIntegridadReferencial(String valor, String ref) {
         boolean existeForanea = false;
         String [] datos =  ref.split("#");
         String nombreTabla =  datos[0];
@@ -274,7 +441,7 @@ public class Instruccion_insetar {
         return existeForanea;
     }
 
-    private static Boolean contieneForanea(LinkedList<Simbolo> valores){
+    protected static Boolean contieneForanea(LinkedList<Simbolo> valores){
          for(Simbolo s : valores){
             if(s.nombre.equals("for"))
                 return true;
@@ -282,13 +449,13 @@ public class Instruccion_insetar {
         return false;        
     }
     
-     private static String obtenerForanea(LinkedList<Simbolo> valores){
+     protected static String obtenerForanea(LinkedList<Simbolo> valores){
          for(Simbolo s : valores){
             if(s.nombre.equals("for"))
                 return s.v.ACadena();
         }
         return "";        
-    }
+    }   
     
     private static Boolean VerificarPrimaria(LinkedList<Simbolo> valores){
         Boolean continuar = true;
@@ -419,6 +586,32 @@ public class Instruccion_insetar {
         return CoincidenTipos;
     }
     
+    protected  static boolean verificaTiposEspecial(LinkedList<Simbolo> valores){
+        Instruccion_declarar dec  = new Instruccion_declarar(null);
+        boolean CoincidenTipos =  false;
+        Simbolo insertar;
+        for(int i =  0; i < posiciones.size(); i++){
+            Simbolo val =  t.valores.get(posiciones.get(i));
+            Simbolo aux =  new Simbolo(val.nombre, val.tipo, null);           
+            Simbolo vald =  valores.get(i);
+            if(dec.comprobarTipos(val, vald)){
+                CoincidenTipos = true; 
+                insertar  =  new Simbolo (val.nombre,val.tipo,null);
+                insertar.v =  dec.v;
+                valoresInsertar.add(insertar);
+            }else if (ComprobarTipoObjeto(aux, vald)){
+                CoincidenTipos = true;
+                insertar =  new Simbolo(val.nombre, val.tipo, null);
+                insertar.v =  vald.v;
+                valoresInsertar.add(insertar);
+            }else{
+                Debuger.Debug("Error de tipos al insertar...", false, null);
+               return false;
+            }
+        }        
+        return CoincidenTipos;
+    }
+    
      protected static boolean ComprobarTipoObjeto(Simbolo iz, Simbolo exp){
         if(Contexto.EsObjeto(iz.tipo) && exp.v.Tipo.equals(Contexto.OBJ)){
             Objeto o =  (Objeto) exp.v;         
@@ -440,6 +633,14 @@ public class Instruccion_insetar {
     private static Boolean contienePrimaria(LinkedList<Simbolo> valores){
          for(Simbolo s : valores){
             if(s.nombre.equals("prim"))
+                return true;
+        }
+        return false;
+    }
+    
+    private static boolean contieneAuto(LinkedList<Simbolo> valores){
+        for(Simbolo s: valores){
+            if(s.nombre.equals("auto"))
                 return true;
         }
         return false;
